@@ -15,5 +15,5 @@ export async function generateStaticParams() {
   }
 
 export default function Page({ params }: { params: { slug: string } }) {
-  return <div>My Post: {params.slug}</div>;
+  return <div className="mx-auto bg-white h-dvh text-slate-500 max-w-8xl">My Post: {params.slug}</div>;
 }

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useRouter, useParams } from 'next/navigation'
+import { useRouter, useParams } from "next/navigation";
 
 type TCategory = {
   _id: string;
@@ -11,9 +11,9 @@ type TCategory = {
 };
 
 export default function Header() {
-    const router = useRouter();
-    const params = useParams()
-    console.log(params)
+  const router = useRouter();
+  const params = useParams();
+  const param = params?.slug || "";
   const [categorys, setCategorys] = useState<TCategory[]>([]);
 
   useEffect(() => {
@@ -27,12 +27,15 @@ export default function Header() {
     fetchPosts();
   }, []);
 
-  if (!categorys.length) return <div className="py-4 text-center bg-white text-slate-500">Loading...</div>;
+  if (!categorys.length)
+    return (
+      <div className="py-4 text-center bg-white text-slate-500">Loading...</div>
+    );
 
   return (
     <>
       <div className="z-[101] sticky top-0 lg:border-b bg-white">
-        <header className="flex m-auto bg-white max-w-screen-2xl">
+        <header className="flex m-auto bg-white max-w-screen-2xl lg:px-8">
           <div className="flex items-center w-[19rem] py-4">
             <Image
               src="/logo.svg"
@@ -54,7 +57,7 @@ export default function Header() {
                     <li
                       key={category._id}
                       onClick={() => router.push(category.name)}
-                      className="inline-flex items-center h-full border-b-2 border-transparent cursor-pointer hover:text-purple-700 hover:border-purple-700"
+                      className={`inline-flex items-center h-full border-b-2 border-transparent cursor-pointer hover:text-purple-700 ${param === category.name?"border-purple-700":"hover:border-purple-700"}`}
                     >
                       <span className="">{category.alias}</span>
                     </li>
