@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 
@@ -27,11 +28,6 @@ export default function Header() {
     fetchPosts();
   }, []);
 
-  if (!categorys.length)
-    return (
-      <div className="py-4 text-center bg-white text-slate-500">Loading...</div>
-    );
-
   return (
     <>
       <div className="z-[101] sticky top-0 lg:border-b bg-white">
@@ -45,9 +41,9 @@ export default function Header() {
               height={28}
               priority
             />
-            <span className="pl-3.5 text-xl font-bold text-slate-900">
+            <Link href={'/'} className="pl-3.5 text-xl font-bold text-slate-900">
               星辰大海
-            </span>
+            </Link>
           </div>
           <div className="flex items-center">
             <nav className="h-full text-base font-medium leading-6 text-slate-700">
@@ -57,15 +53,26 @@ export default function Header() {
                     <li
                       key={category._id}
                       onClick={() => router.push(category.name)}
-                      className={`inline-flex items-center h-full border-b-2 border-transparent cursor-pointer hover:text-purple-700 ${param === category.name?"border-purple-700":"hover:border-purple-700"}`}
+                      className={`inline-flex items-center h-full border-b-2 cursor-pointer hover:text-purple-700 ${
+                        param === category.name
+                          ? "border-purple-700 text-purple-700"
+                          : "hover:border-purple-700 border-b-white"
+                      }`}
                     >
-                      <span className="">{category.alias}</span>
+                      <>
+                        <span className="">{category.alias}</span>
+                      </>
                     </li>
                   );
                 })}
               </ul>
             </nav>
           </div>
+          {!categorys.length && (
+            <>
+              <div className="w-8/12 h-8 my-auto text-center rounded bg-slate-50 text-slate-500"></div>
+            </>
+          )}
         </header>
       </div>
     </>

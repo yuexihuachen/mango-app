@@ -1,19 +1,18 @@
-type TCategory = {
-    _id: string;
-    name: string;
-    alias: string;
-  };
-
-export async function generateStaticParams() {
-    const urls = await fetch(`https://mango.881103.xyz/categorys/find`, {
-        method: "POST",
-      }).then((res) => res.json())
-   
-    return urls.map((url: TCategory) => ({
-      slug: url.name,
-    }))
-  }
+import SideNav from "@components/side-nav/side-nav";
 
 export default function Page({ params }: { params: { slug: string } }) {
-  return <div className="mx-auto bg-white h-dvh text-slate-500 max-w-8xl">My Post: {params.slug}</div>;
+  return (
+    <div>
+      <div className="px-4 m-auto max-w-screen-2xl md:px-8">
+        <div className="lg:block fixed w-[20.2666rem] inset-0 z-20  top-[3.8125rem] left-[max(0px,calc(50%-48rem))] right-auto pb-10 pl-8 pr-6 overflow-y-auto">
+          <SideNav />
+        </div>
+        <div className="lg:pl-[20.8rem]">
+          <main className="relative z-20 max-w-3xl pt-10 xl:max-w-none  h-[calc(100vh-61px)]">
+          My Post: {params.slug}
+          </main>
+        </div>
+      </div>
+    </div>
+  );
 }
