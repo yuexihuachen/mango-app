@@ -1,8 +1,69 @@
 'use client'
 import Image from "next/image";
+import { Dispatch, useEffect, useState, SetStateAction } from "react";
 
-export default function SideNav() {
+type TCategory = {
+    _id: string;
+    name: string;
+    alias: string;
+    order: number;
+  };
 
+  type TProps = {
+    categorys: TCategory[],
+    selectedCategory: string,
+    setSelectedPost:  Dispatch<SetStateAction<Partial<TPost>>>;
+    selectedPost: Partial<TPost>
+  }
+
+
+type TPost = {
+    categoryId: string;
+    published: number;
+    title: string;
+    _id: string;
+  };
+
+export default function SideNav(props: TProps) {
+    const {
+        categorys,
+        selectedCategory,
+        setSelectedPost,
+        selectedPost
+    } = props;
+    const [posts, setPosts] = useState<TPost[]>([])
+    const currentCategory = categorys.find(c => c.name === selectedCategory) as TCategory
+    
+    useEffect(() => {
+        async function fetchPosts() {
+          const res = await fetch(`https://mango.881103.xyz/posts/find`, {
+            method: "POST",
+            mode: "cors", 
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              query: {
+                categoryId: currentCategory._id
+              },
+              options: { _id: 1, title: 1, categoryId: 1, published: 1 },
+            }),
+          });
+          const data = await res.json();
+          setPosts(data);
+          setSelectedPost(data[0])
+        }
+        if (currentCategory?._id && !posts.length) {
+            fetchPosts()
+        }
+        
+      }, [currentCategory?._id]);
+
+
+    const selectPost = (post: TPost) => {
+        setSelectedPost(post)
+    }
+      
     return (
         <nav id="nav" className="lg:text-sm lg:leading-6">
             <div className="sticky top-0 -ml-0.5">
@@ -22,96 +83,15 @@ export default function SideNav() {
                 <div className="bg-gradient-to-b from-white"></div>
             </div>
             <ul>
-                <li className="mt-2">
-                    <div className={`truncate text-base px-6 py-2 rounded hover:bg-purple-50 text-slate-700 font-medium`}>闭包</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">组件通信</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">性能优化从用户输入到用户看到页面轻质</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">状态管理</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">异步操作</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">闭包</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">组件通信</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">性能优化</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">状态管理</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">异步操作</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">闭包</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">组件通信</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">性能优化</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">状态管理</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">异步操作</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">闭包</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">组件通信</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">性能优化</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">状态管理</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">异步操作</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">闭包</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">组件通信</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">性能优化</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">状态管理</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">异步操作</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">闭包</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">组件通信</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">性能优化</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">状态管理</div>
-                </li>
-                <li className="mt-2">
-                    <div className="px-6 py-2 text-base font-medium truncate rounded hover:bg-pink-50 text-slate-700">异步操作</div>
-                </li>
+                {
+                    posts.map((post: TPost) => {
+                        return <li key={post._id} className="mt-2">
+                        <div onClick={() => selectPost(post)} className={`truncate text-base px-6 py-2 rounded text-slate-700 font-medium ${selectedPost._id === post._id ? "bg-purple-100": "hover:bg-purple-50"}`}>
+                            {post.title}
+                        </div>
+                    </li>
+                    })
+                }
             </ul>
         </nav >
     );
