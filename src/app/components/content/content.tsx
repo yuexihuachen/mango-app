@@ -47,7 +47,6 @@ export default function Content(props: TProps) {
     }
 
     if (selectedPost?._id) {
-      console.log(selectedPost)
       fetchPosts();
     }
   }, [selectedPost?._id]);
