@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { Dispatch, useEffect, SetStateAction } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { proxyCategory } from "@/lib/categorys";
 
 type TCategory = {
   _id: string;
@@ -11,36 +12,28 @@ type TCategory = {
   order: number;
 };
 
-type TProps = {
-  setCategorys:  Dispatch<SetStateAction<TCategory[]>>;
-  categorys: TCategory[]
-}
-
-export default function Header(props: TProps) {
-  const {
-    categorys,
-    setCategorys
-  } = props;
+export default function Header() {
   const router = useRouter();
   const params = useParams();
   const param = params?.slug as string || "JavaScript";
-  
+  const [categorys, setCategorys] = useState<TCategory[]>([]);
   useEffect(() => {
     async function fetchPosts() {
       const res = await fetch(`https://mango.881103.xyz/categorys/find`, {
         method: "POST",
+        body: JSON.stringify({})
       });
       const data = await res.json();
+      proxyCategory.category = data.find((c: TCategory) =>  c.name === param)
       const newData = data.sort((a: TCategory,b: TCategory) => a.order - b.order)
-      setCategorys(newData);
+      setCategorys(newData)
     }
-    if (!categorys.length) {
-      fetchPosts();
-    }
+    fetchPosts();
     
   }, []);
 
   const linkPage = (category: TCategory) => {
+    proxyCategory.category = category
     router.push(category.name)
   }
 
@@ -57,7 +50,7 @@ export default function Header(props: TProps) {
             height={28}
             priority
           />
-          <span onClick={() => linkPage(categorys[0])} className="pl-3.5 text-xl font-bold text-slate-900">
+          <span onClick={() => {}} className="pl-3.5 text-xl font-bold text-slate-900">
             星辰大海
           </span>
         </div>

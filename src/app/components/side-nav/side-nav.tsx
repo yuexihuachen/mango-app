@@ -1,6 +1,7 @@
 'use client'
 import Image from "next/image";
 import { Dispatch, useEffect, useState, SetStateAction } from "react";
+import { proxyCategory } from "@/lib/categorys";
 
 type TCategory = {
     _id: string;
@@ -10,8 +11,6 @@ type TCategory = {
   };
 
   type TProps = {
-    categorys: TCategory[],
-    selectedCategory: string,
     setSelectedPost:  Dispatch<SetStateAction<Partial<TPost>>>;
     selectedPost: Partial<TPost>
   }
@@ -24,18 +23,17 @@ type TPost = {
     _id: string;
   };
 
+const delay = 100;
+
 export default function SideNav(props: TProps) {
     const {
-        categorys,
-        selectedCategory,
         setSelectedPost,
         selectedPost
     } = props;
     const [posts, setPosts] = useState<TPost[]>([])
-    const currentCategory = categorys.find(c => c.name === selectedCategory) as TCategory
-    
+
     useEffect(() => {
-        async function fetchPosts() {
+        async function fetchPosts(c: TCategory) {
           const res = await fetch(`https://mango.881103.xyz/posts/find`, {
             method: "POST",
             mode: "cors", 
@@ -44,7 +42,7 @@ export default function SideNav(props: TProps) {
             },
             body: JSON.stringify({
               query: {
-                categoryId: currentCategory._id
+                categoryId: c._id
               },
               options: { _id: 1, title: 1, categoryId: 1, published: 1 },
             }),
@@ -53,11 +51,16 @@ export default function SideNav(props: TProps) {
           setPosts(data);
           setSelectedPost(data[0])
         }
-        if (currentCategory?._id && !posts.length) {
-            fetchPosts()
-        }
+
+        let timerId = setTimeout(function request() {
+          timerId = setTimeout(request, delay);
+          if (proxyCategory.category) {
+            clearTimeout(timerId);
+            fetchPosts(proxyCategory.category as TCategory)
+          }
+        }, delay);
         
-      }, [currentCategory?._id]);
+      }, []);
 
 
     const selectPost = (post: TPost) => {
