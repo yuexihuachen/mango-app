@@ -21,7 +21,7 @@ export default function Header() {
     async function fetchPosts() {
       const res = await fetch(`https://mango.881103.xyz/categorys/find`, {
         method: "POST",
-        body: JSON.stringify({})
+        body: '{}'
       });
       const data = await res.json();
       proxyCategory.category = data.find((c: TCategory) =>  c.name === param)
