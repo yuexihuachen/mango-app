@@ -60,6 +60,7 @@ export default function SideNav(props: TProps) {
           }
         }, delay);
         
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       }, []);
 
 

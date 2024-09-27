@@ -30,6 +30,7 @@ export default function Header() {
     }
     fetchPosts();
     
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const linkPage = (category: TCategory) => {

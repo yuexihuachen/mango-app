@@ -4,13 +4,6 @@ import SideNav from "@components/side-nav/side-nav";
 import Content from "@components/content/content";
 import { useState } from "react";
 
-type TCategory = {
-  _id: string;
-  name: string;
-  alias: string;
-  order: number;
-};
-
 type TPost = {
   categoryId: string;
   published: number;
