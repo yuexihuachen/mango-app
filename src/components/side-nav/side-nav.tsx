@@ -1,39 +1,21 @@
 'use client'
-import Image from "next/image";
-import { Dispatch, useEffect, useState, SetStateAction } from "react";
-import { proxyCategory } from "@/lib/categorys";
 
-type TCategory = {
-    _id: string;
-    name: string;
-    alias: string;
-    order: number;
-  };
-
-  type TProps = {
-    setSelectedPost:  Dispatch<SetStateAction<Partial<TPost>>>;
-    selectedPost: Partial<TPost>
-  }
-
-
-type TPost = {
-    categoryId: string;
-    published: number;
-    title: string;
-    _id: string;
-  };
-
-const delay = 100;
+import { useEffect, useState } from "react";
+import {useParams} from "react-router-dom"
+import Search from '/search.svg'
+import { TProps, TPost } from "../../interface";
 
 export default function SideNav(props: TProps) {
     const {
         setSelectedPost,
         selectedPost
     } = props;
+    const params = useParams();
+    const categoryId = params.id || '67093df6ffbfb0ed0e882c7a'
     const [posts, setPosts] = useState<TPost[]>([])
 
     useEffect(() => {
-        async function fetchPosts(c: TCategory) {
+        async function fetchPosts() {
           const res = await fetch(`https://mango.881103.xyz/posts/find`, {
             method: "POST",
             mode: "cors", 
@@ -42,7 +24,7 @@ export default function SideNav(props: TProps) {
             },
             body: JSON.stringify({
               query: {
-                categoryId: c._id
+                categoryId: categoryId
               },
               options: { _id: 1, title: 1, categoryId: 1, published: 1 },
             }),
@@ -51,17 +33,11 @@ export default function SideNav(props: TProps) {
           setPosts(data);
           setSelectedPost(data[0])
         }
-
-        let timerId = setTimeout(function request() {
-          timerId = setTimeout(request, delay);
-          if (proxyCategory.category) {
-            clearTimeout(timerId);
-            fetchPosts(proxyCategory.category as TCategory)
-          }
-        }, delay);
+        
+        fetchPosts()
         
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, []);
+      }, [categoryId]);
 
 
     const selectPost = (post: TPost) => {
@@ -74,12 +50,12 @@ export default function SideNav(props: TProps) {
                 <div className="h-6 bg-white"></div>
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3">
-                        <Image
-                            src="/search.svg"
+                        <img
+                            src={Search}
                             alt="search Logo"
                             width={16}
                             height={16}
-                            priority
+
                         />
                     </div>
                     <input type="text" className="block w-full rounded-md border-0 py-1.5 pl-9 pr-20 shadow-sm ring-1 ring-inset ring-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-700" />

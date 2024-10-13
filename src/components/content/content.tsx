@@ -1,25 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
+import * as marked from 'marked';
+import { TProp } from "src/interface";
 
-type TPost = {
-  categoryId: string;
-  published: number;
-  title: string;
-  _id: string;
-  content?: string;
-};
-
-type TProps = {
-  selectedPost: Partial<TPost>
-}
-
-export default function Content(props: TProps) {
+export default function Content(props: TProp) {
   const {
     selectedPost
   } = props;
 
-  const [note, setNote] = useState<Partial<TPost>>({})
+  const id  = selectedPost?._id as string || ''
+  const markdownRef = useRef<HTMLDivElement>(null)
+
+  console.log(id)
 
   useEffect(() => {
     async function fetchPosts() {
@@ -31,7 +24,7 @@ export default function Content(props: TProps) {
         },
         body: JSON.stringify({
           query: {
-            _id: selectedPost._id,
+            _id: id,
           },
           options: {
             _id: 1,
@@ -43,17 +36,23 @@ export default function Content(props: TProps) {
         }),
       });
       const data = await res.json();
-      setNote(data[0])
+      if (markdownRef.current) {
+        markdownRef.current.innerHTML = marked.parse(decodeURIComponent(data[0].content || '')) as string;
+      }
     }
-
-    if (selectedPost?._id) {
+    
+    if (id) {
       fetchPosts();
+    } else {
+      if (markdownRef.current) {
+      markdownRef.current.innerHTML = ''
     }
-  }, [selectedPost?._id]);
+    }
+  }, [id]);
 
 
 
   return <section>
-    {decodeURIComponent(note!.content || '')}
+    <div className="max-w-full prose" ref={markdownRef}></div>
   </section>;
 }

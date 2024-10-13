@@ -1,21 +1,14 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
-import { proxyCategory } from "@/lib/categorys";
-
-type TCategory = {
-  _id: string;
-  name: string;
-  alias: string;
-  order: number;
-};
+import {useNavigate, useParams} from "react-router-dom"
+import viteLogo from '/vite.svg'
+import { TCategory } from "../../interface";
 
 export default function Header() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const params = useParams();
-  const param = params?.slug as string || "JavaScript";
+  const param = params.id || ''
   const [categorys, setCategorys] = useState<TCategory[]>([]);
   useEffect(() => {
     async function fetchPosts() {
@@ -24,32 +17,29 @@ export default function Header() {
         body: '{}'
       });
       const data = await res.json();
-      proxyCategory.category = data.find((c: TCategory) =>  c.name === param)
       const newData = data.sort((a: TCategory,b: TCategory) => a.order - b.order)
       setCategorys(newData)
     }
     fetchPosts();
     
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const linkPage = (category: TCategory) => {
-    proxyCategory.category = category
-    router.push(category.name)
+    sessionStorage.setItem('category', JSON.stringify(category))
+    navigate(`/${category._id}`)
   }
 
   return (
     <>
-    <div className="z-[101] lg:border-b bg-white">
-      <header className="flex m-auto bg-white max-w-screen-2xl lg:px-8">
+    <div className="z-[101] lg:border-b bg-white sticky top-0">
+      <header className="sticky top-0 flex m-auto bg-white max-w-screen-2xl lg:px-8">
         <div className="flex items-center w-[19rem] py-4">
-          <Image
-            src="/logo.svg"
+          <img
+            src={viteLogo}
             alt="Logo"
             className="w-7 h-7 text-gradient-to-r from-purple-500 to-pink-500"
             width={28}
             height={28}
-            priority
           />
           <span onClick={() => {}} className="pl-3.5 text-xl font-bold text-slate-900">
             星辰大海
@@ -64,7 +54,7 @@ export default function Header() {
                     key={category._id}
                     onClick={() => linkPage(category)}
                     className={`inline-flex items-center h-full border-b-2 cursor-pointer hover:text-purple-700 ${
-                      param === category.name
+                      param === category._id
                         ? "border-purple-700 text-purple-700"
                         : "hover:border-purple-700 border-b-white"
                     }`}
