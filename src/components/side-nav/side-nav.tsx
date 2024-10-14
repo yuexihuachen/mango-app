@@ -55,7 +55,6 @@ export default function SideNav(props: TProps) {
                             alt="search Logo"
                             width={16}
                             height={16}
-
                         />
                     </div>
                     <input type="text" className="block w-full rounded-md border-0 py-1.5 pl-9 pr-20 shadow-sm ring-1 ring-inset ring-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-700" />

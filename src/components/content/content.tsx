@@ -49,10 +49,23 @@ export default function Content(props: TProp) {
     }
     }
   }, [id]);
-
-
+  
 
   return <section>
-    <div className="max-w-full prose" ref={markdownRef}></div>
+    <div 
+    className={`
+      prose
+      prose-slate
+      prose-h2:mt-0
+      prose-h3:mt-0
+      prose-h4:mt-0
+      max-w-full
+      prose-code:rounded-md
+      prose-code:before:content-none 
+      prose-code:after:content-none
+      prose-p:before:content-none 
+      prose-p:after:content-none
+      prose-hr:my-4
+      `} ref={markdownRef}></div>
   </section>;
 }
