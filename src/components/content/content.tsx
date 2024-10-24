@@ -16,7 +16,7 @@ export default function Content(props: TProp) {
 
   useEffect(() => {
     async function fetchPosts() {
-      const res = await fetch(`https://mango.881103.xyz/posts/find`, {
+      const res = await fetch(`https://mango.881103.xyz/post/find`, {
         method: "POST",
         mode: "cors",
         headers: {

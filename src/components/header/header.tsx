@@ -12,7 +12,7 @@ export default function Header() {
   const [categorys, setCategorys] = useState<TCategory[]>([]);
   useEffect(() => {
     async function fetchPosts() {
-      const res = await fetch(`https://mango.881103.xyz/categorys/find`, {
+      const res = await fetch(`https://mango.881103.xyz/categories/find`, {
         method: "POST",
         body: '{}'
       });
