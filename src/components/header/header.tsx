@@ -14,7 +14,10 @@ export default function Header() {
     async function fetchPosts() {
       const res = await fetch(`https://mango.881103.xyz/categories/find`, {
         method: "POST",
-        body: '{}'
+        headers: {
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify({})
       });
       const data = await res.json();
       const newData = data.sort((a: TCategory,b: TCategory) => a.order - b.order)
