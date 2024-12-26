@@ -16,4 +16,4 @@ EXPOSE 3001
 
 # run npm install in our local machine
 # the command that starts our app
-CMD ["npm", "run", "server"]
+CMD ["npm", "run", "start"]
