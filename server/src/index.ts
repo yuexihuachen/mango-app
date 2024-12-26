@@ -13,7 +13,7 @@ import path from "path";
 dotenv.config({ path: [`.env.${process.env.NODE_ENV}`] });
 
 const app: Express = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 const nunjuckEnv = nunjucks.configure("views");
 
 nunjuckEnv.express(app);
