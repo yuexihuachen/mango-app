@@ -15,7 +15,7 @@ const auth_1 = require("./middlewares/auth");
 const path_1 = __importDefault(require("path"));
 dotenv_1.default.config({ path: [`.env.${process.env.NODE_ENV}`] });
 const app = (0, express_1.default)();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 const nunjuckEnv = nunjucks_1.default.configure("views");
 nunjuckEnv.express(app);
 (0, db_1.default)();

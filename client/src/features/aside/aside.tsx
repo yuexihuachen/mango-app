@@ -21,7 +21,7 @@ export default function SideNav() {
         _id: 0
       };
       if (sessionStorage.getItem('category')) {
-        category = JSON.parse(sessionStorage.getItem('category') || '')
+        category = JSON.parse(sessionStorage.getItem('category') || '')[0]
       }
       const response: any = await PostList({
         query: {
