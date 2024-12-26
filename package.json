@@ -9,11 +9,11 @@
     "debug": "pnpm -F './server' debug",
     "build": "pnpm -F './client' build",
     "client": "pnpm -F './client' dev",
-    "start": "bun --filter server start",
+    "start": "pnpm --filter ./server start",
     "clean": "rm -rf */node_modules",
     "lint": "eslint .",
-    "server:setup":"bun --filter server setup",
-    "setup": "bun --filter server setup && bun --filter client setup"
+    "server:setup":"pnpm --filter ./server install",
+    "setup": "pnpm --filter server setup && pnpm --filter client setup"
   },
   "author": "longwang",
   "license": "ISC"
