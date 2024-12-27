@@ -1,16 +1,16 @@
 import mongoose from "mongoose";
 
 export default function connectDB() {
-  const url: string = process.env.MONGO_URI || "";
+  const url: string = Bun.env.MONGO_URI || '';
+  console.log(url)
   try {
     mongoose.connect(url);
   } catch (err) {
-    process.exit(1);
+    console.log(`Database connect erro: ${err}`);
   }
   const dbConnection = mongoose.connection;
-
-  dbConnection.once("open", (data: any) => {
-    console.log(`Database success connected: ${url}`);
+  dbConnection.once("open", (_: any) => {
+    console.log(`Database connected: ${url}`);
   });
 
   dbConnection.on("error", (err: any) => {

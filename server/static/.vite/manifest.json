@@ -1,18 +1,30 @@
 {
-  "_vendor-CAAj8L8J.js": {
-    "file": "assets/vendor-CAAj8L8J.js",
+  "_vendor.js": {
+    "file": "assets/vendor.js",
     "name": "vendor"
   },
+  "src/error/error.tsx": {
+    "file": "assets/error.js",
+    "name": "error",
+    "src": "src/error/error.tsx",
+    "isEntry": true,
+    "imports": [
+      "_vendor.js"
+    ],
+    "css": [
+      "app.css"
+    ]
+  },
   "src/index.tsx": {
-    "file": "assets/app-D0msS-1u.js",
+    "file": "assets/app.js",
     "name": "app",
     "src": "src/index.tsx",
     "isEntry": true,
     "imports": [
-      "_vendor-CAAj8L8J.js"
+      "_vendor.js"
     ],
     "css": [
-      "assets/app-CIjtexCG.css"
+      "app.css"
     ]
   }
 }

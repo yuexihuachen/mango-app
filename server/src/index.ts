@@ -1,56 +1,81 @@
+import { type Context, Hono } from 'hono';
+import { prettyJSON } from 'hono/pretty-json';
+import { csrf } from 'hono/csrf';
+import * as nunjucks from 'nunjucks';
+import { jwt } from 'hono/jwt'
+import connectDB from './DB/db';
+import { userRoute, categoryRoute, postRoute } from './routes/index';
+import {CONSTANTS} from './constants/constants';
+import { HTTPException } from 'hono/http-exception';
+import { serveStatic } from 'hono/bun';
+import indexTemp from "./views/index.html" with { type: "text" };
+import manifest from "../static/.vite/manifest.json" with { type: "json" };
+import { Category } from './schemas/index';
 
-import express, {Express} from "express";
-import dotenv from "dotenv";
-import { Category } from "./schemas/category.schema";
-import nunjucks from "nunjucks";
-import categoryRouter from "./routes/categories";
-import {router as postRouter} from "./routes/posts";
-import {router as userRouter} from "./routes/users";
-import connectDB from "./db/db";
-import { authGuard } from "./middlewares/auth";
-import path from "path";
+const app = new Hono();
+const port = Bun.env['PORT'] || 3000;
 
-dotenv.config({ path: [`.env.${process.env.NODE_ENV}`] });
-
-const app: Express = express();
-const port = process.env.PORT || 3001;
-const nunjuckEnv = nunjucks.configure("views");
-
-nunjuckEnv.express(app);
 connectDB();
 
-// 解析请求体数据
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// csrf跨站请求伪造
+app.use(csrf());
+// 美化 json
+app.use(prettyJSON());
 
-// 静态资源
-app.use(express.static('.'));
-app.use(express.static('static'));
+app.use(
+  '/:name/auth/*',
+  jwt({
+    secret: Bun.env.AT_SECRET as string,
+  })
+)
 
-app.set('views', '/views');
-app.set("view engine", "html");
+app.route('/user', userRoute);
+app.route('/category', categoryRoute);
+app.route('/post', postRoute);
 
-app.use('/auth', authGuard);
+// 静态资源目录
+app.use('/static/*', serveStatic({ root: '/' }));
+app.use('*', serveStatic({ root: '/static/' }));
 
-app.use(categoryRouter);
-app.use(postRouter);
-app.use(userRouter);
-
-app.get(['/*'], async (req, res) => {
-  const { default: manifest } = await import(path.resolve('./static/.vite/manifest.json'), {
-    assert: {
-      type: "json",
-    },
+app.get('/:name?', async (cxt: Context) => {
+  let manifestFile = manifest;
+  if (Bun.env.NODE_ENV !== 'production') {
+    const filePath = Bun.resolveSync("./static/.vite/manifest.json", process.cwd());
+    const file = Bun.file(filePath);
+    manifestFile = await file.json();
+  }
+  const staticName = "src/index.tsx";
+  const category = await Category.find({},{});
+  const html = nunjucks.renderString(indexTemp, {
+    css: `/static/${manifestFile[staticName].css}`,
+    js: `/static/${manifestFile[staticName].file}`,
+    category: JSON.stringify(category),
   });
-  const category = await Category.find({},{})
-  res.render('index.html', {
-    js: `${manifest['src/index.tsx'].file}`,
-    css: `${manifest['src/index.tsx'].css}`,
-    category: JSON.stringify(category)
+  return cxt.html(html);
+});
+
+app.notFound(async (cxt: Context) => {
+  const staticName = "src/error/error.tsx";
+  const html = nunjucks.renderString(indexTemp, {
+    css: `/static/${manifest[staticName].css}`,
+    js: `/static/${manifest[staticName].file}`
   });
+  return cxt.html(html);
 })
 
+// 错误返回,jwt验证错误返回
+app.onError((err, c) => {
+  let msg = CONSTANTS.FAILURE;
+  if (err instanceof HTTPException && err.message === 'Unauthorized') {
+    msg = {
+      ...CONSTANTS.INVALID_ACCESS_TOKEN,
+      data: err
+    };
+  }
+  return c.json(msg, 404);
+})
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
-});
+export default { 
+  port, 
+  fetch: app.fetch, 
+}

@@ -1,54 +1,52 @@
 import { Post } from "../schemas/index";
-import { Request, Response } from "express";
-import APIResponse from "./response";
+import type { Context } from "hono";
 
-export class PostClass extends APIResponse {
-    constructor() {
-        super()
-    }
-
-    async create(req: Request, res: Response) {
-        const { title, content, categoryId, published } = req.body;
+export class PostClass {
+    async create(cxt: Context) {
+        const body = await cxt.req.json();
         const createPost = new Post({
-            title, content, categoryId, published
+            title: body.title, 
+            content: body.content, 
+            categoryId: body.categoryId,  
+            published: body.published
         });
         const data = await createPost.save()
-        res.json(data)
+        return cxt.json(data)
     }
 
 
-    async find(req: Request, res: Response) {
-        const { query = {}, options = {} } = req.body;
+    async find(cxt: Context) {
+        const body = await cxt.req.json();
         let titleRegex = {}
-        if (query.title) {
+        if (body.query.title) {
             titleRegex = {
                 title:  {
-                    $regex: new RegExp(`${query.title}`)
+                    $regex: new RegExp(`${body.query.title}`)
                 }
             }
-            delete query.title;
+            delete body.query.title;
         }
         const data = await Post.find({
-            ...query,
+            ...body.query,
             ...titleRegex
-        }, options);
-        res.json(data)
+        }, body.options);
+        return cxt.json(data);
     }
 
 
-    async update(req: Request, res: Response) {
-        const { _id, updatePostDto } = req.body;
+    async update(cxt: Context) {
+        const body = await cxt.req.json();
         const updateData = await Post.updateOne({
-            _id
+            _id: body._id
         }, {
-            $set: updatePostDto
+            $set: body.updatePostDto
         })
-        res.json(updateData);
+        return cxt.json(updateData);
     }
 
 
-    async delete(req: Request, res: Response) {
-        const { _id } = req.body;
-        res.json(await Post.deleteOne({_id}));
+    async delete(cxt: Context) {
+        const body = await cxt.req.json();
+        return cxt.json(await Post.deleteOne({_id:body._id}));
     }
 }

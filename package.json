@@ -5,15 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm run --filter '*' dev",
-    "server": "pnpm -F './server' dev",
-    "debug": "pnpm -F './server' debug",
-    "build": "pnpm -F './client' build",
-    "client": "pnpm -F './client' dev",
-    "start": "pnpm --filter ./server start",
-    "clean": "rm -rf */node_modules",
-    "lint": "eslint .",
-    "server:setup":"pnpm --filter ./server install",
-    "setup": "pnpm --filter server setup && pnpm --filter client setup"
+    "client:build": "pnpm -F './client' build",
+    "client:build:dev": "pnpm -F './client' build:dev",
+    "server:dev": "pnpm -F './server' dev",
+    "server:debug": "pnpm -F './server' debug",
+    "start": "pnpm -F './server' start"
   },
   "author": "longwang",
   "license": "ISC"

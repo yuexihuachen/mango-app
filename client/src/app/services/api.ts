@@ -1,17 +1,16 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
 import { nanoid } from "nanoid";
-import { RootState } from '../store'
 
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
   baseUrl: '/',
-  prepareHeaders: (headers, { getState }) => {
+  prepareHeaders: (headers) => {
     // 使用getState 访问您的 redux 存储
-    const store = (getState() as RootState);
+    // const store = (getState() as RootState);
     // if (token) {
     //   headers.set('authentication', `Bearer ${token}`)
     // }
-    console.log(store);
+    // console.log(store);
 
     const requestId = nanoid();
     headers.set('X-Request-ID', requestId);
