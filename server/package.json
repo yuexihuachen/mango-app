@@ -3,7 +3,8 @@
   "scripts": {
     "start": "bun --env-file=.env.production run src/index.ts",
     "dev": "bun run --hot src/index.ts",
-    "debug": "bun run --inspect src/index.ts"
+    "debug": "bun run --inspect src/index.ts",
+    "setup": "bun install"
   },
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.7",

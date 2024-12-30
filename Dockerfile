@@ -8,9 +8,7 @@ WORKDIR /workspace
 # copy the package.json files from local machine to the workdir in container
 COPY package*.json .
 
-RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.bashrc" SHELL="$(which bash)" bash -
-
-RUN pnpm server:setup
+RUN bun --filter server setup
 
 COPY . .
 
