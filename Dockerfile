@@ -1,6 +1,6 @@
 # pull the Node.js Docker image
 # Create a new build stage from a Node image.
-FROM oven/bun:latest
+FROM oven/bun:1 AS base
 
 # create the directory inside the container
 WORKDIR /workspace
@@ -8,7 +8,7 @@ WORKDIR /workspace
 # copy the package.json files from local machine to the workdir in container
 COPY . .
 
-RUN bun run server:setup
+RUN cd /workspace &&  bun --filter server setup
 
 # copy the generated modules and all other files to the container
 # our app is running on port 3000 within the container, so need to expose it
