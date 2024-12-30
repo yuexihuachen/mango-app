@@ -13,7 +13,7 @@ import manifest from "../static/.vite/manifest.json" with { type: "json" };
 import { Category } from './schemas/index';
 
 const app = new Hono();
-const port = Bun.env['PORT'] || 3000;
+const port = Bun.env['PORT'] || 3001;
 
 connectDB();
 
