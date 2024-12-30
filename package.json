@@ -9,6 +9,7 @@
     "client:build:dev": "pnpm -F './client' build:dev",
     "server:dev": "pnpm -F './server' dev",
     "server:debug": "pnpm -F './server' debug",
+    "server:setup": "bun --filter server setup",
     "start": "pnpm -F './server' start"
   },
   "author": "longwang",

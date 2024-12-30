@@ -8,7 +8,7 @@ WORKDIR /workspace
 # copy the package.json files from local machine to the workdir in container
 COPY package*.json .
 
-RUN bun --filter server setup
+RUN bun run server:setup
 
 COPY . .
 
