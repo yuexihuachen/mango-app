@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "mango-app-server",
   "scripts": {
     "start": "bun --env-file=.env.production run src/index.ts",
     "dev": "bun run --hot src/index.ts",

@@ -1,8 +1,7 @@
 {
-  "name": "light-frame",
+  "name": "mango-pp",
   "version": "1.0.0",
   "description": "light-template",
-  "type": "module",
   "scripts": {
     "dev": "pnpm run --filter '*' dev",
     "client:build": "pnpm -F './client' build",
