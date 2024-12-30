@@ -4,13 +4,7 @@ FROM oven/bun:1 AS base
 WORKDIR /workspace
 
 # copy the package.json files from local machine to the workdir in container
-
-RUN pwd
-# copy the package.json files from local machine to the workdir in container
-
-COPY . .
-
-RUN pwd
+COPY . /workspace
 
 RUN bun --filter server install
 
