@@ -8,7 +8,7 @@ WORKDIR /workspace
 # copy the package.json files from local machine to the workdir in container
 COPY . .
 
-RUN cd /workspace &&  bun --filter server setup
+RUN bun run --filter server setup
 
 # copy the generated modules and all other files to the container
 # our app is running on port 3000 within the container, so need to expose it
