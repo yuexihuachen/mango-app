@@ -30,7 +30,7 @@ export default defineConfig({
     },
     reportCompressedSize: true,
     emptyOutDir: true,
-    outDir: '../server/static',
+    outDir: '../static',
     manifest: true,
   }
 })

@@ -9,7 +9,7 @@ import {CONSTANTS} from './constants/constants';
 import { HTTPException } from 'hono/http-exception';
 import { serveStatic } from 'hono/bun';
 import indexTemp from "./views/index.html" with { type: "text" };
-import manifest from "../static/.vite/manifest.json" with { type: "json" };
+import manifest from "../../static/.vite/manifest.json" with { type: "json" };
 import { Category } from './schemas/index';
 
 const app = new Hono();

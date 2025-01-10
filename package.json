@@ -6,10 +6,9 @@
     "dev": "pnpm run --filter '*' dev",
     "client:build": "pnpm -F './client' build",
     "client:build:dev": "pnpm -F './client' build:dev",
-    "server:dev": "pnpm -F './server' dev",
+    "server:dev": "bun run ./server/src/index.ts",
     "server:debug": "pnpm -F './server' debug",
-    "start": "bun run --filter server start",
-    "server:setup": "bun --filter './server' setup"
+    "start": "bun --env-file=.env.production run ./server/src/index.ts"
   },
   "author": "longwang",
   "license": "ISC"
