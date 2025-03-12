@@ -1,15 +1,27 @@
 {
-  "name": "mango-pp",
-  "version": "1.0.0",
-  "description": "light-template",
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "dev": "pnpm run --filter '*' dev",
-    "client:build": "pnpm -F './client' build",
-    "client:build:dev": "pnpm -F './client' build:dev",
-    "server:dev": "bun run ./server/src/index.ts",
-    "server:debug": "pnpm -F './server' debug",
-    "start": "bun --env-file=.env.production run ./server/src/index.ts"
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "author": "longwang",
-  "license": "ISC"
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "next": "15.2.2"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@tailwindcss/postcss": "^4",
+    "tailwindcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.2",
+    "@eslint/eslintrc": "^3"
+  }
 }
