@@ -14,17 +14,15 @@ export default function Page() {
       }
     });
 
-    const res1 = await fetch(`/api/users`);
-    const res2 = await fetch(`/api/signin`);
     const res3 = await fetch(`/api/signin`, {
       method: 'POST',
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ username: name, password: pwd }),
       headers: {
         "Content-Type": "application/json"
       }
     });
 
-    console.log(res, res1, res2, res3);
+    console.log(res, res3);
   };
 
 
