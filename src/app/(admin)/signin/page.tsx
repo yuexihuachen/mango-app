@@ -13,8 +13,21 @@ export default function Page() {
         "Content-Type": "application/json"
       }
     });
-    console.log(res);
+
+    const res1 = await fetch(`/api/users`);
+    const res2 = await fetch(`/api/signin`);
+    const res3 = await fetch(`/api/signin`, {
+      method: 'POST',
+      body: JSON.stringify({ name }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    console.log(res, res1, res2, res3);
   };
+
+
   return (
     <div className="flex flex-col justify-center flex-1 min-h-full px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
