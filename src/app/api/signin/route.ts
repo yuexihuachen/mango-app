@@ -1,24 +1,30 @@
 export async function POST(request: Request) {
   // Parse the request body
   const body = await request.json();
-
+  const { username, passwrod } = body;
   const response = await fetch(`${process.env.API_URL}/login`, {
     method: 'POST',
-    body: JSON.stringify(body),
+    body: JSON.stringify({
+        username,
+        passwrod
+    }),
     headers: {
       'Content-Type': 'application/json',
     },
   });
 
   if (!response.ok) {
-    return new Response(JSON.stringify({
+    return new Response(
+      JSON.stringify({
         code: -1,
-        msg:'proxy api request failed',
-        data: {}
-    }), {
-      status: 201,
-      headers: { 'Content-Type': 'application/json' },
-    });
+        msg: 'proxy api request failed',
+        data: {},
+      }),
+      {
+        status: 201,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
   }
 
   const result = await response.json();
