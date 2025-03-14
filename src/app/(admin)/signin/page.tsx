@@ -1,21 +1,18 @@
 'use client';
-
 import Image from 'next/image';
 import { useState } from 'react';
-import { fetchProxy } from '@/app/lib/actions';
 
 export default function Page() {
   const [name, setName] = useState('');
   const [pwd, setPwd] = useState('');
   const login = async () => {
-    // const res = await fetch(`/login`, {
-    //   method: 'POST',
-    //   body: JSON.stringify({ username: name, password: pwd }),
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   }
-    // });
-    const res = await fetchProxy(`/login`, { username: name, password: pwd });
+    const res = await fetch(`/login`, {
+      method: 'POST',
+      body: JSON.stringify({ username: name, password: pwd }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
     console.log(res);
   };
   return (
