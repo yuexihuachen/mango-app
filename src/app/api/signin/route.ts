@@ -10,6 +10,17 @@ export async function POST(request: Request) {
     },
   });
 
+  if (!response.ok) {
+    return new Response(JSON.stringify({
+        code: -1,
+        msg:'proxy api request failed',
+        data: {}
+    }), {
+      status: 201,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   const result = await response.json();
 
   return new Response(JSON.stringify(result), {
