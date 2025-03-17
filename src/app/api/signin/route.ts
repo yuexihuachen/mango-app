@@ -13,25 +13,33 @@ export async function POST(request: Request) {
   //   },
   // })
   // `${process.env.API_URL}/login`
-  const response = await fetch('/login', {
-    method: 'POST',
-    body: JSON.stringify({
-      username,
-      password
-    }),
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-    },
-  })
-  
-  // Transform or forward the response 
-  const data = await response.json();
+  let data, error;
+  try {
+    const response = await fetch('/login', {
+      method: 'POST',
+      body: JSON.stringify({
+        username,
+        password
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    })
+    
+    // Transform or forward the response 
+    data = await response.json();
+  } catch(err) {
+    error = err
+  }
+
+
   const transformed = { 
     ...data, 
     url: `${process.env.API_URL}/login`,
     params : {
       body
-    }
+    },
+    error
   };
  
   return new Response(JSON.stringify(transformed), {
