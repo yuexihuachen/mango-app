@@ -15,7 +15,7 @@ export async function POST(request: Request) {
   // `${process.env.API_URL}/login`
   let data, error;
   try {
-    const response = await fetch('/login', {
+    const response = await fetch(`${process.env.API_URL}/login`, {
       method: 'POST',
       body: JSON.stringify({
         username,
@@ -35,7 +35,6 @@ export async function POST(request: Request) {
 
   const transformed = { 
     ...data, 
-    url: `${process.env.API_URL}/login`,
     params : {
       body
     },
