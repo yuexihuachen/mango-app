@@ -13,7 +13,7 @@ export async function POST(request: Request) {
   //   },
   // })
   // `${process.env.API_URL}/login`
-  let data, error;
+  let data, error, otherdata;
   try {
     const response = await fetch(`${process.env.API_URL}/login`, {
       method: 'POST',
@@ -21,11 +21,13 @@ export async function POST(request: Request) {
         username,
         password
       }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
+      headers: { 'Content-Type': 'application/json' }
+    }).then(res => {
+      return res.json()
+    }).catch(err => {
+      error = err
     })
-    
+    otherdata = response
     // Transform or forward the response 
     data = await response.json();
   } catch(err) {
@@ -38,7 +40,8 @@ export async function POST(request: Request) {
     params : {
       body
     },
-    error
+    error,
+    otherdata
   };
  
   return new Response(JSON.stringify(transformed), {
