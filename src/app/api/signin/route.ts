@@ -1,36 +1,11 @@
-export async function POST(request: Request) {
-  // Parse the request body
-  const body = await request.json();
-  const { username, password } = body;
-  const response = await fetch(`${process.env.API_URL}/login`, {
-    method: 'POST',
-    body: JSON.stringify({
-        username,
-        password
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    return new Response(
-      JSON.stringify({
-        code: -1,
-        msg: 'proxy api request failed',
-        data: {},
-      }),
-      {
-        status: 201,
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
-  }
-
-  const result = await response.json();
-
-  return new Response(JSON.stringify(result), {
-    status: 201,
+export async function POST() {
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos/1');
+ 
+  // Transform or forward the response
+  const data = await response.json();
+  const transformed = { ...data, source: 'proxied-through-nextjs' };
+ 
+  return new Response(JSON.stringify(transformed), {
     headers: { 'Content-Type': 'application/json' },
   });
 }
