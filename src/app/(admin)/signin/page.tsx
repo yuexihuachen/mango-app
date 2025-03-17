@@ -15,7 +15,7 @@ export default function Page() {
       }
     });
 
-    const res3 = await fetch(`/api/signin`, {
+    const res2 = await fetch(`/api/signin`, {
       method: 'POST',
       body: JSON.stringify({ username: name, password: pwd }),
       headers: {
@@ -23,7 +23,15 @@ export default function Page() {
       }
     });
 
-    console.log(res, res3);
+    const res3 = await fetch(`/api/login`, {
+      method: 'POST',
+      body: JSON.stringify({ username: name, password: pwd }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    console.log(res,res2 , res3);
   };
 
 
