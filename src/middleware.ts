@@ -5,9 +5,7 @@ import { cookies } from 'next/headers'
 const protectedRoutes = ['/note','/category']
 // const publicRoutes = ['/login', '/signup', '/']
  
-export default async function middleware(req: NextRequest) {
-  const newHeaders = new Headers(req.headers);
-  
+export default async function middleware(req: NextRequest) {  
   // 检查路由是公共的还是受保护的
   const path = req.nextUrl.pathname
   const isProtectedRoute = protectedRoutes.includes(path)
@@ -15,14 +13,11 @@ export default async function middleware(req: NextRequest) {
  
   // 3. Decrypt the session from the cookie
   const cookie = (await cookies()).get('at')?.value
-
-  newHeaders.set('x-middleware-auth', cookie as string);
  
   // 4. Redirect to /login if the user is not authenticated
   if (isProtectedRoute && !cookie) {
     return NextResponse.redirect(new URL('/signin', req.nextUrl))
   }
- 
   // 5. Redirect to /dashboard if the user is authenticated
   // if (
   //   isPublicRoute &&
