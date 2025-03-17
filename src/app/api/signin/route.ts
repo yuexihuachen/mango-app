@@ -1,12 +1,12 @@
 export async function POST(request: Request) {
   // Parse the request body
   const body = await request.json();
-  const { username, passwrod } = body;
+  const { username, password } = body;
   const response = await fetch(`${process.env.API_URL}/login`, {
     method: 'POST',
     body: JSON.stringify({
         username,
-        passwrod
+        password
     }),
     headers: {
       'Content-Type': 'application/json',
