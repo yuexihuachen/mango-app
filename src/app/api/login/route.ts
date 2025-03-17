@@ -1,3 +1,4 @@
+import axios from 'axios';
 
 type User = {
   username: string;
@@ -7,9 +8,13 @@ type User = {
 function resolveAfter2Seconds(args: User) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve({
-        args
-      });
+      axios.post(`${process.env.API_URL}/login`, {
+        ...args
+      }).then((res) => {
+        resolve(res)
+      }).catch(err => {
+        resolve(err)
+      })
     }, 2000);
   });
 }
@@ -37,7 +42,7 @@ export async function POST(request: Request) {
   const transformed = { 
     ...data, 
     params : {
-      body
+      ...body
     },
     id: 1
   };
