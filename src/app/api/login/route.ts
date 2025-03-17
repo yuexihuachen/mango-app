@@ -1,4 +1,4 @@
-// import axios from 'axios';
+import axios from 'axios';
 
 type User = {
   username: string;
@@ -8,18 +8,14 @@ type User = {
 function resolveAfter2Seconds(args: User) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      // axios.post(`${process.env.API_URL}/login`, {
-      //   ...args
-      // }).then((res) => {
-      //   resolve(res)
-      // }).catch(err => {
-      //   resolve(err)
-      // })
-      resolve({
-        ...args,
-        env: process.env.API_URL
+      axios.post(`${process.env.API_URL}/login`, {
+        ...args
+      }).then((res) => {
+        resolve(res)
+      }).catch(err => {
+        resolve(err)
       })
-    }, 2000);
+    }, 0);
   });
 }
 
