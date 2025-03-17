@@ -6,17 +6,17 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: {
-      allowedOrigins: ['mango.881103.xyz']
+      allowedOrigins: ['mango.881103.xyz'],
     },
   },
   async rewrites() {
     return [
-        {
-            source: '/:path*',
-            destination: 'https://mango.881103.xyz/:path*'
-        }
+      {
+        source: '/:path*',
+        destination: 'https://mango.881103.xyz/:path*',
+      },
     ];
-}
+  },
 };
 
 export default nextConfig;
