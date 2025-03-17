@@ -8,7 +8,7 @@ type User = {
 function resolveAfter2Seconds(args: User) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      axios.post(`${process.env.API_URL}/login`, {
+      axios.post(`/login`, {
         ...args
       }).then((res) => {
         resolve(res)
