@@ -13,19 +13,26 @@ export async function POST(request: Request) {
   //   },
   // })
   // `${process.env.API_URL}/login`
-  const response = await fetch(`${process.env.API_URL}/login`, {
-    method: 'POST',
-    body: JSON.stringify({
-      username,
-      password,
-    }),
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-    },
-  })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let response: any, error;
+  try {
+    response = await fetch(`${process.env.API_URL}/login`, {
+      method: 'POST',
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    })
+  } catch(err) {
+    error = err
+  }
+  
   // Transform or forward the response 
   const data = await response.json();
-  const transformed = { ...data, source: 'proxied-through-nextjs' };
+  const transformed = { ...data, error };
  
   return new Response(JSON.stringify(transformed), {
     headers: { 'Content-Type': 'application/json' },
