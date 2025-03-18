@@ -14,7 +14,13 @@ export default function Page() {
       }
     });
 
-    const data = await fetch(`/api/hello`);
+    const data = await fetch(`/api/signin`, {
+      method: 'POST',
+      body: JSON.stringify({ username: name, password: pwd }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
     console.log(res, data, res.ok)
 
   };
