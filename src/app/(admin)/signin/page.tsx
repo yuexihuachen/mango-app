@@ -1,6 +1,8 @@
 'use client';
 import Image from 'next/image';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
+import { Response, Token } from '@/app/lib/interface';
 
 export default function Page() {
   const [name, setName] = useState('');
@@ -12,17 +14,12 @@ export default function Page() {
       headers: {
         "Content-Type": "application/json"
       }
-    });
-
-    const data = await fetch(`/api/signin`, {
-      method: 'POST',
-      body: JSON.stringify({ username: name, password: pwd }),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-    console.log(res, data, res.ok)
-
+    }) as unknown as Response<Token>;
+    if (!res.code) {
+      Cookies.set('at', res.data.at,{ expires: 1 })
+      Cookies.set('rt', res.data.rt,{ expires: 7 })
+    }
+    
   };
 
 
