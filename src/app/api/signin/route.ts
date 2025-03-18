@@ -10,8 +10,7 @@ export async function POST(req: Request) {
       }
   });
 
-  return Response.json({ 
-    response: res,
-    body
-   });
+  return new Response(JSON.stringify(res), {
+    headers: { 'Content-Type': 'application/json' },
+  });
 }
