@@ -4,6 +4,7 @@ import { handle } from 'hono/vercel';
 const app = new Hono().basePath('/api')
 
 app.get('/hello', (c) => {
+  console.log(`**************** api/hello *******************`)
   return c.json({
     message: 'Hello Next.js!'
   })
