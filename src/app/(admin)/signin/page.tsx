@@ -14,7 +14,7 @@ export default function Page() {
       }
     });
     if (res.ok) {
-      const data = await fetch(`/api/login`, {
+      const data = await fetch(`/api/hello`, {
         method: 'POST',
         body: JSON.stringify({ username: name, password: pwd}),
         headers: {
