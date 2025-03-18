@@ -13,16 +13,9 @@ export default function Page() {
         "Content-Type": "application/json"
       }
     });
-    if (res.ok) {
-      const data = await fetch(`/api/hello`, {
-        method: 'POST',
-        body: JSON.stringify({ username: name, password: pwd}),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-      console.log(res.body, data)
-    }
+
+    const data = await fetch(`/api/hello`);
+    console.log(res, data, res.ok)
 
   };
 

@@ -6,10 +6,8 @@ export const runtime = 'edge'
 const app = new Hono().basePath('/api')
 
 app.get('/hello', (c: Context) => {
-  const body = c.req.json();
   return c.json({
-    message: 'Hello Next.js!',
-    body
+    message: 'Hello Next.js!'
   })
 })
 
