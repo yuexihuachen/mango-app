@@ -2,36 +2,35 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
+type TResponse = {
+  code: number;
+  msg: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any;
+}
 
 export default function Page() {
   const [name, setName] = useState('');
   const [pwd, setPwd] = useState('');
   const login = async () => {
-    const res = await fetch(`/login`, {
+    const response = await fetch(`/login`, {
       method: 'POST',
       body: JSON.stringify({ username: name, password: pwd }),
       headers: {
         "Content-Type": "application/json"
       }
-    });
+    }) as unknown as TResponse;
+    if (!response.code) {
+      const data = await fetch(`/api/login`, {
+        method: 'POST',
+        body: JSON.stringify({ username: name, password: pwd }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }) as unknown as TResponse;
+      console.log(data)
+    }
 
-    const res2 = await fetch(`/api/signin`, {
-      method: 'POST',
-      body: JSON.stringify({ username: name, password: pwd }),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-
-    const res3 = await fetch(`/api/login`, {
-      method: 'POST',
-      body: JSON.stringify({ username: name, password: pwd }),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-
-    console.log(res,res2 , res3);
   };
 
 
