@@ -3,20 +3,18 @@ import Image from 'next/image';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import { Response, Token } from '@/app/lib/interface';
 
 
 export default function Page() {
   const [name, setName] = useState('');
   const [pwd, setPwd] = useState('');
   const login = async () => {
-    const res = await axios.post(`/login`, { username: name, password: pwd });
-    console.log(res)
-    Cookies.set('at', 'at',{ expires: 1 })
-    //const data = await res as unknown as Response<Token>;
-    // if (!data.code) {
-    //   Cookies.set('at', res.data.at,{ expires: 1 })
-    //   Cookies.set('rt', res.data.rt,{ expires: 7 })
-    // }
+    const res = await axios.post(`/login`, { username: name, password: pwd }) as Response<Token>;
+    if (!res.code) {
+      Cookies.set('at', res.data.at,{ expires: 1 })
+      Cookies.set('rt', res.data.rt,{ expires: 7 })
+    }
   };
 
 
