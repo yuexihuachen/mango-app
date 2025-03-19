@@ -1,9 +1,12 @@
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation';
+'use client'
+import { useEffect } from 'react'
+import { signOut } from '@/app/actions'
+import { redirect } from "next/navigation";
+ 
+export default function Page() {
+  useEffect(() => {
+    signOut()
+  }, [])
 
-export default async function Page() {
-  const cookieStore = await cookies()
-  cookieStore.delete('at')
-  cookieStore.delete('rt')
   return redirect('/signin');
 }
