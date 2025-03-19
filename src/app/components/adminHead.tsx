@@ -57,7 +57,7 @@ export default async function Header() {
                   <span className="absolute -inset-1.5"></span>
                   <span className="sr-only"></span>
                   {token &&
-                    <Link href="/api/signout">
+                    <Link href="/signout">
                       <Image
                         width={20}
                         height={20}
