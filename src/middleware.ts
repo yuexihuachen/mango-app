@@ -3,13 +3,13 @@ import { cookies } from 'next/headers'
  
 // 公共路由和受保护路由
 const protectedRoutes = ['/note','/category']
-// const publicRoutes = ['/login', '/signup', '/']
+const publicRoutes = ['/signin', '/register']
  
 export default async function middleware(req: NextRequest) {  
   // 检查路由是公共的还是受保护的
   const path = req.nextUrl.pathname
   const isProtectedRoute = protectedRoutes.includes(path)
-  // const isPublicRoute = publicRoutes.includes(path)
+  const isPublicRoute = publicRoutes.includes(path)
  
   // 3. Decrypt the session from the cookie
   const cookie = (await cookies()).get('at')?.value
@@ -19,13 +19,12 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/signin', req.nextUrl))
   }
   // 5. Redirect to /dashboard if the user is authenticated
-  // if (
-  //   isPublicRoute &&
-  //   cookie &&
-  //   !req.nextUrl.pathname.startsWith('/dashboard')
-  // ) {
-  //   return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
-  // }
+  if (
+    isPublicRoute &&
+    cookie
+  ) {
+    return NextResponse.redirect(new URL('/note', req.nextUrl))
+  }
  
   return NextResponse.next()
 }

@@ -16,10 +16,8 @@ export default function Page() {
       username: name,
       password: pwd,
     });
-    console.log('res', res)
     if (!res?.data?.code) {
       const result = res.data as Response<Token>;
-      console.log('res.data', res.data)
       Cookies.set('at', result.data.at, { expires: 1 });
       Cookies.set('rt', result.data.rt, { expires: 7 });
       const returnUrl = document.referrer || '/note'
