@@ -19,7 +19,6 @@ export default function Page() {
       Cookies.set('at', res.data.at,{ expires: 1 })
       Cookies.set('rt', res.data.rt,{ expires: 7 })
     }
-    
   };
 
 
