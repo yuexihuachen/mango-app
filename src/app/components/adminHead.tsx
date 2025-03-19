@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 
 export default async function Header() {
+  const header = await headers();
+  const path = header.get('x-current-path');
   const navigation = [
     { name: '笔记', href: '/note' },
     { name: '类型', href: '/category' },
@@ -34,7 +36,7 @@ export default async function Header() {
                     <Link
                       key={item.name}
                       className={`px-3 py-5 text-sm font-medium relative text-gray-900 after:w-full after:h-0.5 after:absolute after:-bottom-0.5 after:left-0 ${
-                        'note' === item.name
+                        path === item.name
                           ? 'after:bg-indigo-500 font-medium'
                           : 'hover:after:bg-indigo-500'
                       }`}

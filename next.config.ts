@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: '/:path*',
+        source: '/api/:path*',
         destination: 'https://mango.881103.xyz/:path*',
       },
     ];

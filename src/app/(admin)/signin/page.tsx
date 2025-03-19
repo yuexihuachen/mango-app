@@ -12,7 +12,7 @@ export default function Page() {
   const [pwd, setPwd] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const login = async () => {
-    const res = await axios.post(`/login`, {
+    const res = await axios.post(`/api/login`, {
       username: name,
       password: pwd,
     });

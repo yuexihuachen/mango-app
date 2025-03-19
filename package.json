@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev:ssl": "next dev --turbopack --experimental-https",
-    "dev": "next dev --turbopack",
+    "dev": "NODE_OPTIONS='--inspect' next dev --turbopack ",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
