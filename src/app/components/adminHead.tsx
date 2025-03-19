@@ -60,7 +60,7 @@ export default async function Header() {
                         width={20}
                         height={20}
                         className="w-5 h-5"
-                        alt="logo"
+                        alt="signout"
                         src="/login.svg"
                         priority
                       />
@@ -71,7 +71,7 @@ export default async function Header() {
                         width={20}
                         height={20}
                         className="w-5 h-5"
-                        alt="logo"
+                        alt="signin"
                         src="/log-out.svg"
                         priority
                       />
@@ -94,7 +94,7 @@ export default async function Header() {
                   width={24}
                   height={24}
                   className="w-6 h-6"
-                  alt="logo"
+                  alt="signout-menu"
                   src="/head-menu.svg"
                   priority
                 />
@@ -149,7 +149,7 @@ export default async function Header() {
                   width={20}
                   height={20}
                   className="w-5 h-5"
-                  alt="logo"
+                  alt="sign-out"
                   src="/log-out.svg"
                   priority
                 />
