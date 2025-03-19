@@ -12,20 +12,21 @@ export default function Page() {
   const [pwd, setPwd] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const login = async () => {
-    axios.post(`/login`, {
+    const res = await axios.post(`/login`, {
       username: name,
       password: pwd,
-    }).then(res => {
+    });
+    console.log('res', res)
+    if (!res?.data?.code) {
       const result = res.data as Response<Token>;
+      console.log('res.data', res.data)
       Cookies.set('at', result.data.at, { expires: 1 });
       Cookies.set('rt', result.data.rt, { expires: 7 });
       const returnUrl = document.referrer || '/note'
       redirect(returnUrl)
-      // setIsModalOpen(true);
-    }).catch(() => {
+    } else {
       setIsModalOpen(true);
-    })
-
+    }
   };
 
   return (
