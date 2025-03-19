@@ -36,7 +36,7 @@ export default async function Header() {
                     <Link
                       key={item.name}
                       className={`px-3 py-5 text-sm font-medium relative text-gray-900 after:w-full after:h-0.5 after:absolute after:-bottom-0.5 after:left-0 ${
-                        path === item.name
+                        path === item.href
                           ? 'after:bg-indigo-500 font-medium'
                           : 'hover:after:bg-indigo-500'
                       }`}
