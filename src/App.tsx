@@ -1,36 +1,59 @@
-import Header from './components/header/header';
-import SideNav from './components/side-nav/side-nav';
-import Content from './components/content/content';
-import './App.css'
-import { useState } from 'react';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  redirect
+} from 'react-router';
+import React from 'react';
+import Cookies from 'js-cookie';
+import Index from '~/pages/index/index.tsx';
 
+const Signin = React.lazy(() => import("./pages/signin/signin"));
+const Signup = React.lazy(() => import("./pages/signup/signup"));
+const Note = React.lazy(() => import("./pages/note/note"));
+const Category = React.lazy(() => import("./pages/category/category"));
 
-type TPost = {
-  categoryId: string;
-  published: number;
-  title: string;
-  _id: string;
-};
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Index />,
+    children: [
+      {
+        path: '/signin',
+        loader: loginLoader,
+        element: <Signin />
+      },
+      {
+        path: '/signup',
+        element: <Signup />
+      },
+      {
+        path: '/note',
+        loader: protectedLoader,
+        element: <Note />
+      },
+      {
+        path: '/category',
+        loader: protectedLoader,
+        element: <Category />
+      }
+    ]
+  }
+])
 
-function App() {
-  const [selectedPost, setSelectedPost] = useState<Partial<TPost>>({})
-  return (
-    <>
-      <Header />
-      <div className="overflow-hidden">
-      <div className="px-4 m-auto max-w-screen-2xl md:px-8">
-        <div className="lg:block fixed w-[20.2666rem] inset-0 z-20  top-[3.8125rem] left-[max(0px,calc(50%-48rem))] right-auto pb-10 pl-8 pr-6 overflow-y-auto">
-          <SideNav {...{selectedPost,setSelectedPost}} />
-        </div>
-        <div className="lg:pl-[20.8rem]">
-          <main className="relative z-20 max-w-3xl pt-10 xl:max-w-none  h-[calc(100vh-61px)] overflow-y-auto">
-            <Content {...{selectedPost}} />
-          </main>
-        </div>
-      </div>
-    </div>
-    </>
-  )
+async function loginLoader() {
+  if (Cookies.get('at')) {
+    return redirect("/note");
+  }
+  return null;
 }
 
-export default App
+function protectedLoader() {
+  if (!Cookies.get('at')) {
+    return redirect("/signin");
+  }
+  return null;
+}
+
+export default function App() {
+  return <RouterProvider router={router} />;
+}
