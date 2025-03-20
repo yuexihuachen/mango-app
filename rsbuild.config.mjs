@@ -7,6 +7,6 @@ export default defineConfig({
     tsconfigPath: './tsconfig.json',
   },
   output: {
-    assetPrefix: 'mango-app'
+    assetPrefix: '/mango-app/'
   }
 });
