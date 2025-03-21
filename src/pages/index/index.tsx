@@ -1,13 +1,21 @@
-import { Outlet } from 'react-router';
+import { Outlet, useLocation } from 'react-router';
+import {useState, useLayoutEffect} from 'react';
 import Cookies from 'js-cookie';
 import Header from '~/components/header/header';
 
 const Index = () => {
   const token = Cookies.get('at');
-  const navigation = [
+  const location = useLocation();
+  const [navigation, setNavigation] = useState([
     { name: '笔记', href: '/note' },
     { name: '类型', href: '/category' },
-  ];
+  ])
+  useLayoutEffect(() => {
+    if (location.pathname === '/') {
+      setNavigation([{ name: '类型', href: '/category' }])
+    }
+  }, [])
+
   const props = {
     token,
     navigation

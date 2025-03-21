@@ -1,11 +1,15 @@
-import { useLocation, Link } from 'react-router';
+import { useLocation, Link, useNavigate } from 'react-router';
+import Cookies from 'js-cookie';
 
 export default function Header(props) {
   const { token, navigation } = props;
   const location = useLocation();
+  const navigator = useNavigate();
 
-  const isSignin = () => {
-
+  const signOut = () => {
+    Cookies.remove('at');
+    Cookies.remove('rt');
+    navigator('/note');
   };
   return (
     <div className="min-h-full border-b border-gray-300">
@@ -46,26 +50,18 @@ export default function Header(props) {
               <div className="flex items-center ml-4 md:ml-6">
                 <button
                   type="button"
-                  onClick={isSignin}
+                  onClick={signOut}
                   className="relative p-1 text-gray-400 rounded-full cursor-pointer"
                 >
                   <span className="absolute -inset-1.5"></span>
                   <span className="sr-only"></span>
-                  {token ? (
+                  {token && (
                     <img
                       width={20}
                       height={20}
                       className="w-5 h-5"
                       alt="signout"
                       src="/log-out.svg"
-                    />
-                  ) : (
-                    <img
-                      width={20}
-                      height={20}
-                      className="w-5 h-5"
-                      alt="signout"
-                      src="/login.svg"
                     />
                   )}
                 </button>
