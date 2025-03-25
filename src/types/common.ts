@@ -21,3 +21,7 @@ export type GloablStatus = {
     tab?: string;
 }
 
+export type At = {
+    at: string;
+}
+

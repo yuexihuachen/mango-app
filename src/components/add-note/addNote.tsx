@@ -4,9 +4,11 @@ import * as marked from 'marked';
 import CodeMirror, { EditorView } from '@uiw/react-codemirror';
 import { useAppDispatch } from '~/hooks';
 import { updateStatus } from '~/features/global/globalSlice';
+import httpRequest from '~/lib/httpClient';
+import { Note, Response } from '~/types';
 
 function AddNote() {
-  const { data, loading } = useFetch('/category/find');
+  const { data } = useFetch('/category/find');
   const dispatch = useAppDispatch()
   const markdownRef = useRef<HTMLDivElement>(null);
   const [category, setCagetory] = useState<string>('');
@@ -21,21 +23,24 @@ function AddNote() {
   }, []);
 
   useEffect(() => {
-    dispatch(updateStatus({
-        loading
-    }))
-  }, [loading])
+
+  }, [])
 
   const savePost = async () => {
-    // const res = await useFetch('/post/auth/create', {
-    //   title,
-    //   content: encodeURIComponent(content),
-    //   categoryId: category,
-    //   published,
-    // });
-    dispatch(updateStatus({
-      tab: '1'
-  }))
+    const res: Response<Omit<Note, 'id'>> = await httpRequest.post('/auth/note/create', {
+      title,
+      content: encodeURIComponent(content),
+      categoryId: category,
+      published,
+    });
+    if (res.code === 0) {
+      dispatch(updateStatus({
+        modal: {
+          show: true,
+          content: '新增成功'
+        }
+      }))
+    }
   };
 
   return (
@@ -78,7 +83,7 @@ function AddNote() {
               autoComplete="category-name"
               className="px-3 appearance-none row-start-1 col-start-1 block w-full text-base max-w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
             >
-              {data && data.map((c) => {
+              {data && data.data.map((c) => {
                   return (
                     <option key={c.id} value={c.id}>
                       {c.alias}

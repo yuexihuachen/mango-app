@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import httpRequest from "~/lib/httpClient";
 
 /**
- * fetch post method
+ * useFetch 请求数据
+ * method: Post
  */
 export default (url: string, body = {}) => {
     const [data, setData] = useState(null);
@@ -12,7 +13,7 @@ export default (url: string, body = {}) => {
     useEffect(() => {
         httpRequest.post(url, body).then(res => {
             setLoading(false)
-            setData(res.data)
+            setData(res)
         })
         .catch(err => {
             setLoading(false);

@@ -8,6 +8,7 @@ export type Note = {
 
 export type InitNote = {
     notes: Note[]
+    currentNote: Partial<Note>
 }
 
 export type Tab = {

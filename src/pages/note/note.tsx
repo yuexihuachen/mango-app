@@ -1,9 +1,10 @@
 import React from 'react';
 import Tabs from '~/components/tabs/tabs';
-import AddNote from '~/components/add-note/addNote';
-import SearchNote from '~/components/search-note/searchNote';
-import EditNote from '~/components/edit-note/editNote';
-import ViewNote from '~/components/view-note/viewNote';
+
+const SearchNote = React.lazy(() => import('~/components/search-note/searchNote'))
+const AddNote = React.lazy(() => import('~/components/add-note/addNote'))
+const ViewNote = React.lazy(() => import('~/components/view-note/viewNote'))
+const EditNote = React.lazy(() => import('~/components/edit-note/editNote'))
 
 const Note = () => {
   const items = [

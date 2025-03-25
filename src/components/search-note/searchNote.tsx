@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import httpRequest from '~/lib/httpClient';
 import { useAppDispatch, useAppSelector } from '~/hooks';
 import { Response, Note, SearchNoteBody } from '~/types';
-import { searchNote } from '~/features/note/noteSlice';
+import { searchNote, selectedNote } from '~/features/note/noteSlice';
 import useFetch from '~/hooks/useFetch';
 import { groupBy } from '~/utils/utils';
+import { updateStatus } from '~/features/global/globalSlice';
 
 function SearchNote() {
   const dispatch = useAppDispatch();
@@ -16,8 +17,8 @@ function SearchNote() {
   const [objCategory, setObjCategory] = useState({})
 
   useEffect(() => {
-    if (categories) {
-        setObjCategory(groupBy(categories, 'id'));
+    if (categories?.data) {
+        setObjCategory(groupBy(categories.data, 'id'));
     }
 
   }, [loading]);
@@ -41,13 +42,18 @@ function SearchNote() {
 
   const deleteNote = async (note: Note) => {};
 
-  const editNote = async (note: Note) => {};
+  const editNote = async (note: Note) => {
+    dispatch(selectedNote(note))
+    dispatch(updateStatus({
+      tab: '3'
+    }))
+  };
 
   const viewNote = async (note: Note) => {};
 
   return (
     <>
-      <div className="grid grid-cols-4 gap-y-4 mx-4 text-base sticky top-[55px] bg-white z-20">
+      <div className="z-20 grid grid-cols-4 mx-4 text-base bg-white gap-y-4">
         <div className="inline-grid items-end h-24 p-3">
           <div className="sm:col-span-3">
             <label
@@ -83,7 +89,7 @@ function SearchNote() {
               onChange={(e) => setCagetory(e.target.value)}
               className="px-3 appearance-none row-start-1 col-start-1 block w-full text-base max-w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
             >
-              {!loading && categories.map((item) => {
+              {!loading && categories.data.map((item) => {
                 return (
                   <option key={item.id} value={item.id}>
                     {item.alias}
@@ -132,10 +138,11 @@ function SearchNote() {
       <div className="grid grid-cols-4 m-4 text-base pb-11">
         {
           notes.map((note) => {
+            const category = objCategory[note.category]?.alias
             return (
               <React.Fragment key={note.id}>
                 <div className="px-3 py-6 border-b">{note.title}</div>
-                <div className="px-3 py-6 border-b">{objCategory[note.category].alias}</div>
+                <div className="px-3 py-6 border-b">{category}</div>
                 <div className="px-3 py-6 border-b">
                   {note.published === '1' ? '是' : '否'}
                 </div>

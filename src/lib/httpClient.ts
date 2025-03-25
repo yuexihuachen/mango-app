@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { Response, At } from '~/types';
 
 // axios instance
 const httpRequest = axios.create({
@@ -9,13 +10,13 @@ const httpRequest = axios.create({
 
 const refreshUserToken = () => {
   const url = `${process.env.API_URL}/refresh`;
-  const refreshToken = Cookies.get('rt')
+  const rt = Cookies.get('rt')
   return httpRequest
     .post(url, {
-      refreshToken
+      rt
     })
     .then(res => {
-      return res.data
+      return res
     })
 }
 
@@ -55,10 +56,14 @@ httpRequest.interceptors.response.use(
   async error => {
     const res = error.response
     // after token expired to refresh token
-    if (res && res.data && res.data.message === 'INVALID_ACCESS_TOKEN') {
-      const refreshTokenResponse = await refreshUserToken()
-      if (refreshTokenResponse && !refreshTokenResponse.message) {
-        return httpRequest.request(res.config)
+    if (res && res.data && res.data.msg === 'INVALID_ACCESS_TOKEN') {
+      const refreshTokenResponse = await refreshUserToken() as unknown as Response<At>
+      if (refreshTokenResponse.code !== 0) {
+        Cookies.remove('at');
+        Cookies.remove('rt');
+        window.location.href = '/signin'
+      } else {
+        Cookies.set('at', refreshTokenResponse.data.at, { expires: 1 });
       }
       return Promise.resolve(refreshTokenResponse)
     }

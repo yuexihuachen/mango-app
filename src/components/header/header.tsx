@@ -12,7 +12,7 @@ export default function Header(props) {
     navigator('/note');
   };
   return (
-    <div className="min-h-full border-b border-gray-300">
+    <div className="sticky top-0 z-50 min-h-full border-b border-gray-300">
       <nav className="bg-white">
         <div className="w-9/12 mx-auto sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">

@@ -47,7 +47,7 @@ async function loginLoader() {
   return null;
 }
 
-function protectedLoader() {
+async function protectedLoader() {
   if (!Cookies.get('at')) {
     return redirect("/signin");
   }
