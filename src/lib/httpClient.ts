@@ -1,12 +1,14 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import CONSTANTS from '~/constants/constants';
 
 // axios instance
-const httpRequest = axios.create();
+const httpRequest = axios.create({
+  baseURL: process.env.API_URL,
+  timeout: 15000,
+});
 
 const refreshUserToken = () => {
-  const url = `${CONSTANTS.API_URL}/refresh`;
+  const url = `${process.env.API_URL}/refresh`;
   const refreshToken = Cookies.get('rt')
   return httpRequest
     .post(url, {

@@ -1,15 +1,21 @@
-import { useState } from 'react';
+import { useAppSelector, useAppDispatch } from '~/hooks';
+import { updateStatus } from '~/features/global/globalSlice';
 
 export default function Tabs(props) {
-  const { items, itemKey } = props;
-  const [selectedKey, setSelectedKey] = useState(itemKey);
+  const { items } = props;
+  const itemKey = useAppSelector((state) => state.global.tab);
+  const dispatch = useAppDispatch();
   const onSelectTab = (key) => {
-    setSelectedKey(key);
+    dispatch(
+      updateStatus({
+        tab: key,
+      }),
+    );
   };
   return (
     <div className="min-h-full">
       <nav className="bg-white">
-        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="w-9/12 px-4 mx-auto sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 border-b border-gray-300">
             <div className="flex items-center">
               <div className="block">
@@ -19,7 +25,7 @@ export default function Tabs(props) {
                       key={item.key}
                       onClick={() => onSelectTab(item.key)}
                       className={`px-3 py-5 text-sm font-medium relative  after:w-full after:h-1 after:absolute after:-bottom-1 after:left-0 ${
-                        selectedKey === item.key
+                        itemKey === item.key
                           ? 'after:bg-indigo-500 font-medium text-indigo-600'
                           : 'hover:after:bg-indigo-500 text-gray-900'
                       }`}
@@ -35,9 +41,8 @@ export default function Tabs(props) {
             {items.map((item) => (
                     <div
                       key={item.key}
-                      onClick={() => onSelectTab(item.key)}
                       className={`mt-4 text-gray-500 ${
-                        selectedKey === item.key
+                        itemKey === item.key
                           ? 'block'
                           : 'hidden'
                       }`}

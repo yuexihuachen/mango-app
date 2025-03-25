@@ -1,23 +1,36 @@
 import { useState } from 'react';
 import httpRequest from '~/lib/httpClient';
 import Cookies from 'js-cookie';
-import Modal from '~/components/modal/modal';
-import CONSTANTS from '~/constants/constants';
+import { useAppDispatch } from '~/hooks';
+import { Response, SigninData} from '~/types/common';
+import { redirect, useNavigate } from 'react-router';
+import { updateStatus } from '~/features/global/globalSlice';
 
 const Signin = () => {
+  const navigator = useNavigate();
+  const dispatch = useAppDispatch();
   const [name, setName] = useState('');
   const [pwd, setPwd] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const login = async () => {
-    const res = await httpRequest.post(`${CONSTANTS.API_URL}/login`, {
+    const res = await httpRequest.post(`${process.env.API_URL}/login`, {
       username: name,
       password: pwd,
-    });
+    }) as Response<SigninData>;
     if (res?.code === 0) {
       Cookies.set('at', res.data.at, { expires: 1 });
       Cookies.set('rt', res.data.rt, { expires: 7 });
+      if (document.referrer) {
+        redirect(document.referrer)
+      }
+      navigator('/note')
     } else {
-      setIsModalOpen(true);
+      dispatch(updateStatus({
+        modal: {
+          show: true,
+          content: '登录异常'
+        }
+      }))
     }
   };
 
@@ -101,13 +114,6 @@ const Signin = () => {
           </div>
         </div>
       </div>
-      <Modal
-        content="登录失败"
-        open={isModalOpen}
-        onOk={() => {
-          setIsModalOpen(false);
-        }}
-      />
     </>
   );
 };

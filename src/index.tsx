@@ -1,13 +1,12 @@
-import React, { StrictMode, Suspense } from 'react';
+import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { store } from '~/store';
+import { Provider } from 'react-redux';
 import './index.css';
-import App from "./App";
+import App from './App';
 
-createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-      <Suspense fallback={<div>loading</div>}>
-        <App />
-      </Suspense>
-    </StrictMode>
-  )
-  
+const root = createRoot(document.getElementById('root'));
+
+root.render(
+  <Provider store={store} children={<App />} />
+);

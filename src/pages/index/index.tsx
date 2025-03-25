@@ -2,6 +2,8 @@ import { Outlet, useLocation } from 'react-router';
 import {useState, useLayoutEffect} from 'react';
 import Cookies from 'js-cookie';
 import Header from '~/components/header/header';
+import Loading from '~/components/loading/loading';
+import Modal from '~/components/modal/modal';
 
 const Index = () => {
   const token = Cookies.get('at');
@@ -10,9 +12,10 @@ const Index = () => {
     { name: '笔记', href: '/note' },
     { name: '类型', href: '/category' },
   ])
+
   useLayoutEffect(() => {
     if (location.pathname === '/') {
-      setNavigation([{ name: '类型', href: '/category' }])
+      setNavigation([{ name: 'test', href: '/' }])
     }
   }, [])
 
@@ -23,9 +26,11 @@ const Index = () => {
   return (
     <div className="content">
       <Header {...props}/>
-      <div>
+      <div className="py-2">
         <Outlet />
       </div>
+      <Loading />
+      <Modal />
     </div>
   );
 };

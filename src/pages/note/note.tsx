@@ -31,9 +31,7 @@ const Note = () => {
 
   return (
     <>
-      <h2 className="px-6 py-4 text-2xl font-bold tracking-tight text-gray-900">
-      </h2>
-      <Tabs items={items} itemKey={'2'} />
+      <Tabs items={items} />
     </>
   );
 };
