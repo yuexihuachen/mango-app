@@ -13,7 +13,7 @@ export default defineConfig({
     assetPrefix: '/mango-app/'
   },
   html: {
-    title: '读史的程序员',
+    title: '笔记',
     favicon: 'https://cdn.jsdelivr.net/gh/yuexihuachen/CDN/favicon-32x32.png',
   },
 });

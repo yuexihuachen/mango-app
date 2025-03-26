@@ -20,13 +20,13 @@ const Note = () => {
     },
     {
       key: '3',
-      label: '编辑',
-      children: <EditNote />
+      label: '查看',
+      children: <ViewNote />
     },
     {
       key: '4',
-      label: '查看',
-      children: <ViewNote />
+      label: '',
+      children: <EditNote />
     },
   ];
 

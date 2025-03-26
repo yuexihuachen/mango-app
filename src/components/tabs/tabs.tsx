@@ -20,7 +20,7 @@ export default function Tabs(props) {
             <div className="flex items-center">
               <div className="block">
                 <div className="flex items-baseline space-x-4">
-                  {items.map((item) => (
+                  {items.filter(item => item.label).map((item) => (
                     <div
                       key={item.key}
                       onClick={() => onSelectTab(item.key)}

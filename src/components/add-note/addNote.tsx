@@ -48,15 +48,13 @@ function AddNote() {
       <div className="grid grid-cols-2 gap-4 m-4 text-4xl">
         <div className="h-24 p-3">
           <div className="sm:col-span-3">
-            <label
-              htmlFor="title"
+            <div
               className="block text-sm font-medium leading-6 text-gray-900"
             >
               标题
-            </label>
+            </div>
             <div className="mt-2">
               <input
-                id="title"
                 name="title"
                 type="text"
                 onChange={(e) => setTitle(e.target.value)}
@@ -68,15 +66,13 @@ function AddNote() {
           </div>
         </div>
         <div className="h-24 p-3">
-          <label
-            htmlFor="category"
+          <div
             className="block text-sm font-medium leading-6 text-gray-900"
           >
             类型
-          </label>
+          </div>
           <div className="grid mt-2">
             <select
-              id="category"
               name="category"
               value={category}
               onChange={(e) => setCagetory(e.target.value)}
@@ -138,7 +134,6 @@ function AddNote() {
             <div className="relative flex gap-x-3">
               <div className="flex items-center h-6">
                 <input
-                  id="published"
                   type="checkbox"
                   checked={!!published}
                   onChange={(e) => setPublished(e.target.checked ? 1 : 0)}
@@ -146,12 +141,11 @@ function AddNote() {
                 />
               </div>
               <div className="text-sm leading-6">
-                <label
-                  htmlFor="published"
+                <div
                   className="font-medium text-gray-900"
                 >
                   是否发布
-                </label>
+                </div>
               </div>
             </div>
           </div>
