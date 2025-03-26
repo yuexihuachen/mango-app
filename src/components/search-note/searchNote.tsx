@@ -6,6 +6,8 @@ import { searchNote, selectedNote } from '~/features/note/noteSlice';
 import useFetch from '~/hooks/useFetch';
 import { groupBy } from '~/utils/utils';
 import { updateStatus } from '~/features/global/globalSlice';
+import Modal from '~/components/modal/modal';
+import Toast from '~/components/toast/toast';
 
 function SearchNote() {
   const dispatch = useAppDispatch();
@@ -15,6 +17,25 @@ function SearchNote() {
   const [category, setCagetory] = useState<string>('');
   const [published, setPublished] = useState<number>(-1);
   const [objCategory, setObjCategory] = useState({});
+  const [open, setOpen] = useState(false);
+  const [curNote, setCurNote] = useState(null);
+  const [deleteContent] = useState('确定删除当前笔记？');
+  const [toastOpen, setToastOpen] = useState(false)
+
+  const onOk = async () => {
+    setOpen(false);
+    const data = await httpRequest.post('/auth/note/delete', {
+      id: curNote.id,
+    }) as Response<Note> ;
+    if (data?.code === 0) {
+      setToastOpen(true);
+      searchPosts()
+    }
+  };
+
+  const onCancel = () => {
+    setOpen(false);
+  }
 
   useEffect(() => {
     if (categories?.data) {
@@ -41,7 +62,10 @@ function SearchNote() {
     }
   };
 
-  const deleteNote = async (note: Note) => {};
+  const deleteNote = (note: Note) => {
+    setCurNote(note);
+    setOpen(true);
+  };
 
   const editNote = async (note: Note) => {
     dispatch(selectedNote(note));
@@ -52,16 +76,21 @@ function SearchNote() {
     );
   };
 
-  const viewNote = async (note: Note) => {};
+  const viewNote = async (note: Note) => {
+    dispatch(selectedNote(note));
+    dispatch(
+      updateStatus({
+        tab: '3',
+      }),
+    );
+  };
 
   return (
     <>
-      <div className="z-20 grid grid-cols-4 mx-4 text-base bg-white gap-y-4">
-        <div className="inline-grid items-end h-24 p-3">
+      <div className="z-20 grid grid-cols-4 text-base bg-white gap-y-4">
+        <div className="inline-grid items-end h-24 pr-3">
           <div className="sm:col-span-3">
-            <div
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <div className="block text-sm font-medium leading-6 text-gray-900">
               标题
             </div>
             <div className="mt-2">
@@ -76,10 +105,8 @@ function SearchNote() {
             </div>
           </div>
         </div>
-        <div className="inline-grid items-end h-24 p-3">
-          <div
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
+        <div className="inline-grid items-end h-24 pr-3">
+          <div className="block text-sm font-medium leading-6 text-gray-900">
             类型
           </div>
           <div className="grid mt-2">
@@ -101,10 +128,8 @@ function SearchNote() {
             </select>
           </div>
         </div>
-        <div className="inline-grid items-end h-24 p-3">
-          <div
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
+        <div className="inline-grid items-end h-24 pr-3">
+          <div className="block text-sm font-medium leading-6 text-gray-900">
             是否发布
           </div>
           <div className="grid mt-2">
@@ -121,7 +146,7 @@ function SearchNote() {
             </select>
           </div>
         </div>
-        <div className="inline-grid items-end h-24 p-3">
+        <div className="inline-grid items-end h-24">
           <button
             type="button"
             onClick={searchPosts}
@@ -130,22 +155,26 @@ function SearchNote() {
             搜索
           </button>
         </div>
-        <div className="p-3 border-b">标题</div>
-        <div className="p-3 border-b">类别</div>
-        <div className="p-3 border-b">是否发布</div>
-        <div className="p-3 border-b">操作</div>
+        <div className="p-3 border-b border-gray-200">标题</div>
+        <div className="p-3 border-b border-gray-200">类别</div>
+        <div className="p-3 border-b border-gray-200">是否发布</div>
+        <div className="p-3 border-b border-gray-200">操作</div>
       </div>
-      <div className="grid grid-cols-4 ml-4 mr-4 text-base pb-11">
+      <div className="grid grid-cols-4 text-base pb-11">
         {notes.map((note) => {
           const category = objCategory[note.category]?.alias;
           return (
             <React.Fragment key={note.id}>
-              <div className="px-3 py-6 border-b">{note.title}</div>
-              <div className="px-3 py-6 border-b">{category}</div>
-              <div className="px-3 py-6 border-b">
+              <div className="px-3 py-6 border-b border-gray-200">
+                {note.title}
+              </div>
+              <div className="px-3 py-6 border-b border-gray-200">
+                {category}
+              </div>
+              <div className="px-3 py-6 border-b border-gray-200">
                 {note.published === '1' ? '是' : '否'}
               </div>
-              <div className="px-3 py-6 border-b cursor-pointer">
+              <div className="px-3 py-6 border-b border-gray-200 cursor-pointer">
                 <span className="flex items-center ml-auto font-medium text-indigo-600">
                   <span
                     onClick={() => viewNote(note)}
@@ -185,6 +214,23 @@ function SearchNote() {
           );
         })}
       </div>
+      <Modal
+        {...{
+          open,
+          ...{ content: deleteContent },
+          onOk,
+          onCancel
+        }}
+      />
+      <Toast 
+        {
+          ...{
+            open: toastOpen,
+            content: '删除成功',
+            onCancel: () => setToastOpen(false)
+          }
+        }
+      />
     </>
   );
 }

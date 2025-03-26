@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { config } from 'process';
 import { Response, At } from '~/types';
 
 // axios instance

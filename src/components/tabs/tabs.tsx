@@ -24,7 +24,7 @@ export default function Tabs(props) {
                     <div
                       key={item.key}
                       onClick={() => onSelectTab(item.key)}
-                      className={`px-3 py-5 text-sm font-medium relative  after:w-full after:h-1 after:absolute after:-bottom-1 after:left-0 ${
+                      className={`px-3 py-5 text-sm font-medium relative  after:w-full after:h-0.5 after:absolute after:-bottom-0.5 after:left-0 ${
                         itemKey === item.key
                           ? 'after:bg-indigo-500 font-medium text-indigo-600'
                           : 'hover:after:bg-indigo-500 text-gray-900'

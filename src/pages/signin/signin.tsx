@@ -1,16 +1,19 @@
 import { useState } from 'react';
 import httpRequest from '~/lib/httpClient';
 import Cookies from 'js-cookie';
-import { useAppDispatch } from '~/hooks';
 import { Response, SigninData} from '~/types/common';
 import { redirect, useNavigate } from 'react-router';
-import { updateStatus } from '~/features/global/globalSlice';
+import Modal from '~/components/modal/modal';
 
 const Signin = () => {
   const navigator = useNavigate();
-  const dispatch = useAppDispatch();
   const [name, setName] = useState('');
   const [pwd, setPwd] = useState('');
+  const [open, setOpen] = useState(false)
+
+  const onOk = () => {
+    setOpen(false)
+  }
 
   const login = async () => {
     const res = await httpRequest.post(`${process.env.API_URL}/login`, {
@@ -25,12 +28,7 @@ const Signin = () => {
       }
       navigator('/note')
     } else {
-      dispatch(updateStatus({
-        modal: {
-          show: true,
-          content: '登录异常'
-        }
-      }))
+      setOpen(true)
     }
   };
 
@@ -114,6 +112,11 @@ const Signin = () => {
           </div>
         </div>
       </div>
+      <Modal {...{ 
+        open, 
+        ...{ content: '登录异常' },
+        onOk
+        }} />
     </>
   );
 };

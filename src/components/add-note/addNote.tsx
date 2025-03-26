@@ -1,20 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import useFetch from '~/hooks/useFetch';
 import * as marked from 'marked';
 import CodeMirror, { EditorView } from '@uiw/react-codemirror';
-import { useAppDispatch } from '~/hooks';
-import { updateStatus } from '~/features/global/globalSlice';
 import httpRequest from '~/lib/httpClient';
 import { Note, Response } from '~/types';
+import Modal from '~/components/modal/modal';
 
 function AddNote() {
   const { data } = useFetch('/category/find');
-  const dispatch = useAppDispatch()
   const markdownRef = useRef<HTMLDivElement>(null);
   const [category, setCagetory] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [published, setPublished] = useState<number>(0);
   const [content, setContent] = useState<string>('');
+  const [open, setOpen] = useState(false);
   const onChange = React.useCallback((val: string) => {
     if (markdownRef.current) {
       setContent(val);
@@ -22,24 +21,19 @@ function AddNote() {
     }
   }, []);
 
-  useEffect(() => {
-
-  }, [])
+  const onOk = () => {
+    setOpen(false);
+  }
 
   const savePost = async () => {
     const res: Response<Omit<Note, 'id'>> = await httpRequest.post('/auth/note/create', {
       title,
       content: encodeURIComponent(content),
-      categoryId: category,
+      category: category,
       published,
     });
     if (res.code === 0) {
-      dispatch(updateStatus({
-        modal: {
-          show: true,
-          content: '新增成功'
-        }
-      }))
+      setOpen(true)
     }
   };
 
@@ -160,6 +154,13 @@ function AddNote() {
           </button>
         </div>
       </div>
+      <Modal
+        {...{
+          open,
+          ...{ content: '新增成功' },
+          onOk
+        }}
+      />
     </>
   );
 }

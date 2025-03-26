@@ -3,7 +3,6 @@ import {useState, useLayoutEffect} from 'react';
 import Cookies from 'js-cookie';
 import Header from '~/components/header/header';
 import Loading from '~/components/loading/loading';
-import Modal from '~/components/modal/modal';
 
 const Index = () => {
   const token = Cookies.get('at');
@@ -30,7 +29,6 @@ const Index = () => {
         <Outlet />
       </div>
       <Loading />
-      <Modal />
     </div>
   );
 };

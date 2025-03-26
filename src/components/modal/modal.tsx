@@ -1,26 +1,7 @@
-import { useAppSelector, useAppDispatch } from '~/hooks';
-import { updateStatus } from '~/features/global/globalSlice';
-
-export default function Modal() {
-  // const { title, content, open, onOk, onCancel } = props;
-  const dispatch = useAppDispatch();
-  const modal = useAppSelector((state) => state.global.modal);
-  const onOk = () => {
-    dispatch(updateStatus({
-      modal: {
-        show: !modal.show
-      }
-    }))
-  }
-  const onCancel = () => {
-    dispatch(updateStatus({
-      modal: {
-        show: false
-      }
-    }))
-  }
+export default function Modal(props) {
+  const { title, content, open, onOk, onCancel } = props;
   return (
-    <div className={`relative z-10 ${modal.show ? '' : 'hidden'}`}>
+    <div className={`relative z-10 ${open ? '' : 'hidden'}`}>
       <div className="fixed inset-0 transition-opacity bg-gray-500/75"></div>
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
         <div className="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0">
@@ -29,23 +10,25 @@ export default function Modal() {
               <div className="sm:flex sm:items-start">
                 <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                   <h3 className="text-base font-semibold text-gray-900">
-                    {modal.title}
+                    {title}
                   </h3>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500">{modal.content}</p>
+                    <p className="text-sm text-gray-500">{content}</p>
                   </div>
                 </div>
               </div>
             </div>
             <div className="px-4 py-3 bg-gray-50 sm:flex sm:flex-row-reverse sm:px-6">
-              <button
-                type="button"
-                onClick={onOk}
-                className="inline-flex justify-center w-full px-3 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-xs hover:bg-indigo-500 sm:ml-3 sm:w-auto"
-              >
-                Ok
-              </button>
-              {(
+              {onOk && (
+                <button
+                  type="button"
+                  onClick={onOk}
+                  className="inline-flex justify-center w-full px-3 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-xs hover:bg-indigo-500 sm:ml-3 sm:w-auto"
+                >
+                  Ok
+                </button>
+              )}
+              {onCancel && (
                 <button
                   type="button"
                   onClick={onCancel}

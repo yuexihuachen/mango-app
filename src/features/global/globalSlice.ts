@@ -4,11 +4,6 @@ import { GloablStatus } from '~/types';
 
 const initialState = {
   loading: false,
-  modal: {
-    show: false,
-    title: '',
-    content:''
-  },
   tab: '1'
 }
 

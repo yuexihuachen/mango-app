@@ -26,7 +26,7 @@ function EditNote() {
   useEffect(() => {
     if (currentNote) {
         setTitle(currentNote.title)
-        setCagetory(currentNote.category)
+        setCagetory(currentNote.category || '0')
         const deContent = decodeURIComponent(currentNote.content as string)
         setContent(deContent);
         markdownRef.current.innerHTML = marked.parse(deContent);
@@ -35,17 +35,22 @@ function EditNote() {
   }, [currentNote])
 
   const savePost = async () => {
-    const res: Response<Omit<Note, 'id'>> = await httpRequest.post('/auth/note/create', {
-      title,
-      content: encodeURIComponent(content),
-      categoryId: category,
-      published,
+    const res: Response<Omit<Note, 'id'>> = await httpRequest.post('/auth/note/update', {
+      condition: {
+        id: currentNote.id
+      }, 
+      fields: {
+        title,
+        content: encodeURIComponent(content),
+        category,
+        published,
+      }
     });
     if (res.code === 0) {
       dispatch(updateStatus({
         modal: {
           show: true,
-          content: '新增成功'
+          content: '修改成功'
         }
       }))
     }
@@ -66,7 +71,7 @@ function EditNote() {
                 name="title"
                 type="text"
                 onChange={(e) => setTitle(e.target.value)}
-                value={title}
+                defaultValue={title}
                 autoComplete="given-name"
                 className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
