@@ -65,6 +65,7 @@ httpRequest.interceptors.response.use(
         window.location.href = '/signin'
       } else {
         Cookies.set('at', refreshTokenResponse.data.at, { expires: 1 });
+        return httpRequest.request(res.config)
       }
       return Promise.resolve(refreshTokenResponse)
     }
