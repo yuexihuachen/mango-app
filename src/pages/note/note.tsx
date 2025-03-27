@@ -20,7 +20,7 @@ const Note = () => {
     },
     {
       key: '3',
-      label: '查看',
+      label: '',
       children: <ViewNote />
     },
     {

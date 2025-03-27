@@ -70,7 +70,7 @@ function ViewNote() {
           </div>
         </div>
         <div className={`p-3 col-span-2`}>
-          <div className="h-[720px] overflow-y-scroll overscroll-contain shadow-xl p-4">
+          <div className="p-4 shadow-xl">
             <div
               className={`
                   prose

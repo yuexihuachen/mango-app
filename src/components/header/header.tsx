@@ -1,8 +1,9 @@
 import { useLocation, Link, useNavigate } from 'react-router';
 import Cookies from 'js-cookie';
+import CONSTANTS from '~/constants/constants';
 
 export default function Header(props) {
-  const { token, navigation } = props;
+  const { navigation } = props;
   const location = useLocation();
   const navigator = useNavigate();
 
@@ -24,7 +25,7 @@ export default function Header(props) {
                     height={24}
                     className="w-6 h-6"
                     alt="logo"
-                    src="/logo-home.svg"
+                    src="/hudie1.svg"
                   />
                 </a>
               </div>
@@ -55,7 +56,7 @@ export default function Header(props) {
                 >
                   <span className="absolute -inset-1.5"></span>
                   <span className="sr-only"></span>
-                  {token && (
+                  { CONSTANTS.PROTECTED_ROUTES.includes(location.pathname) && (
                     <img
                       width={20}
                       height={20}

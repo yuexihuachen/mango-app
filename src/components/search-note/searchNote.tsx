@@ -7,7 +7,6 @@ import useFetch from '~/hooks/useFetch';
 import { groupBy } from '~/utils/utils';
 import { updateStatus } from '~/features/global/globalSlice';
 import Modal from '~/components/modal/modal';
-import Toast from '~/components/toast/toast';
 
 function SearchNote() {
   const dispatch = useAppDispatch();
@@ -20,7 +19,6 @@ function SearchNote() {
   const [open, setOpen] = useState(false);
   const [curNote, setCurNote] = useState(null);
   const [deleteContent] = useState('确定删除当前笔记？');
-  const [toastOpen, setToastOpen] = useState(false)
 
   const onOk = async () => {
     setOpen(false);
@@ -28,7 +26,14 @@ function SearchNote() {
       id: curNote.id,
     }) as Response<Note> ;
     if (data?.code === 0) {
-      setToastOpen(true);
+      dispatch(
+        updateStatus({
+          toast: {
+            content: '删除成功',
+            show: true,
+          },
+        }),
+      );
       searchPosts()
     }
   };
@@ -147,10 +152,10 @@ function SearchNote() {
           </div>
         </div>
         <div className="inline-grid items-end h-24">
-          <button
+        <button
             type="button"
             onClick={searchPosts}
-            className="w-full py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="px-12 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             搜索
           </button>
@@ -221,15 +226,6 @@ function SearchNote() {
           onOk,
           onCancel
         }}
-      />
-      <Toast 
-        {
-          ...{
-            open: toastOpen,
-            content: '删除成功',
-            onCancel: () => setToastOpen(false)
-          }
-        }
       />
     </>
   );

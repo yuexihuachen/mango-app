@@ -2,7 +2,7 @@ export default function Modal(props) {
   const { title, content, open, onOk, onCancel } = props;
   return (
     <div className={`relative z-10 ${open ? '' : 'hidden'}`}>
-      <div className="fixed inset-0 transition-opacity bg-gray-500/20"></div>
+      <div className="fixed inset-0 transition-opacity bg-gray-500/75"></div>
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
         <div className="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0">
           <div className="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-full sm:max-w-lg">

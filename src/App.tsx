@@ -11,6 +11,7 @@ const Signin = React.lazy(() => import("./pages/signin/signin"));
 const Signup = React.lazy(() => import("./pages/signup/signup"));
 const Note = React.lazy(() => import("./pages/note/note"));
 const Category = React.lazy(() => import("./pages/category/category"));
+const Layout = React.lazy(() => import("./pages/layout/layout"));
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,14 @@ const router = createBrowserRouter([
         path: '/category',
         loader: protectedLoader,
         element: <Category />
+      },
+      {
+        path: ':categoryId',
+        element: <Layout />
+      },
+      {
+        path: '/',
+        element: <Layout />
       }
     ]
   }

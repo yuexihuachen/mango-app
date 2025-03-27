@@ -15,10 +15,16 @@ export type Modal = {
     show: boolean;
 }
 
+export type Toast = {
+    content: string;
+    show: boolean;
+}
+
 export type GloablStatus = {
     loading?: boolean;
-    modal?: Modal;
+    toast?: Toast;
     tab?: string;
+    
 }
 
 export type At = {

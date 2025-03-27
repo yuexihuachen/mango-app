@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import useFetch from '~/hooks/useFetch';
 import * as marked from 'marked';
 import CodeMirror, { EditorView } from '@uiw/react-codemirror';
@@ -7,7 +7,7 @@ import { Note, Response } from '~/types';
 import Modal from '~/components/modal/modal';
 
 function AddNote() {
-  const { data } = useFetch('/category/find');
+  const { data, loading } = useFetch('/category/find');
   const markdownRef = useRef<HTMLDivElement>(null);
   const [category, setCagetory] = useState<string>('');
   const [title, setTitle] = useState<string>('');
@@ -20,6 +20,12 @@ function AddNote() {
       markdownRef.current.innerHTML = marked.parse(val) as string;
     }
   }, []);
+
+  useEffect(() => {
+    if (!loading && data?.data) {
+      setCagetory(data.data[0].id)
+    }
+  }, [loading])
 
   const onOk = () => {
     setOpen(false);
@@ -36,6 +42,7 @@ function AddNote() {
       setOpen(true)
     }
   };
+
 
   return (
     <>
@@ -145,7 +152,7 @@ function AddNote() {
           </div>
         </div>
         <div className="col-span-2 p-5">
-          <button
+        <button
             type="button"
             onClick={savePost}
             className="w-full py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -166,3 +173,4 @@ function AddNote() {
 }
 
 export default AddNote;
+

@@ -21,3 +21,7 @@ export type SearchNoteBody = {
     published: string;
 }
 
+export type InitSelectedNote = {
+    selectedNote: Partial<Note>
+}
+

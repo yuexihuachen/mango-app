@@ -4,7 +4,11 @@ import { GloablStatus } from '~/types';
 
 const initialState = {
   loading: false,
-  tab: '1'
+  tab: '1',
+  toast: {
+    content: '',
+    show: false
+  }
 }
 
 export const globalSlice = createSlice({
