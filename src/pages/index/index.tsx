@@ -6,6 +6,7 @@ import Loading from '~/components/loading/loading';
 import Toast from '~/components/toast/gloablToast';
 import useFetch from '~/hooks/useFetch';
 import CONSTANTS from '~/constants/constants';
+import Footer from '~/components/footer/footer';
 
 const protectedRoutes = CONSTANTS.PROTECTED_ROUTES;
 
@@ -47,6 +48,7 @@ const Index = () => {
           <Outlet />
         </div>
       </div>
+      <Footer />
       <Loading />
       <Toast />
     </div>
