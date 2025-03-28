@@ -1,0 +1,1 @@
+{"version":3,"file":"static/js/async/src_pages_signup_signup_tsx.js","sources":["/Users/wangl577/Documents/project/mango-app/src/pages/signup/signup.tsx"],"sourcesContent":["const Signup = () => {\n    return <div>\n        Catetory\n    </div>\n}\n\nexport default Signup;"],"names":[],"mappings":";;;;;;;;;;AAAA;AACA;AAAA;;;;;;AAGA;AAJA;AAMA"}
