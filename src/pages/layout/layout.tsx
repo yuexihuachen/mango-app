@@ -28,7 +28,7 @@ const Layout = () => {
   
   return (
     <>
-    <div className="lg:block fixed w-[20.2666rem] inset-0 z-20  top-[4rem] left-[max(0px,calc(50%-48rem))] right-auto pb-10 pl-8 pr-6 overflow-y-auto">
+    <div className="lg:block fixed w-[20.2666rem] inset-0 z-20  top-[4rem] left-[max(0px,calc(50%-48rem))] right-auto pb-10 pl-8 pr-6 overflow-y-auto border-r-1 border-gray-50">
       <Sidebar {...{notes}} />
     </div>
     <div className="lg:pl-[20.8rem]">

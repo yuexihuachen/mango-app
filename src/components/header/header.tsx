@@ -19,7 +19,8 @@ export default function Header(props) {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <div className="shrink-0">
-                <a href="/">
+              <Link
+              to={'/'}>
                   <img
                     width={24}
                     height={24}
@@ -27,7 +28,7 @@ export default function Header(props) {
                     alt="logo"
                     src="/hudie1.svg"
                   />
-                </a>
+                </Link>
               </div>
               <div className="hidden md:block">
                 <div className="flex items-baseline ml-10 space-x-4">
