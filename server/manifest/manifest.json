@@ -1,0 +1,32 @@
+{
+  "allFiles": [
+    "/static/css/index.css",
+    "/static/js/index.js",
+    "/static/js/vendor.js",
+    "/index.html",
+    "/static/css/index.css.map",
+    "/static/js/index.js.map",
+    "/static/js/vendor.js.map"
+  ],
+  "entries": {
+    "index": {
+      "assets": [
+        "static/js/vendor.js.map",
+        "static/css/index.css.map",
+        "static/js/index.js.map"
+      ],
+      "html": [
+        "/index.html"
+      ],
+      "initial": {
+        "js": [
+          "/static/js/vendor.js",
+          "/static/js/index.js"
+        ],
+        "css": [
+          "/static/css/index.css"
+        ]
+      }
+    }
+  }
+}
