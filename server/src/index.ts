@@ -1,9 +1,9 @@
 import { Hono } from 'hono';
 import { serveStatic } from 'hono/bun';
-import * as nunjucks from 'nunjucks';
+
 
 import { bundle } from './middleware/bundle';
-import indexHtml from "./views/index.html" with { type: "text" };
+import { render } from './middleware/render';
 
 const app = new Hono()
 
@@ -11,15 +11,10 @@ const app = new Hono()
 app.use('*', serveStatic({ root: '/manifest/' }));
 
 app.use(bundle())
+app.use(render())
 
 app.get('/*', (c) => {
-  const manifestFiles = c.get('manifest')
-  const html = nunjucks.renderString(indexHtml, {
-    cssArray: manifestFiles.css,
-    jsArray: manifestFiles.js
-  });
-
-  return c.html(html);
+  return c.render('index')
 })
 
 export default app
