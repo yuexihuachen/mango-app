@@ -1,7 +1,6 @@
 import { Hono } from 'hono';
 import { serveStatic } from 'hono/bun';
 
-
 import { bundle } from './middleware/bundle';
 import { render } from './middleware/render';
 

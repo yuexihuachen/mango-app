@@ -1,0 +1,7 @@
+const CONSTANTS = {
+
+}
+
+export {
+    CONSTANTS
+}
