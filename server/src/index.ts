@@ -12,11 +12,9 @@ import { contextStorage } from 'hono/context-storage'
 
 import { render } from './middleware/render';
 import { timeMonitoring } from './middleware/time-monitoring';
-import { startDBServer } from './connection';
+import sql from './connection';
 
 const app = new Hono();
-
-const sql = startDBServer()
 
 app.use(timeMonitoring())
 app.use(contextStorage())

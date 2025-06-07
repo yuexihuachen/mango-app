@@ -1,8 +1,8 @@
 import { SQL } from "bun";
 
-
-export function startDBServer() {
-    const sql = new SQL({
+let sql;
+try {
+sql = new SQL({
         hostname: "localhost",
         database: "notesDB",
         username: "admin",
@@ -16,6 +16,12 @@ export function startDBServer() {
             console.log("Connection closed");
         },
     });
-    return sql;
+} catch (error) {
+    console.error(error)
+} finally {
+    
 }
+
+
+export default sql as unknown as SQL;
 
