@@ -15,18 +15,14 @@
     <meta name="keywords" content="light-frame" />
     <meta name="description" content="light-frame" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
-    {% for css in cssArray %}
-        <link rel="stylesheet" crossorigin href="{{cdn}}{{css}}">
-    {% endfor %}
+   {{styleTags | safe}}
 </head>
 
 <body>
     <div id="root">
        
     </div>
-    {% for js in jsArray %}
-    <script type="module" crossorigin src="{{cdn}}{{js}}"></script>
-    {% endfor %}
+   {{scriptTags | safe}}
     
 </body>
 

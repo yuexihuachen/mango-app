@@ -16,6 +16,3 @@ declare module "bun" {
 }
 
 declare module 'nunjucks';
-declare module 'better-sqlite3';
-declare module 'nodemailer';
-

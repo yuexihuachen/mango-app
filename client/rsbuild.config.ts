@@ -17,6 +17,7 @@ export default defineConfig({
     }
   },
   output: {
+    cleanDistPath: true,
     sourceMap: {
       js: process.env.NODE_ENV === 'production' ?'source-map' : 'cheap-module-source-map',
       css: true,

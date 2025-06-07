@@ -1,26 +1,26 @@
-import * as nunjucks from 'nunjucks';
+import type { Context, Next } from 'hono';
+import nunjucks from 'nunjucks';
 
+import manifest from "../../manifest/manifest.json" with { type: "json" };
 import indexHtml from "../views/index.html" with { type: "text" };
 
 const render = () => {
-  return async (c, next) => {
-    c.render = async (pageName) => {
-      const manifestFiles = c.get('manifest')
-      const currentAssets = manifestFiles[pageName].initial;
-      let assets = { js: [], css: [] };
-      const cdnUrl = 'http://localhost:8080';
-      if (currentAssets) {
-        const { js, css } = currentAssets;
-        for (let j of js) {
-          assets.js.push(`${cdnUrl}${j}`)
-        }
-        for (let cs of css) {
-          assets.css.push(`${cdnUrl}${cs}`)
-        }
-      }
+  return async (c: Context, next: Next) => {
+    c.render = async () => {
+      const { entries } = (manifest);
+
+      const { js = [], css = [] } = entries['index'].initial;
+
+      const scriptTags = js
+        .map((url: string) => `<script src="${url}" defer async></script>`)
+        .join('\n');
+      const styleTags = css
+        .map((file: string) => `<link rel="stylesheet" href="${file}">`)
+        .join('\n');
+
       const html = nunjucks.renderString(indexHtml, {
-        cssArray: assets.css,
-        jsArray: assets.js
+        scriptTags,
+        styleTags
       });
 
       return c.html(html);

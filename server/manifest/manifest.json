@@ -1,24 +1,25 @@
 {
   "allFiles": [
+    "/static/js/async/src_pages_home_tsx.js",
+    "/static/js/async/src_pages_about_tsx.js",
     "/static/css/index.css",
     "/static/js/index.js",
     "/static/js/vendor.js",
-    "/static/js/async/src_pages_home_tsx.js",
     "/index.html",
+    "/static/js/async/src_pages_home_tsx.js.map",
+    "/static/js/async/src_pages_about_tsx.js.map",
     "/static/css/index.css.map",
-    "/index.5781e1463620d445.hot-update.js.map",
     "/static/js/index.js.map",
-    "/static/js/vendor.js.map",
-    "/static/js/async/src_pages_home_tsx.js.map"
+    "/static/js/vendor.js.map"
   ],
   "entries": {
     "index": {
       "assets": [
-        "static/js/async/src_pages_home_tsx.js.map",
         "static/js/vendor.js.map",
         "static/css/index.css.map",
-        "index.5781e1463620d445.hot-update.js.map",
-        "static/js/index.js.map"
+        "static/js/index.js.map",
+        "static/js/async/src_pages_about_tsx.js.map",
+        "static/js/async/src_pages_home_tsx.js.map"
       ],
       "html": [
         "/index.html"
@@ -34,6 +35,7 @@
       },
       "async": {
         "js": [
+          "/static/js/async/src_pages_about_tsx.js",
           "/static/js/async/src_pages_home_tsx.js"
         ]
       }

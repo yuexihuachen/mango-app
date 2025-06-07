@@ -6,6 +6,7 @@ import {
 import { Index } from "@/pages/index";
 
 const Home = React.lazy(() => import("@/pages/home"));
+const About = React.lazy(() => import("@/pages/about"));
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
        {
         path: '/home',
         element: <Home />
+       },
+       {
+        path: '/about',
+        element: <About />
        }
     ]
   }
