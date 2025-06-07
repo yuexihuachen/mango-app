@@ -11,9 +11,14 @@ import { secureHeaders } from 'hono/secure-headers';
 import { contextStorage } from 'hono/context-storage'
 
 import { render } from './middleware/render';
+import { timeMonitoring } from './middleware/time-monitoring';
+import { startDBServer } from './connection';
 
-const app = new Hono()
+const app = new Hono();
 
+const sql = startDBServer()
+
+app.use(timeMonitoring())
 app.use(contextStorage())
 app.use('*', cors({
   origin: 'https://kongzi.eu.org',
@@ -30,6 +35,11 @@ app.use(secureHeaders());
 app.use('*', serveStatic({ root: '/manifest/' }));
 
 app.use(render())
+
+app.get('/data', async (c) => {
+  const rows = await sql`SELECT * FROM tb_user`.values();
+  return c.json(rows)
+})
 
 app.get('/*', (c) => {
   return c.render('index');
