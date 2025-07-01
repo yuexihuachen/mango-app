@@ -1,13 +1,16 @@
 import type { Context, Next } from 'hono';
 import nunjucks from 'nunjucks';
 
-import manifest from "../../manifest/manifest.json" with { type: "json" };
+// import manifest from "../../manifest/manifest.json" with { type: "json" };
 import indexHtml from "../views/index.html" with { type: "text" };
 
 const render = () => {
   return async (c: Context, next: Next) => {
     c.render = async () => {
-      const { entries } = (manifest);
+      const path = "./manifest/manifest.json";
+      const file = Bun.file(path);
+      const manifest = await file.json();
+      const { entries } = manifest;
 
       const { js = [], css = [] } = entries['index'].initial;
 
