@@ -16,13 +16,18 @@ import sql from './connection';
 
 const app = new Hono();
 
+//时间戳和env
 app.use(timeMonitoring())
+// 上下文的存储
 app.use(contextStorage())
+// 跨资源贡献
 app.use('*', cors({
   origin: 'https://kongzi.eu.org',
   allowMethods: ['POST', 'GET'],
 }));
+// request id
 app.use('*', requestId())
+// csrf
 app.use(csrf({
   origin: ['kongzi.eu.com'],
 }))
