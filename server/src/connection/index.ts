@@ -5,7 +5,7 @@ try {
 sql = new SQL({
         hostname: "localhost",
         database: "notesDB",
-        username: "admin",
+        username: "postgres",
         password: "123456",
         port: 5432,
         ssl: false,

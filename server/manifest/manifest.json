@@ -1,12 +1,12 @@
 {
   "allFiles": [
-    "/static/js/vendor.ffa84acc.js",
     "/static/js/async/477.8c955b36.js",
     "/static/js/async/479.7e5580b4.js",
     "/static/css/index.069606c4.css",
-    "/static/js/index.9937c850.js",
+    "/static/js/index.8b98625f.js",
+    "/static/js/vendor.ffa84acc.js",
     "/static/js/vendor.ffa84acc.js.map",
-    "/static/js/index.9937c850.js.map",
+    "/static/js/index.8b98625f.js.map",
     "/static/css/index.069606c4.css.map",
     "/static/js/async/479.7e5580b4.js.map",
     "/static/js/async/477.8c955b36.js.map",
@@ -15,19 +15,19 @@
   "entries": {
     "index": {
       "assets": [
-        "static/js/index.9937c850.js.map",
+        "static/js/vendor.ffa84acc.js.map",
         "static/css/index.069606c4.css.map",
+        "static/js/index.8b98625f.js.map",
         "static/js/async/479.7e5580b4.js.map",
-        "static/js/async/477.8c955b36.js.map",
-        "static/js/vendor.ffa84acc.js.map"
+        "static/js/async/477.8c955b36.js.map"
       ],
       "html": [
         "/index.html"
       ],
       "initial": {
         "js": [
-          "/static/js/index.9937c850.js",
-          "/static/js/vendor.ffa84acc.js"
+          "/static/js/vendor.ffa84acc.js",
+          "/static/js/index.8b98625f.js"
         ],
         "css": [
           "/static/css/index.069606c4.css"

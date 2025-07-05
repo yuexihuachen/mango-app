@@ -39,8 +39,14 @@ app.use('*', serveStatic({ root: '/manifest/' }));
 
 app.use(render())
 
-app.get('/data', async (c) => {
-  const rows = await sql`SELECT * FROM tb_user`.values();
+app.get('/hello', async (c) => {
+  let rows = {hello:'world'}
+  try {
+    rows = await sql`SELECT * FROM public.user`.values();
+  } catch(error) {
+    console.log(error)
+  }
+  
   return c.json(rows)
 })
 
