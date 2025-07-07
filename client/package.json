@@ -4,16 +4,18 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "rsbuild build",
-    "watch": "rsbuild build --watch",
-    "check": "biome check --write",
-    "dev": "rsbuild dev",
-    "format": "prettier --write .",
-    "lint": "eslint .",
-    "preview": "rsbuild preview"
+    "dev": "vite",
+    "watch": "vite build --watch",
+    "build": "cross-env NODE_ENV=development vite build --mode development"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
+    "@tailwindcss/typography": "^0.5.16",
+    "@tailwindcss/vite": "^4.1.11",
+    "@uiw/react-codemirror": "^4.24.0",
+    "@vitejs/plugin-react": "^4.6.0",
+    "cross-env": "^7.0.3",
+    "marked": "^16.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-error-boundary": "^6.0.0",
@@ -36,6 +38,7 @@
     "prettier": "^3.5.3",
     "tailwindcss": "^4.1.7",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.29.0"
+    "typescript-eslint": "^8.29.0",
+    "vite": "^7.0.2"
   }
 }

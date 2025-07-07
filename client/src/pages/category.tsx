@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 import Tabs from "@/components/tabs/tabs";
 
-const EditNote = React.lazy(() => import('@/components/note/editNote'));
-const NodeList = React.lazy(() => import('@/components/note/noteList'));
+const EditCategory = React.lazy(() => import('@/components/category/editCategory'));
+const CategoryList = React.lazy(() => import('@/components/category/categoryList'));
 
-const Note = () => {
+const Category = () => {
   const [selectedKey, setSelectedKey] = useState<string>('1')
   const items = [
     {
       key: '1',
       label: '列表',
-      children: <NodeList />
+      children: <CategoryList />
     },
     {
       key: '2',
       label: '编辑',
-      children: <EditNote />
+      children: <EditCategory />
     }
   ];
   const onSelectTab = (key: string) => {
@@ -26,4 +26,4 @@ const Note = () => {
   </div>
 }
 
-export default Note
+export default Category

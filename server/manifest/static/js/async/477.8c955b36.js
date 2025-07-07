@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkclient=self.webpackChunkclient||[]).push([["477"],{153:function(e,t,l){l.r(t),l.d(t,{default:()=>i});var n=l(381);let i=()=>(0,n.jsxs)("div",{className:"flex min-h-screen leading-none flex-col justify-center text-center",children:[(0,n.jsx)("h1",{className:"text-6xl font-bold",children:"Rsbuild with React 333"}),(0,n.jsx)("p",{className:"opacity-50 font-normal text-lg",children:"Start building amazing things with Rsbuild."})]})}}]);
-//# sourceMappingURL=477.8c955b36.js.map

@@ -1,0 +1,1 @@
+import{j as e}from"./index-Cl2RFo67.js";const s=()=>e.jsxs("div",{className:"flex min-h-screen leading-none flex-col justify-center text-center",children:[e.jsx("h1",{className:"text-6xl font-bold",children:"tag"}),e.jsx("p",{className:"opacity-50 font-normal text-lg",children:"tag"})]});export{s as default};
