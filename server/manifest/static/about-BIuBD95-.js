@@ -1,1 +1,0 @@
-import{j as t}from"./index-Ddfs-G7_.js";const s=()=>t.jsxs("div",{className:"flex min-h-screen leading-none flex-col justify-center text-center",children:[t.jsx("h1",{className:"text-6xl font-bold",children:"Rsbuild with React about"}),t.jsx("p",{className:"opacity-50 font-normal text-lg",children:"Start building amazing things with Rsbuild."})]});export{s as default};
