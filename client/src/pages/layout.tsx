@@ -10,14 +10,16 @@ const Layout = () => {
           <Link to={'/'}><img src={Logo} className="h-6" /></Link>
           <span className="font-bold">管理后台</span>
         </div>
-        <div className="flex ml-8 gap-6 cursor-pointer flex-auto">
+        <div className="flex text-sm ml-8 gap-6 cursor-pointer flex-auto">
           <Link to={'/note'}>文章</Link>
           <Link to={'/category'}>类别</Link>
           <Link to={'/tag'}>标签</Link>
           <Link to={'/discuss'}>评论</Link>
         </div>
-        <div className="flex ml-6">
-          <div className="cursor-pointer">登录</div>
+        <div className="flex ml-6 text-sm items-center">
+          <Link to={'/signin'} className="cursor-pointer">登录</Link>
+          <div className="h-3 w-[0.5px] bg-gray-300 mx-4"></div>
+          <Link to={'/signup'} className="cursor-pointer">注册</Link>
         </div>
       </div>
     </div>

@@ -5,3 +5,13 @@ export type TabItem = {
   label: string;
   children: ReactNode
 };
+
+export type Response<T> = {
+  code: number;
+  message: string;
+  data: T;
+}
+
+export type AccessToken = {
+    access_token: string;
+}

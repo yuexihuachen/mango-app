@@ -19,7 +19,9 @@ if (rootEl) {
     <StrictMode>
     <ErrorBoundary fallback={<ErrorInfo />}>
       <Suspense fallback={<Loading />}>
-          <Provider store={store} children={<App />} />
+          <Provider store={store} children={
+              <App />
+            } />
       </Suspense>
     </ErrorBoundary>
   </StrictMode>
