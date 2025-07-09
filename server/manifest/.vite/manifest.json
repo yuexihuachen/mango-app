@@ -1,27 +1,20 @@
 {
-  "_index-Bq7FgSu6.js": {
-    "file": "static/index-Bq7FgSu6.js",
-    "name": "index",
-    "imports": [
-      "index.html"
-    ]
-  },
-  "_select-DMYHHEKe.js": {
-    "file": "static/select-DMYHHEKe.js",
+  "_select-BXWlciok.js": {
+    "file": "static/select-BXWlciok.js",
     "name": "select",
     "imports": [
       "index.html"
     ]
   },
-  "_tabs-DKYYySv_.js": {
-    "file": "static/tabs-DKYYySv_.js",
+  "_tabs-DoRn4TYV.js": {
+    "file": "static/tabs-DoRn4TYV.js",
     "name": "tabs",
     "imports": [
       "index.html"
     ]
   },
   "index.html": {
-    "file": "static/index-Cl2RFo67.js",
+    "file": "static/index-CptmFRyM.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
@@ -34,11 +27,11 @@
       "src/pages/discuss.tsx"
     ],
     "css": [
-      "static/index-ZskzOK6P.css"
+      "static/index-Ca-REJps.css"
     ]
   },
   "src/components/category/categoryList.tsx": {
-    "file": "static/categoryList-CgaI55vF.js",
+    "file": "static/categoryList-DJGBSHZ3.js",
     "name": "categoryList",
     "src": "src/components/category/categoryList.tsx",
     "isDynamicEntry": true,
@@ -47,39 +40,36 @@
     ]
   },
   "src/components/category/editCategory.tsx": {
-    "file": "static/editCategory-CW-w1ISl.js",
+    "file": "static/editCategory-DJUlKDI1.js",
     "name": "editCategory",
     "src": "src/components/category/editCategory.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "index.html",
-      "_index-Bq7FgSu6.js",
-      "_select-DMYHHEKe.js"
+      "index.html"
     ]
   },
   "src/components/note/editNote.tsx": {
-    "file": "static/editNote-B-LUS32A.js",
+    "file": "static/editNote-DiWIzLzY.js",
     "name": "editNote",
     "src": "src/components/note/editNote.tsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_index-Bq7FgSu6.js",
-      "_select-DMYHHEKe.js"
+      "_select-BXWlciok.js"
     ]
   },
   "src/components/note/noteList.tsx": {
-    "file": "static/noteList-C6FAL9L0.js",
+    "file": "static/noteList-BhLdhUii.js",
     "name": "noteList",
     "src": "src/components/note/noteList.tsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_select-DMYHHEKe.js"
+      "_select-BXWlciok.js"
     ]
   },
   "src/pages/about.tsx": {
-    "file": "static/about-DgKncfXP.js",
+    "file": "static/about-CivqU6RJ.js",
     "name": "about",
     "src": "src/pages/about.tsx",
     "isDynamicEntry": true,
@@ -88,13 +78,13 @@
     ]
   },
   "src/pages/category.tsx": {
-    "file": "static/category-avSstHqU.js",
+    "file": "static/category-Gknvhxes.js",
     "name": "category",
     "src": "src/pages/category.tsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_tabs-DKYYySv_.js"
+      "_tabs-DoRn4TYV.js"
     ],
     "dynamicImports": [
       "src/components/category/editCategory.tsx",
@@ -102,7 +92,7 @@
     ]
   },
   "src/pages/discuss.tsx": {
-    "file": "static/discuss-DR5VayjB.js",
+    "file": "static/discuss-DUyUSbv_.js",
     "name": "discuss",
     "src": "src/pages/discuss.tsx",
     "isDynamicEntry": true,
@@ -111,7 +101,7 @@
     ]
   },
   "src/pages/home.tsx": {
-    "file": "static/home-CGxGHlQQ.js",
+    "file": "static/home-DxTdiWUi.js",
     "name": "home",
     "src": "src/pages/home.tsx",
     "isDynamicEntry": true,
@@ -120,13 +110,13 @@
     ]
   },
   "src/pages/note.tsx": {
-    "file": "static/note-dJNzG6BJ.js",
+    "file": "static/note-BUt_eUJc.js",
     "name": "note",
     "src": "src/pages/note.tsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_tabs-DKYYySv_.js"
+      "_tabs-DoRn4TYV.js"
     ],
     "dynamicImports": [
       "src/components/note/editNote.tsx",
@@ -134,7 +124,7 @@
     ]
   },
   "src/pages/tag.tsx": {
-    "file": "static/tag-BDwrFN28.js",
+    "file": "static/tag-Co6V9oFJ.js",
     "name": "tag",
     "src": "src/pages/tag.tsx",
     "isDynamicEntry": true,

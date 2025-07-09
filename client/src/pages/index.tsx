@@ -10,7 +10,7 @@ const Index = () => {
         <Link to={'/'}><img src={Logo} className="h-6" /></Link>
         <span className="font-bold">技术茶馆</span>
       </div>
-      <div className="flex ml-8 gap-6 cursor-pointer flex-auto">
+      <div className="flex text-sm ml-8 gap-6 cursor-pointer flex-auto">
          <Link to={'/'}>首页</Link>
         <Link to={'/home'}>归档</Link>
         <Link to={'/about'}>类别</Link>
