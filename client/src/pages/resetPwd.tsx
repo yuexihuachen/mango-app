@@ -2,6 +2,7 @@ import { useState } from 'react';
 import httpRequest from '@/utils/httpClient';
 import { Response } from '@/types/index';
 import { message, Button } from 'antd';
+import { useNavigate } from 'react-router';
 
 const ResetPwd = () => {
     const [email, setEmail] = useState('');
@@ -9,8 +10,10 @@ const ResetPwd = () => {
     const [pwd, setPwd] = useState('');
     const [confirmPwd, setConfirmPwd] = useState('');
     const [btnName, setBtnName] = useState<string>('发送验证码');
-    const [btnLoading, setBtnLoading] = useState(false)
+    const [btnLoading, setBtnLoading] = useState(false);
+    const [disabledBtn, setDisabledBtn] = useState(false);
     const [messageApi, contextHolder] = message.useMessage();
+    const navigate = useNavigate()
 
     const forgetPwd = async () => {
         if (!email || !code || !pwd || !confirmPwd) {
@@ -29,12 +32,17 @@ const ResetPwd = () => {
         const res = (await httpRequest.post(`/forgetPwd`, {
             code,
             password: pwd,
-            email: email
+            email: email,
+            confirmPasswrod: confirmPwd
         })) as Response<{}>;
         if (res.code !== 0) {
             messageApi.error('重置失败');
         } else {
             messageApi.success('重置成功');
+            setDisabledBtn(true)
+            setTimeout(() => {
+                navigate('/signin')
+            }, 3000);
         }
     };
 
@@ -166,6 +174,7 @@ const ResetPwd = () => {
                         <div>
                             <button
                                 type="submit"
+                                disabled={disabledBtn}
                                 onClick={forgetPwd}
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >

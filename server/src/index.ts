@@ -8,11 +8,17 @@ import { prettyJSON } from 'hono/pretty-json';
 import { requestId } from 'hono/request-id';
 // 设置安全请求头
 import { secureHeaders } from 'hono/secure-headers';
-import { contextStorage } from 'hono/context-storage'
+import { contextStorage } from 'hono/context-storage';
 
-import { render } from './middleware/render';
-import { timeMonitoring } from './middleware/time-monitoring';
-import sql from './connection';
+import {
+  category,
+  user,
+  note
+} from '@/routes/index';
+import { authMiddleware } from '@/middleware/bearerAuth';
+import { render } from '@/middleware/render';
+import { timeMonitoring } from '@/middleware/time-monitoring';
+import sql from '@/connection';
 
 const app = new Hono();
 
@@ -38,6 +44,12 @@ app.use(secureHeaders());
 app.use('*', serveStatic({ root: '/manifest/' }));
 
 app.use(render())
+
+app.use('/auth/*', authMiddleware);
+
+app.route('/', category);
+app.route('/', note);
+app.route('/', user);
 
 app.get('/hello', async (c) => {
   let rows = {hello:'world'}

@@ -1,7 +1,6 @@
 import { sign, verify } from 'hono/jwt';
 import * as nodemailer from "nodemailer";
-import { Email, TUser } from '../interface/user';
-import CONSTANTS from './constants';
+import { Email, TUser } from '@/types/index';
 
 const storage = new Map();
 
@@ -17,7 +16,7 @@ const getTokens = async (user: any) => {
     rtExpires = Math.floor(Date.now() / 1000) + 60 * 25; // 25分钟
   }
 
-  const payload = { id: user.id, username: user.username };
+  const payload = { id: user.user_id, username: user.username };
 
   const at: string = await sign(
     {
@@ -35,6 +34,8 @@ const getTokens = async (user: any) => {
     Bun.env.RT_SECRET as string
   );
 
+
+
   return {
     at,
     rt,
@@ -50,7 +51,7 @@ const getAtToken = async (user: any) => {
     atExpires = Math.floor(Date.now() / 1000) + 60 * 1;
   }
 
-  const payload = { id: user.id, username: user.username };
+  const payload = { id: user.user_id, username: user.username };
 
   const at: string = await sign(
     {
@@ -82,10 +83,12 @@ const generateTransporter = (params: Email): any => {
       },
     };
     const transporter = nodemailer.createTransport(configOptions);
-    const failed = CONSTANTS.FAILED;
+    const failed = {
+      code: -1,
+      msg: '邮箱验证失败'
+    };
     transporter.verify(function (error: any, success: any) {
       if (error) {
-        failed.msg = "邮箱验证失败";
         reject(failed);
       }
     });
@@ -96,11 +99,12 @@ const generateTransporter = (params: Email): any => {
       text: params.text
     }, function(err: any) {
       if (err) {
-        failed.msg = "邮件发送失败";
         reject(failed);
       }
-      const result = CONSTANTS.SUCCESS;
-      result.msg = '邮件发送成功'
+      const result = {
+        code: 0,
+        msg: '邮件发送成功'
+      };
       resolve(result);
     })
   })

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { message } from 'antd';
+import dayjs from 'dayjs';
 
 import httpRequest from '@/utils/httpClient';
 import { Response } from '@/types/index';
@@ -26,12 +27,14 @@ const Signup = () => {
             messageApi.warning('两次输入密码不一致');
             return false;
         }
+        const currentDate = dayjs().format()
         const res = (await httpRequest.post(`/register`, {
             code,
             password: pwd,
             confirmPasswrod: confirmPwd,
             username,
-            email: email
+            email: email,
+            createDate: currentDate
         })) as Response<{}>;
     
         if (res?.code !== 0) {
