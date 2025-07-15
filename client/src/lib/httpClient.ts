@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { Response, AccessToken } from '@/types';
+import {docCookies} from '@/utils/utils';
 
 // axios instance
 const httpRequest = axios.create({
@@ -11,7 +12,7 @@ const refreshUserToken = () => {
   const url = `/refresh`;
   return httpRequest
     .post(url, {
-      rt
+      rt: docCookies.getItem('rt')
     })
     .then(res => {
       return res
@@ -37,7 +38,7 @@ const errorHandler = (error: AxiosError) => {
 }
 
 httpRequest.interceptors.request.use(function(config) {
-  config.headers['Authorization'] = `Bearer token`;
+  config.headers['Authorization'] = `Bearer ${docCookies.getItem('at')}`;
   return config
 }, errorHandler)
 

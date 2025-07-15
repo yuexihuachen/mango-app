@@ -9,18 +9,24 @@ import { requestId } from 'hono/request-id';
 // 设置安全请求头
 import { secureHeaders } from 'hono/secure-headers';
 import { contextStorage } from 'hono/context-storage';
-
+import dayjs from 'dayjs';
+import toArray from 'dayjs/plugin/toArray';
 import {
   category,
   user,
   note
 } from '@/routes/index';
+import sql from '@/connection';
+
 import { authMiddleware } from '@/middleware/bearerAuth';
 import { render } from '@/middleware/render';
 import { timeMonitoring } from '@/middleware/time-monitoring';
-import sql from '@/connection';
+import {authentication} from '@/middleware/authentication';
+
 
 const app = new Hono();
+dayjs.locale('zh-cn');
+dayjs.extend(toArray);
 
 //时间戳和env
 app.use(timeMonitoring())
@@ -39,6 +45,7 @@ app.use(csrf({
 }))
 app.use(prettyJSON());
 app.use(secureHeaders());
+app.use(authentication())
 
 // 静态资源目录
 app.use('*', serveStatic({ root: '/manifest/' }));

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { message } from 'antd';
 import dayjs from 'dayjs';
 
-import httpRequest from '@/utils/httpClient';
+import httpRequest from '@/lib/httpClient';
 import { Response } from '@/types/index';
 
 
@@ -25,6 +25,10 @@ const Signup = () => {
         }
         if (pwd !== confirmPwd) {
             messageApi.warning('两次输入密码不一致');
+            return false;
+        }
+        if (pwd.length >= 8) {
+            messageApi.warning('密码长度不少于8位');
             return false;
         }
         const currentDate = dayjs().format()

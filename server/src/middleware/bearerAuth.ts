@@ -12,8 +12,10 @@ export const authMiddleware = async (c: Context, next: Next) => {
   ) {
     token = c.req.header('Authorization')?.replace(/Bearer\s+/i, '') as string;
   }
-  const failed = CONSTANTS.FAILED;
-  failed.msg = CONSTANTS.INVALID_ACCESS_TOKEN;
+  const failed = {
+    code: -1,
+    msg: CONSTANTS.INVALID_ACCESS_TOKEN
+  };
   const bearer = bearerAuth({ 
     token,
     noAuthenticationHeaderMessage: async (c) => {
@@ -31,7 +33,7 @@ export const authMiddleware = async (c: Context, next: Next) => {
         user = await verifyToken(t, Bun.env.AT_SECRET);
       } catch(error) {
       }
-      return user?.id;
+      return user.user_id;
     }
   })
   return bearer(c, next);

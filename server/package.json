@@ -1,11 +1,13 @@
 {
   "name": "server",
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
-    "debug": "bun run --inspect src/index.ts",
-    "start": "bun run src/index.ts"
+    "dev": "cross-env TZ=Asia/Shanghai bun run --hot src/index.ts",
+    "debug": "cross-env TZ=Asia/Shanghai  bun run --inspect src/index.ts",
+    "start": "cross-env TZ=Asia/Shanghai  bun run src/index.ts"
   },
   "dependencies": {
+    "cross-env": "^7.0.3",
+    "dayjs": "^1.11.13",
     "hono": "^4.7.10",
     "nodemailer": "^7.0.5",
     "nunjucks": "^3.2.4",

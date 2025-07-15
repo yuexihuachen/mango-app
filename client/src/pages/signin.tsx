@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import httpRequest from '@/utils/httpClient';
+import httpRequest from '@/lib/httpClient';
 import { Response } from '@/types/index';
 import { Link, useNavigate } from 'react-router';
 import { message } from 'antd';

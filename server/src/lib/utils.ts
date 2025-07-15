@@ -1,22 +1,23 @@
 import { sign, verify } from 'hono/jwt';
 import * as nodemailer from "nodemailer";
+import dayjs from 'dayjs';
 import { Email, TUser } from '@/types/index';
 
 const storage = new Map();
 
 const getTokens = async (user: any) => {
   // at Token expires 6 hours
-  let atExpires: number = Math.floor(Date.now() / 1000) + 60 * 60 * 6;
+  let atExpires: number = Math.floor(dayjs().valueOf() / 1000) + 60 * 60 * 6;
 
   // rt Token expires 7 days
-  let rtExpires: number = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7;
+  let rtExpires: number = Math.floor(dayjs().valueOf() / 1000) + 60 * 60 * 24 * 7;
 
   if (Bun.env.NODE_ENV === "development") {
-    atExpires = Math.floor(Date.now() / 1000) + 60 * 5; // 5分钟
-    rtExpires = Math.floor(Date.now() / 1000) + 60 * 25; // 25分钟
+    atExpires = Math.floor(dayjs().valueOf() / 1000) + 60 * 30; // 30分钟
+    rtExpires = Math.floor(dayjs().valueOf() / 1000) + 60 * 60; // 60分钟
   }
 
-  const payload = { id: user.user_id, username: user.username };
+  const payload = { user_id: user.user_id, username: user.username };
 
   const at: string = await sign(
     {
@@ -51,7 +52,7 @@ const getAtToken = async (user: any) => {
     atExpires = Math.floor(Date.now() / 1000) + 60 * 1;
   }
 
-  const payload = { id: user.user_id, username: user.username };
+  const payload = { user_id: user.user_id, username: user.username };
 
   const at: string = await sign(
     {

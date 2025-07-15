@@ -3,13 +3,12 @@ import {
   getCookie,
   setCookie
 } from 'hono/cookie';
-
+import dayjs from 'dayjs';
 import sql from '@/connection/index';
 import BaseClass from '@/lib/baseClass';
 import { getAtToken, getTokens, verifyToken, generateTransporter, setStorage, getStorage } from '@/lib/utils';
 import type { Email, TUser } from '@/types/user';
 import CONSTANTS from '@/lib/constants';
-import { HonoBase } from 'hono/hono-base';
 
 const {
   ALl_DAY
@@ -59,12 +58,14 @@ class User extends BaseClass {
     let response = super.failed('登录失败');
     if (isMatch && res.count) {
       const tokens = await getTokens(result);
-      
+      const currentTime = dayjs().valueOf()
+      const atDateArray = dayjs(currentTime + ALl_DAY).toArray();
+      const rtDateArray = dayjs(currentTime + ALl_DAY * 7).toArray();
       setCookie(c, 'at', tokens.at, {
-        expires: new Date(Date.now() + ALl_DAY)
+        expires: new Date(Date.UTC(...atDateArray)),
       })
       setCookie(c, 'rt', tokens.rt, {
-        expires: new Date(Date.now() + ALl_DAY * 7)
+        expires: new Date(Date.UTC(...rtDateArray)),
       })
       response = await super.success({
         msg: '登录成功', 
@@ -89,11 +90,17 @@ class User extends BaseClass {
 
     if (user?.user_id && user?.username) {
       const token = await getAtToken({
-        id: user.user_id,
+        user_id: user.user_id,
         username: user.username,
       });
-      response = super.success('刷新token成功', {
-        at: token.at
+      const currentTime = dayjs().valueOf()
+      const atDateArray = dayjs(currentTime + ALl_DAY).toArray();
+      setCookie(c, 'at', token.at, {
+        expires: new Date(Date.UTC(...atDateArray)),
+      })
+      response = super.success({
+        msg: '刷新token成功', 
+        data: {}
       });
     }
     return c.json(response);
@@ -112,7 +119,7 @@ class User extends BaseClass {
 
     if (user?.user_id && user?.username) {
       response = super.success('有效的token信息', {
-        id: user.user_id,
+        user_id: user.user_id,
         username: user.username
       });
     }

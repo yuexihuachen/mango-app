@@ -8,18 +8,34 @@ class Category extends BaseClass {
     super();
   }
 
+  // "category_name"	"category_alias"	"user_id"	"create_date"	"update_date"	"order"
   async create(c: Context) {
     const body = await c.req.json();
-    const query = await sql`INSERT INTO categories (name, alias, orderid, uid) VALUES ($name, $alias, $orderid, $uid)`.values();
-    const result = query.run({
-      $name: body.name,
-      $alias: body.alias,
-      $orderid: body.orderid,
-      $uid: c.get('userid')
-    });
+    const {
+      title,
+      alias,
+      order,
+      createDate
+    } = body;
+    const user = c.get('user');
+    const userData = {
+      category_name: title,
+      category_alias: alias,
+      user_id: user.user_id,
+      order,
+      create_date: createDate,
+      update_date: createDate
+    };
+    const result = await sql`
+      INSERT INTO category ${sql(userData)}
+      RETURNING *
+    `;
     let response = super.failed('新增失败');
-    if (result?.changes) {
-      response = super.success('新增成功', result)
+    if (result.count) {
+      response = super.success({
+        msg: '新增成功',
+        data: {}
+      })
     }
     return c.json(response);
   }

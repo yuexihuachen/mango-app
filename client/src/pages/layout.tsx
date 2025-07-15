@@ -4,11 +4,11 @@ import Logo from '../assets/images/logo.svg'
 
 const Layout = () => {
   return <div className="w-full">
-    <div className="fixed top-0 w-full z-50 bg-white">
-      <div className="flex gap-4 px-6 border-b-header-border items-center h-12 bg-white max-w-10xl border-b">
+    <div className="fixed top-0 w-full z-50 bg-white shadow-md">
+      <div className="flex gap-4 px-6 items-center h-16 max-w-10xl">
         <div className="inline-flex items-center gap-4 cursor-pointer">
           <Link to={'/'}><img src={Logo} className="h-6" /></Link>
-          <span className="font-bold">管理后台</span>
+          <span className="font-black">ExplainThis</span>
         </div>
         <div className="flex text-sm ml-8 gap-6 cursor-pointer flex-auto">
           <Link to={'/note'}>文章</Link>
@@ -23,7 +23,7 @@ const Layout = () => {
         </div>
       </div>
     </div>
-    <div className="mt-12">
+    <div className="mt-16">
       <Outlet />
     </div>
   </div>

@@ -109,7 +109,6 @@ class Note extends BaseClass {
       runParams[`$${key}`] = condition[key];
     }
     sql = sql.trim().slice(0, sql.trim().length - 3);
-    console.log(sql, runParams)
     const query = db.query(sql);
     const result = query.run(runParams);
     let response = super.failed('更新失败');

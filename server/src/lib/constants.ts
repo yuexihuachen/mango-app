@@ -2,7 +2,7 @@ const CONSTANTS = {
     INVALID_ACCESS_TOKEN: 'INVALID_ACCESS_TOKEN',
     INVALID_REFRESH_TOKEN: 'INVALID_REFRESH_TOKEN',
     PROTECTED_ROUTES: ['/note','/category','/user'],
-    ALl_DAY: 86400
+    ALl_DAY: 86400000
 };
 
 export default CONSTANTS;
