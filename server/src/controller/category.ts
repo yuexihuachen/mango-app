@@ -42,26 +42,29 @@ class Category extends BaseClass {
 
   async find(c: Context) {
     const body = await c.req.json();
-    let sql =  `select id,name,alias,orderid from categories`;
-    let runParams: Partial<Id> = {};
-    if (body?.id) {
-      sql += ` where id=$id`;
-      runParams['$id'] = body.id;
-    }
-    if (body?.token) {
-      if (sql.includes('where')) {
-        sql += ` and uid=$uid`;
-        runParams['$uid'] = c.get('userid');
-      } else {
-        sql += ` where uid=$uid`;
-        runParams['$uid'] = c.get('userid');
-      }
-    }
-    const query = db.query(sql);
-    const result = query.all(runParams);
+    const {
+      pageSize,
+      pageIndex
+    } = body;
+    const user = c.get('user');
+    const res = await sql`
+      SELECT
+        category_id, category_name, category_alias, "order", create_date, update_date,COUNT(0) OVER() AS total
+      FROM
+        category
+        WHERE user_id=${user.user_id}
+        ORDER BY category_id
+        LIMIT ${pageSize} OFFSET ${(pageIndex - 1) * pageSize}
+    `;
+    
     let response = super.failed('查询失败');
-    if (Array.isArray(result)) {
-      response = super.success('查询成功', result)
+    if (res.count) {
+      const result = res;
+      response = super.success({
+        msg: '查询成功',
+        data: result,
+        total: res[0].total
+      })
     }
     return c.json(response);
   }

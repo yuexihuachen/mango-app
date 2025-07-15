@@ -1,7 +1,8 @@
 import { type Context } from 'hono';
 import {
   getCookie,
-  setCookie
+  setCookie,
+  deleteCookie
 } from 'hono/cookie';
 import dayjs from 'dayjs';
 import sql from '@/connection/index';
@@ -102,6 +103,9 @@ class User extends BaseClass {
         msg: '刷新token成功', 
         data: {}
       });
+    } else {
+      deleteCookie(c, 'at');
+      deleteCookie(c, 'rt');
     }
     return c.json(response);
   }

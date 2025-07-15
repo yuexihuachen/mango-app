@@ -10,14 +10,17 @@ class BaseClass {
         failed.msg = msg;
         return failed;
     }
-    public success(args: Omit<Response<any>, 'code'>):Response<any> {
-        const success = {
+    public success(args: Omit<Response<any>, 'code'> & {total?: number}) {
+        const success:Response<any> & {total?: number} = {
             code: 0,
             msg: '',
             data: {}
         };
         success.msg = args.msg;
         success.data = args.data;
+        if (args?.total) {
+            success.total = args.total;
+        }
         return success;
     }
 }

@@ -1,38 +1,63 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { message } from 'antd';
 
 import httpRequest from '@/lib/httpClient';
 import { Response } from '@/types';
+import { Props } from '@/types/category';
 
-const EditCategory = () => {
+const EditCategory = (props: Props) => {
+  const {
+    selectedCategory
+  } = props; 
   const [title, setTitle] = useState('');
   const [alias, setAlias] = useState('');
-  const [order, setOrder] = useState(-1);
+  const [order, setOrder] = useState<number>(0);
   const [messageApi, contextHolder] = message.useMessage();
 
-  const handleData = async () => {
-        if (!title || !alias || order <= 0) {
-            messageApi.warning('数据不能为空');
-            return false;
-        }
-        const createDate = dayjs().format()
-        const res = (await httpRequest.post(`/auth/category/create`, {
-            title,
-            alias,
-            order,
-            createDate
-        })) as Response<{}>;
-    
-        if (res?.code !== 0) {
-            messageApi.success('新增失败');
-        } else {
-            messageApi.success('新增成功')
-        }
-    };
+  useEffect(() => {
+    if (selectedCategory) {
+      setTitle(selectedCategory.category_name as string)
+      setAlias(selectedCategory.category_alias as string)
+      setOrder(selectedCategory.order as number)
+    }
+  }, [selectedCategory])
 
+  const handleData = async () => {
+    if (!title || !alias || order <= 0) {
+      messageApi.warning('请输入有效的数据');
+      return false;
+    }
+    const createDate = dayjs().format()
+    const res = (await httpRequest.post(`/auth/category/create`, {
+      title,
+      alias,
+      order,
+      createDate
+    })) as Response<{}>;
+
+    if (res?.code !== 0) {
+      messageApi.success('新增失败');
+    } else {
+      messageApi.success('新增成功')
+    }
+  };
+  const onClear = () => {
+    setTitle('')
+      setAlias('')
+      setOrder(0)
+  }
   return <>
-  {contextHolder}
+    {contextHolder}
+    <div className='flex flex-row justify-end'>
+        <button
+          type="button"
+          onClick={onClear}
+          className="px-12 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
+        >
+          清空
+        </button>
+    </div>
     <div className="z-20 grid grid-rows-5 text-base bg-white gap-y-4">
       <div className="inline-grid items-end h-24 pr-3">
         <div className="block text-sm font-medium leading-6 text-gray-900">
@@ -43,8 +68,7 @@ const EditCategory = () => {
             name="title"
             type="text"
             onChange={(e) => setTitle(e.target.value)}
-            value={title}
-            autoComplete="given-name"
+            value={title || ''}
             className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />
         </div>
@@ -58,7 +82,7 @@ const EditCategory = () => {
             name="alias"
             type="text"
             onChange={(e) => setAlias(e.target.value)}
-            value={alias}
+            value={alias || ''}
             autoComplete="given-name"
             className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />
@@ -73,7 +97,7 @@ const EditCategory = () => {
             name="order"
             type="text"
             onChange={(e) => setOrder(Number(e.target.value))}
-            value={order}
+            value={order || 0}
             autoComplete="given-name"
             className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />

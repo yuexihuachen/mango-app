@@ -1,5 +1,8 @@
 import type { Context, Next } from 'hono';
 import { verifyToken } from '@/lib/utils';
+import {
+  deleteCookie,
+} from 'hono/cookie'
 
 const authentication = () => {
     return async (c: Context, next: Next) => {
@@ -15,7 +18,9 @@ const authentication = () => {
                 const user = await verifyToken(token, Bun.env.AT_SECRET);
                 c.set('user', user)
             } catch (error) {
-                c.set('user', {})
+                c.set('user', {});
+                deleteCookie(c, 'at');
+                console.log('过期user')
             }
         }
         await next()
