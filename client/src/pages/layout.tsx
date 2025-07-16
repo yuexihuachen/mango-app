@@ -14,6 +14,7 @@ const Layout = () => {
           <Link to={'/note'}>文章</Link>
           <Link to={'/category'}>类别</Link>
           <Link to={'/tag'}>标签</Link>
+           <Link to={'/talk'}>微说</Link>
           <Link to={'/discuss'}>评论</Link>
         </div>
         <div className="flex ml-6 text-sm items-center">

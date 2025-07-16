@@ -14,7 +14,8 @@ import toArray from 'dayjs/plugin/toArray';
 import {
   category,
   user,
-  note
+  note,
+  tag
 } from '@/routes/index';
 import sql from '@/connection';
 
@@ -57,6 +58,7 @@ app.use('/auth/*', authMiddleware);
 app.route('/', category);
 app.route('/', note);
 app.route('/', user);
+app.route('/', tag);
 
 app.get('/hello', async (c) => {
   let rows = {hello:'world'}

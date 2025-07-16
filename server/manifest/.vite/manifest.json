@@ -1,57 +1,58 @@
 {
-  "_button-CyPEKfS9.js": {
-    "file": "static/button-CyPEKfS9.js",
+  "_button-C5-QKwh-.js": {
+    "file": "static/button-C5-QKwh-.js",
     "name": "button",
     "imports": [
       "index.html",
-      "_httpClient-D_WQJw5l.js",
-      "_objectWithoutPropertiesLoose-Cv5OCJ0e.js"
+      "_httpClient-C9Um3c9y.js"
     ]
   },
-  "_dayjs.min-DKjcRhTl.js": {
-    "file": "static/dayjs.min-DKjcRhTl.js",
+  "_dayjs.min-B-NiVJfK.js": {
+    "file": "static/dayjs.min-B-NiVJfK.js",
     "name": "dayjs.min",
     "imports": [
       "index.html"
     ]
   },
-  "_httpClient-D_WQJw5l.js": {
-    "file": "static/httpClient-D_WQJw5l.js",
+  "_httpClient-C9Um3c9y.js": {
+    "file": "static/httpClient-C9Um3c9y.js",
     "name": "httpClient",
     "imports": [
-      "index.html",
-      "_objectWithoutPropertiesLoose-Cv5OCJ0e.js"
+      "index.html"
     ]
   },
-  "_index-CzVrMaut.js": {
-    "file": "static/index-CzVrMaut.js",
+  "_index-BOMmqVZq.js": {
+    "file": "static/index-BOMmqVZq.js",
     "name": "index",
     "imports": [
-      "_httpClient-D_WQJw5l.js",
-      "index.html",
-      "_objectWithoutPropertiesLoose-Cv5OCJ0e.js"
+      "index.html"
     ]
   },
-  "_objectWithoutPropertiesLoose-Cv5OCJ0e.js": {
-    "file": "static/objectWithoutPropertiesLoose-Cv5OCJ0e.js",
-    "name": "objectWithoutPropertiesLoose"
+  "_index-D3mA6cJj.js": {
+    "file": "static/index-D3mA6cJj.js",
+    "name": "index",
+    "imports": [
+      "_httpClient-C9Um3c9y.js",
+      "index.html",
+      "_button-C5-QKwh-.js"
+    ]
   },
-  "_select-epa6wdJF.js": {
-    "file": "static/select-epa6wdJF.js",
+  "_select-BEnuvY82.js": {
+    "file": "static/select-BEnuvY82.js",
     "name": "select",
     "imports": [
       "index.html"
     ]
   },
-  "_tabs-CnNi2cjc.js": {
-    "file": "static/tabs-CnNi2cjc.js",
+  "_tabs-C5v-3ysP.js": {
+    "file": "static/tabs-C5v-3ysP.js",
     "name": "tabs",
     "imports": [
       "index.html"
     ]
   },
   "index.html": {
-    "file": "static/index-BVQpmP7I.js",
+    "file": "static/index-sn9bs8W1.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
@@ -60,6 +61,7 @@
       "src/pages/about.tsx",
       "src/pages/note.tsx",
       "src/pages/tag.tsx",
+      "src/pages/talk.tsx",
       "src/pages/category.tsx",
       "src/pages/discuss.tsx",
       "src/pages/signin.tsx",
@@ -67,36 +69,36 @@
       "src/pages/signup.tsx"
     ],
     "css": [
-      "static/index-BokTm3_B.css"
+      "static/index-FNvA0DjM.css"
     ]
   },
   "src/components/category/categoryList.tsx": {
-    "file": "static/categoryList-C2jlbKzl.js",
+    "file": "static/categoryList-2e4iU83B.js",
     "name": "categoryList",
     "src": "src/components/category/categoryList.tsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_httpClient-D_WQJw5l.js",
-      "_button-CyPEKfS9.js",
-      "_objectWithoutPropertiesLoose-Cv5OCJ0e.js"
+      "_httpClient-C9Um3c9y.js",
+      "_index-BOMmqVZq.js",
+      "_index-D3mA6cJj.js",
+      "_button-C5-QKwh-.js"
     ]
   },
   "src/components/category/editCategory.tsx": {
-    "file": "static/editCategory-Bnt5v5Q6.js",
+    "file": "static/editCategory-5ndyhFpD.js",
     "name": "editCategory",
     "src": "src/components/category/editCategory.tsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_dayjs.min-DKjcRhTl.js",
-      "_httpClient-D_WQJw5l.js",
-      "_index-CzVrMaut.js",
-      "_objectWithoutPropertiesLoose-Cv5OCJ0e.js"
+      "_dayjs.min-B-NiVJfK.js",
+      "_httpClient-C9Um3c9y.js",
+      "_index-BOMmqVZq.js"
     ]
   },
   "src/components/discuss/discussList.tsx": {
-    "file": "static/discussList-BGwokIzb.js",
+    "file": "static/discussList-CiJwdGXO.js",
     "name": "discussList",
     "src": "src/components/discuss/discussList.tsx",
     "isDynamicEntry": true,
@@ -105,7 +107,7 @@
     ]
   },
   "src/components/discuss/editDiscuss.tsx": {
-    "file": "static/editDiscuss-4dNGav9w.js",
+    "file": "static/editDiscuss-a85SGQEF.js",
     "name": "editDiscuss",
     "src": "src/components/discuss/editDiscuss.tsx",
     "isDynamicEntry": true,
@@ -114,46 +116,56 @@
     ]
   },
   "src/components/note/editNote.tsx": {
-    "file": "static/editNote-D07Ylgaf.js",
+    "file": "static/editNote-B92dpgFN.js",
     "name": "editNote",
     "src": "src/components/note/editNote.tsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_objectWithoutPropertiesLoose-Cv5OCJ0e.js",
-      "_select-epa6wdJF.js"
+      "_httpClient-C9Um3c9y.js",
+      "_select-BEnuvY82.js"
     ]
   },
   "src/components/note/noteList.tsx": {
-    "file": "static/noteList-Cqt917lw.js",
+    "file": "static/noteList-BEtBKZoU.js",
     "name": "noteList",
     "src": "src/components/note/noteList.tsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_select-epa6wdJF.js"
+      "_httpClient-C9Um3c9y.js",
+      "_select-BEnuvY82.js",
+      "_index-D3mA6cJj.js",
+      "_button-C5-QKwh-.js"
     ]
   },
   "src/components/tag/editTag.tsx": {
-    "file": "static/editTag-D62b4NOz.js",
+    "file": "static/editTag-DajD98X_.js",
     "name": "editTag",
     "src": "src/components/tag/editTag.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "index.html"
+      "index.html",
+      "_dayjs.min-B-NiVJfK.js",
+      "_httpClient-C9Um3c9y.js",
+      "_index-BOMmqVZq.js"
     ]
   },
   "src/components/tag/tagList.tsx": {
-    "file": "static/tagList-K_ZXSEsD.js",
+    "file": "static/tagList-Blj8FdyZ.js",
     "name": "tagList",
     "src": "src/components/tag/tagList.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "index.html"
+      "index.html",
+      "_httpClient-C9Um3c9y.js",
+      "_index-BOMmqVZq.js",
+      "_index-D3mA6cJj.js",
+      "_button-C5-QKwh-.js"
     ]
   },
   "src/pages/about.tsx": {
-    "file": "static/about-BZ_Sz-tv.js",
+    "file": "static/about-iNrLgFS3.js",
     "name": "about",
     "src": "src/pages/about.tsx",
     "isDynamicEntry": true,
@@ -162,13 +174,14 @@
     ]
   },
   "src/pages/category.tsx": {
-    "file": "static/category-sm8rlhtK.js",
+    "file": "static/category-DRblJzQE.js",
     "name": "category",
     "src": "src/pages/category.tsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_tabs-CnNi2cjc.js"
+      "_tabs-C5v-3ysP.js",
+      "_index-BOMmqVZq.js"
     ],
     "dynamicImports": [
       "src/components/category/editCategory.tsx",
@@ -176,13 +189,13 @@
     ]
   },
   "src/pages/discuss.tsx": {
-    "file": "static/discuss-SqR2Rpzn.js",
+    "file": "static/discuss-Cy5L7NBz.js",
     "name": "discuss",
     "src": "src/pages/discuss.tsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_tabs-CnNi2cjc.js"
+      "_tabs-C5v-3ysP.js"
     ],
     "dynamicImports": [
       "src/components/discuss/editDiscuss.tsx",
@@ -190,7 +203,7 @@
     ]
   },
   "src/pages/home.tsx": {
-    "file": "static/home-C0Vc_sDm.js",
+    "file": "static/home-BcGAjYGA.js",
     "name": "home",
     "src": "src/pages/home.tsx",
     "isDynamicEntry": true,
@@ -199,13 +212,13 @@
     ]
   },
   "src/pages/note.tsx": {
-    "file": "static/note-DrXHxrEN.js",
+    "file": "static/note-BV97VrrW.js",
     "name": "note",
     "src": "src/pages/note.tsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_tabs-CnNi2cjc.js"
+      "_tabs-C5v-3ysP.js"
     ],
     "dynamicImports": [
       "src/components/note/editNote.tsx",
@@ -213,51 +226,60 @@
     ]
   },
   "src/pages/resetPwd.tsx": {
-    "file": "static/resetPwd-CK6yDYnd.js",
+    "file": "static/resetPwd-DrGMYZbA.js",
     "name": "resetPwd",
     "src": "src/pages/resetPwd.tsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_httpClient-D_WQJw5l.js",
-      "_index-CzVrMaut.js",
-      "_button-CyPEKfS9.js",
-      "_objectWithoutPropertiesLoose-Cv5OCJ0e.js"
+      "_httpClient-C9Um3c9y.js",
+      "_button-C5-QKwh-.js"
     ]
   },
   "src/pages/signin.tsx": {
-    "file": "static/signin-DKSRCwfM.js",
+    "file": "static/signin-BTiS6r8U.js",
     "name": "signin",
     "src": "src/pages/signin.tsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_httpClient-D_WQJw5l.js",
-      "_index-CzVrMaut.js",
-      "_objectWithoutPropertiesLoose-Cv5OCJ0e.js"
+      "_httpClient-C9Um3c9y.js"
     ]
   },
   "src/pages/signup.tsx": {
-    "file": "static/signup-AiEO0bpp.js",
+    "file": "static/signup-CxBPq3d3.js",
     "name": "signup",
     "src": "src/pages/signup.tsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_dayjs.min-DKjcRhTl.js",
-      "_httpClient-D_WQJw5l.js",
-      "_index-CzVrMaut.js",
-      "_objectWithoutPropertiesLoose-Cv5OCJ0e.js"
+      "_dayjs.min-B-NiVJfK.js",
+      "_httpClient-C9Um3c9y.js"
     ]
   },
   "src/pages/tag.tsx": {
-    "file": "static/tag-Bl_ojvmp.js",
+    "file": "static/tag-DXdfifzm.js",
     "name": "tag",
     "src": "src/pages/tag.tsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_tabs-CnNi2cjc.js"
+      "_tabs-C5v-3ysP.js",
+      "_index-BOMmqVZq.js"
+    ],
+    "dynamicImports": [
+      "src/components/tag/editTag.tsx",
+      "src/components/tag/tagList.tsx"
+    ]
+  },
+  "src/pages/talk.tsx": {
+    "file": "static/talk-D6LIU9KA.js",
+    "name": "talk",
+    "src": "src/pages/talk.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_tabs-C5v-3ysP.js"
     ],
     "dynamicImports": [
       "src/components/tag/editTag.tsx",

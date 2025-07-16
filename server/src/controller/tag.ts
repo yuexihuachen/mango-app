@@ -2,31 +2,27 @@ import sql from '@/connection';
 import BaseClass from '@/lib/baseClass';
 import type { Context } from 'hono';
 
-class Category extends BaseClass {
+class Tag extends BaseClass {
   constructor() {
     super();
   }
 
-  // "category_name"	"category_alias"	"user_id"	"create_date"	"update_date"	"order"
+  // "tag_id"	"tag_name"	"user_id"	"create_date"	"update_date"
   async create(c: Context) {
     const body = await c.req.json();
     const {
-      title,
-      alias,
-      order,
+      name,
       createDate
     } = body;
     const user = c.get('user');
     const userData = {
-      category_name: title,
-      category_alias: alias,
+      tag_name: name,
       user_id: user.user_id,
-      order,
       create_date: createDate,
       update_date: createDate
     };
     const result = await sql`
-      INSERT INTO category ${sql(userData)}
+      INSERT INTO tag ${sql(userData)}
       RETURNING *
     `;
     let response = super.failed('新增失败');
@@ -43,11 +39,11 @@ class Category extends BaseClass {
     const user = c.get('user');
     const res = await sql`
       SELECT
-        category_id, category_name, category_alias, "order", create_date, update_date
+        tag_id, tag_name, create_date
       FROM
-        category
+        tag
         WHERE user_id=${user.user_id}
-        ORDER BY category_id
+        ORDER BY tag_id
     `;
     
     let response = super.failed('查询失败');
@@ -65,20 +61,16 @@ class Category extends BaseClass {
     const body = await c.req.json();
     const {
       id,
-      title,
-      alias,
-      order,
+      name,
       updateDate
     } = body;
     const user = c.get('user');
     const userData = {
-      category_name: title,
-      category_alias: alias,
-      order,
+      tag_name: name,
       update_date: updateDate
     };
 
-    const result = await sql`UPDATE category SET ${sql(userData)} WHERE category_id=${id} AND user_id=${user.user_id}`;
+    const result = await sql`UPDATE tag SET ${sql(userData)} WHERE tag_id=${id} AND user_id=${user.user_id}`;
     let response = super.failed('更新失败');
     if (result.count) {
       response = super.success({
@@ -100,7 +92,7 @@ class Category extends BaseClass {
     };
     if (id) {
       result = await sql`
-      DELETE FROM category WHERE user_id=${user.user_id} AND category_id=${id};`
+      DELETE FROM tag WHERE user_id=${user.user_id} AND tag_id=${id};`
     }
     let response = super.failed('删除失败');
     if (result.count) {
@@ -113,4 +105,4 @@ class Category extends BaseClass {
   }
 }
 
-export default Category;
+export default Tag;

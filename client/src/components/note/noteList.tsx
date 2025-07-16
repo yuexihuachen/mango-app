@@ -1,35 +1,86 @@
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import httpRequest from '@/lib/httpClient';
+import { Response } from '@/types';
+import { CategoryItem } from '@/types/category';
+import { message, Modal } from 'antd';
+import { TagItem } from '@/types/tag';
+
 import Select from "../select/select";
 
-const items = [{
-  id: -1,
-  name: '全部'
-}, {
-  id: 0,
-  name: '未发布'
-}];
+const firstItem = {id: 0, name: '全部'};
 
-const pushItems = [{
-  id: -1,
-  name: '全部'
-}, {
-  id: 0,
+const pushItems = [firstItem, {
+  id: 1,
   name: '未发布'
 }, {
-  id: 1,
+  id: 2,
   name: '已发布'
 }]
 
+type Item = {
+  id: number;
+  name: string;
+}
+
 const NoteList = () => {
-  const [category, setCategory] = useState(1);
+  const [categoryList, setCategoryList] = useState<Item[]>([]);
+  const [tagList, setTagList] = useState<Item[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [title, setTitle] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState(1);
+  const [selectedTag, setSelectedTag] = useState(1);
   const [isPush, setIsPush] = useState(-1);
-  const onSelectedValue = (value: number) => {
-    setCategory(value)
+
+  const onCategoryValue = (value: string) => {
+    setSelectedCategory(parseInt(value, 10))
+  }
+
+  const onTagValue = (value: string) => {
+    setSelectedTag(parseInt(value, 10))
   }
   const onPushValue = (value: number) => {
     setIsPush(value)
   }
+  const fetchCategoryData = async () => {
+      const res = (await httpRequest.post(`/auth/category/find`,{})) as Response<any>;
+      if (res?.code === 0) {
+        const category: Item[]  = res.data.map((ca: CategoryItem) => ({
+          id: ca.category_id,
+          name: ca.category_alias
+        }))
+        setCategoryList([firstItem, ...category])
+      } else {
+        message.error('请求失败')
+      }
+  };
+
+  const fetchTagData = async () => {
+      const res = (await httpRequest.post(`/auth/tag/find`,{})) as Response<any>;
+      if (res?.code === 0) {
+        const tag: Item[]  = res.data.map((tag: TagItem) => ({
+          id: tag.tag_id,
+          name: tag.tag_name
+        }))
+        setTagList([firstItem, ...tag])
+      } else {
+        message.error('请求失败')
+      }
+  };
+
+  useEffect(() => {
+    fetchCategoryData();
+    fetchTagData()
+  }, [])
+
+  const handleOk = async () => {
+
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   return <>
     <div className="z-20 grid grid-cols-5 text-base bg-white gap-y-4">
       <div className="inline-grid items-end h-24 pr-3">
@@ -40,7 +91,8 @@ const NoteList = () => {
           <input
             name="title"
             type="text"
-            autoComplete="given-name"
+            value={title || ''}
+            onChange={e => setTitle(e.target.value)}
             className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />
         </div>
@@ -50,7 +102,10 @@ const NoteList = () => {
           类型
         </div>
         <div className="grid mt-2">
-          <Select {...{ onSelectedValue, items, value: category }} />
+          <Select {...{ 
+            onSelectedValue: onCategoryValue, 
+            items: categoryList, 
+            value: selectedCategory }} />
         </div>
       </div>
       <div className="inline-grid items-end h-24 pr-3">
@@ -58,7 +113,10 @@ const NoteList = () => {
           标签
         </div>
         <div className="grid mt-2">
-          <Select {...{ onSelectedValue, items, value: category }} />
+          <Select {...{ 
+            onSelectedValue: onTagValue, 
+            items: tagList, 
+            value: selectedTag }} />
         </div>
       </div>
       <div className="inline-grid items-end h-24 pr-3">
@@ -137,6 +195,15 @@ const NoteList = () => {
           );
         })} */}
     </div>
+          <Modal
+            title="确认删除当前类别信息"
+            okText={'确认'}
+            cancelText={'取消'}
+            open={isModalOpen}
+            onOk={handleOk}
+            onCancel={handleCancel}
+          >
+          </Modal>
   </>
 }
 

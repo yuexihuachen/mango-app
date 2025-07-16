@@ -36,5 +36,6 @@ export const authMiddleware = async (c: Context, next: Next) => {
       return user.user_id;
     }
   })
+
   return bearer(c, next);
 };

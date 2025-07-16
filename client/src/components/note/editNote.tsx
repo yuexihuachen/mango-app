@@ -1,25 +1,31 @@
 import * as marked from 'marked';
 import CodeMirror, { EditorView } from '@uiw/react-codemirror';
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import httpRequest from '@/lib/httpClient';
+import { Response } from '@/types';
+import { CategoryItem } from '@/types/category';
+import { message } from 'antd';
+import { TagItem } from '@/types/tag';
 
 import Select from "../select/select";
 
-const items = [{
-  id: -1,
-  name: '全部'
-}, {
-  id: 0,
-  name: '未发布'
-}];
+type Item = {
+  id: number;
+  name: string;
+}
 
 const EditNote = () => {
+  const [title, setTitle] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(1);
+  const [selectedTag, setSelectedTag] = useState(1);
+
+  const [categoryList, setCategoryList] = useState<Item[]>([]);
+  const [tagList, setTagList] = useState<Item[]>([]);
   const markdownRef = useRef<HTMLDivElement>(null);
   const [content, setContent] = useState<string>('');
-  const [category, setCategory] = useState(1);
-  const [published, setPublished] = useState<number>(0);
-  const onSelectedValue = (value: number) => {
-    setCategory(value)
-  }
+
+  const [published, setPublished] = useState<boolean>(false);
+
   const onChange = useCallback((val: string) => {
     if (markdownRef.current) {
       setContent(val);
@@ -28,8 +34,51 @@ const EditNote = () => {
       }
     }
   }, []);
+
+    const fetchCategoryData = async () => {
+      const res = (await httpRequest.post(`/auth/category/find`,{})) as Response<any>;
+      if (res?.code === 0) {
+        const category: Item[]  = res.data.map((ca: CategoryItem) => ({
+          id: ca.category_id,
+          name: ca.category_alias
+        }))
+        setCategoryList([...category])
+      } else {
+        message.error('请求失败')
+      }
+  };
+
+  const fetchTagData = async () => {
+      const res = (await httpRequest.post(`/auth/tag/find`,{})) as Response<any>;
+      if (res?.code === 0) {
+        const tag: Item[]  = res.data.map((tag: TagItem) => ({
+          id: tag.tag_id,
+          name: tag.tag_name
+        }))
+        setTagList([...tag])
+      } else {
+        message.error('请求失败')
+      }
+  };
+
+  useEffect(() => {
+    fetchCategoryData();
+    fetchTagData()
+  }, [])
+
+  const onCategoryValue = (value: string) => {
+    setSelectedCategory(parseInt(value, 10))
+  }
+
+  const onTagValue = (value: string) => {
+    setSelectedTag(parseInt(value, 10))
+  }
+
+  const handleData = () => {
+
+  }
   return <>
-    <div className="z-20 grid grid-cols-5 text-base bg-white gap-y-4">
+    <div className="z-20 grid grid-cols-[1fr_1fr_1fr_auto_1fr] text-base bg-white gap-y-4">
       <div className="inline-grid items-end h-24 pr-3">
         <div className="block text-sm font-medium leading-6 text-gray-900">
           标题
@@ -38,7 +87,8 @@ const EditNote = () => {
           <input
             name="title"
             type="text"
-            autoComplete="given-name"
+            value={title || ''}
+            onChange={e => setTitle(e.target.value)}
             className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />
         </div>
@@ -48,7 +98,10 @@ const EditNote = () => {
           类型
         </div>
         <div className="grid mt-2">
-          <Select {...{ onSelectedValue, items, value: category }} />
+            <Select {...{ 
+            onSelectedValue: onCategoryValue, 
+            items: categoryList, 
+            value: selectedCategory }} />
         </div>
       </div>
       <div className="inline-grid items-end h-24 pr-3">
@@ -56,18 +109,21 @@ const EditNote = () => {
           标签
         </div>
         <div className="grid mt-2">
-          <Select {...{ onSelectedValue, items, value: category }} />
+          <Select {...{ 
+            onSelectedValue: onTagValue, 
+            items: tagList, 
+            value: selectedTag }} />
         </div>
       </div>
       <div className="inline-grid items-end h-24 pr-3">
         <div className="block text-sm font-medium leading-6 text-gray-900">
-          是否发布
+          发布
         </div>
         <div className="grid mt-2">
           <input
             type="checkbox"
-            checked={!!published}
-            onChange={(e) => setPublished(e.target.checked ? 1 : 0)}
+            checked={published}
+            onChange={(e) => setPublished(e.target.checked)}
             className="w-9 h-9 text-indigo-600 border-gray-300 rounded focus:ring-indigo-600 accent-indigo-500"
           />
         </div>
@@ -75,6 +131,7 @@ const EditNote = () => {
       <div className="inline-grid items-end h-24">
         <button
           type="button"
+          onClick={handleData}
           className="px-12 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           保存
@@ -85,11 +142,11 @@ const EditNote = () => {
       <div className="py-3">
         <div
           className="relative
-        h-[720px]
-        overflow-y-scroll
-        overscroll-contain
-        text-base"
-        >
+            h-[720px]
+            overflow-y-scroll
+            overscroll-contain
+            text-base"
+            >
           <CodeMirror
             value={content}
             height="auto"

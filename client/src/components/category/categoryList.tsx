@@ -1,42 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import httpRequest from '@/lib/httpClient';
 import { Response } from '@/types';
-import { CategoryItem, Props } from '@/types/category';
-import { Modal } from 'antd';
+import { CategoryItem } from '@/types/category';
+import { message, Modal } from 'antd';
+import { useAppDispatch } from '@/hooks';
+import { updateState } from '@/features/category/categorySlice';
 
-
-const CategoryList = (props: Props) => {
-  const {
-    setCategory
-  } = props; 
-
+const CategoryList = () => {
+  const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [categoryList, setCategoryList] = useState<CategoryItem[]>([])
-    const handleOk = () => {
- 
+  const [categoryList, setCategoryList] = useState<CategoryItem[]>([]);
+  const [deCategory, setDeCategory] = useState<CategoryItem>();
+  const handleOk = async () => {
+    if (deCategory?.category_id) {
+      const res = (await httpRequest.post(`/auth/category/delete`,{id: deCategory.category_id})) as Response<any>;
+      if (res?.code === 0) {
+        message.success('删除成功');
+        const newCategoryList =categoryList.filter(ca => ca.category_id !== deCategory.category_id);
+        setCategoryList(newCategoryList)
+      } else {
+        message.error('删除失败');
+      }
+      setIsModalOpen(false);
+    }
   };
   const handleCancel = () => {
     setIsModalOpen(false);
   };
   const fetchData = async () => {
-      const res = (await httpRequest.post(`/category/find`, {
-        pageSize:3,
-        pageIndex: 1
-      })) as Response<any>;
+      const res = (await httpRequest.post(`/auth/category/find`,{})) as Response<any>;
       if (res?.code === 0) {
         setCategoryList(res.data)
+      } else {
+        message.error('请求失败')
       }
-    };
+  };
 
   useEffect(() => {
     fetchData()
   },[])
   const deleteCategory = (category: CategoryItem) => {
+    setDeCategory(category)
     setIsModalOpen(true);
   };
 
   const editCategory = async (category: CategoryItem) => {
-    setCategory && setCategory(category)
+    dispatch(updateState({
+      selectedCategory: category,
+      categoryTabId: '2'
+    }))
   };
   return <>
     <div className="z-20 grid grid-cols-5 text-base bg-white gap-y-4">
@@ -47,6 +59,7 @@ const CategoryList = (props: Props) => {
       <div className="p-3 border-b border-gray-200">
         <button
           type="button"
+          onClick={fetchData}
           className="px-12 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           搜索

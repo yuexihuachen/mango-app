@@ -1,5 +1,5 @@
 type SelectProps<T> = {
-    value: T;
+    value: number;
     onSelectedValue: (value: T) => void;
     items: {
         id: number;
@@ -7,7 +7,7 @@ type SelectProps<T> = {
     }[]
 }
 
-const Select = (props: SelectProps<number>) => {
+const Select = (props: SelectProps<string>) => {
     const { value, onSelectedValue, items } = props;
     return <>
         <select

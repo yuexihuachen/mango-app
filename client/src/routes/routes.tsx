@@ -12,6 +12,7 @@ const Home = React.lazy(() => import("@/pages/home"));
 const About = React.lazy(() => import("@/pages/about"));
 const Note = React.lazy(() => import("@/pages/note"));
 const Tag = React.lazy(() => import("@/pages/tag"));
+const Talk = React.lazy(() => import("@/pages/talk"));
 const Category = React.lazy(() => import("@/pages/category"));
 const Discuss = React.lazy(() => import("@/pages/discuss"));
 const Signin = React.lazy(() => import("@/pages/signin"));
@@ -52,6 +53,11 @@ const noteRouter = [
     path: '/tag',
     loader: protectedLoader,
     element: <Tag />
+  },
+  {
+    path: '/talk',
+    loader: protectedLoader,
+    element: <Talk />
   },
   {
     path: 'discuss',

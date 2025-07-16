@@ -1,9 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import noteReducer from '@/features/note/noteSlice';
+import categoryReducer from '@/features/category/categorySlice';
+import tagReducer from '@/features/tag/tagSlice';
+import contextReducer from '@/features/context/contextSlice';
 
 export const store = configureStore({
   reducer: {
-    note: noteReducer
+    note: noteReducer,
+    category: categoryReducer,
+    context: contextReducer,
+    tag: tagReducer
   }
 })
 
