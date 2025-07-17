@@ -1,21 +1,49 @@
 import { Link, Outlet } from "react-router";
+import { useLocation } from "react-router";
+import Logo from '../assets/images/logo.svg';
 
-import Logo from '../assets/images/logo.svg'
+const links = [
+    {
+        "url": "/note",
+        "name": "文章"
+    },
+    {
+        "url": "/category",
+        "name": "类别"
+    },
+    {
+        "url": "/tag",
+        "name": "标签"
+    },
+    {
+        "url": "/talk",
+        "name": "微说"
+    },
+    {
+        "url": "/discuss",
+        "name": "评论"
+    }
+];
 
 const Layout = () => {
+  const {pathname} = useLocation();
   return <div className="w-full">
     <div className="fixed top-0 w-full z-50 bg-white shadow-md">
-      <div className="flex gap-4 px-6 items-center h-16 max-w-10xl">
+      <div className="mx-auto flex gap-4 px-6 items-center h-16 max-w-10xl">
         <div className="inline-flex items-center gap-4 cursor-pointer">
           <Link to={'/'}><img src={Logo} className="h-6" /></Link>
           <span className="font-black">ExplainThis</span>
         </div>
-        <div className="flex text-sm ml-8 gap-6 cursor-pointer flex-auto">
-          <Link to={'/note'}>文章</Link>
-          <Link to={'/category'}>类别</Link>
-          <Link to={'/tag'}>标签</Link>
-           <Link to={'/talk'}>微说</Link>
-          <Link to={'/discuss'}>评论</Link>
+        <div className="flex text-sm ml-8 gap-6 h-16 items-start cursor-pointer flex-auto">
+          {
+            links.map((link) => {
+              const {
+                url,
+                name
+              } = link;
+              return <Link key={url} className={`item item-hover ${pathname == url?'item-selected':''}`} to={url}>{name}</Link>
+            })
+          } 
         </div>
         <div className="flex ml-6 text-sm items-center">
           <Link to={'/signin'} className="cursor-pointer">登录</Link>

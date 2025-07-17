@@ -15,3 +15,18 @@
     font-family: var(--font-serif);
   }
 }
+
+@layer components {
+  .item {
+    @apply inline-flex items-center h-[62px]  relative after:w-full after:h-0.5 after:absolute after:-bottom-0.5 after:left-0;
+  }
+
+  .item-selected {
+    @apply after:bg-indigo-500 text-indigo-500;
+  }
+
+  .item-hover {
+    @apply hover:after:bg-indigo-500;
+  }
+
+}

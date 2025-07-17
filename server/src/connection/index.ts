@@ -13,7 +13,7 @@
 
 import { SQL } from "bun";
 
-let sql: any;
+let sql: any = null;
 
 function resolveSql() {
   return new Promise((resolve) => {
@@ -38,7 +38,9 @@ function resolveSql() {
 }
 
 (async function() {
-    await resolveSql()
+    if (!sql) {
+        await resolveSql()
+    }
 })()
 
 export default sql;

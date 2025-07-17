@@ -1,24 +1,28 @@
+import { NoteItem } from '@/types/note';
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-const initialState: any = {
-    notes: [],
-    currentNote: {}
+type Init = {
+  selectedNote: Partial<NoteItem>;
+  noteTabId: string;
+}
+
+const initialState: Init = {
+  selectedNote: {},
+  noteTabId: '1'
 }
 
 export const noteSlice = createSlice({
   name: 'note',
   initialState,
   reducers: {
-    searchNote: (state, action: PayloadAction<any>) => {
-        state.notes = action.payload
-    },
-    selectedNote: (state, action: PayloadAction<any>) => {
-        state.currentNote = action.payload
+    updateNote: (state, action: PayloadAction<Init>) => {
+        state = action.payload;
+        return state
     }
   },
 })
 
-export const { searchNote, selectedNote } = noteSlice.actions
+export const { updateNote } = noteSlice.actions
 
 export default noteSlice.reducer

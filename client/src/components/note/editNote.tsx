@@ -2,69 +2,98 @@ import * as marked from 'marked';
 import CodeMirror, { EditorView } from '@uiw/react-codemirror';
 import { useState, useRef, useCallback, useEffect } from 'react';
 import httpRequest from '@/lib/httpClient';
-import { Response } from '@/types';
+import { NoteServerItem, Response } from '@/types';
 import { CategoryItem } from '@/types/category';
 import { message } from 'antd';
 import { TagItem } from '@/types/tag';
-
+import dayjs from 'dayjs';
 import Select from "../select/select";
+import { useAppSelector } from '@/hooks';
 
 type Item = {
   id: number;
   name: string;
 }
 
-const EditNote = () => {
+type Props = {
+  tagList: TagItem[];
+  categoryList: CategoryItem[];
+}
+
+const EditNote = (props: Props) => {
+  const {
+    tagList: tags,
+    categoryList: categorys
+  } = props;
   const [title, setTitle] = useState('');
+  const [content, setContent] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState(1);
   const [selectedTag, setSelectedTag] = useState(1);
+  const [published, setPublished] = useState<boolean>(false);
+
+  const selectedNote = useAppSelector(state => state.note.selectedNote);
 
   const [categoryList, setCategoryList] = useState<Item[]>([]);
   const [tagList, setTagList] = useState<Item[]>([]);
   const markdownRef = useRef<HTMLDivElement>(null);
-  const [content, setContent] = useState<string>('');
-
-  const [published, setPublished] = useState<boolean>(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const onChange = useCallback((val: string) => {
     if (markdownRef.current) {
+      const value = marked.parse(val) as string;
       setContent(val);
-      if (markdownRef.current) {
-        markdownRef.current.innerHTML = marked.parse(val) as string;
-      }
+      markdownRef.current.innerHTML = value;
     }
   }, []);
 
-    const fetchCategoryData = async () => {
-      const res = (await httpRequest.post(`/auth/category/find`,{})) as Response<any>;
-      if (res?.code === 0) {
-        const category: Item[]  = res.data.map((ca: CategoryItem) => ({
-          id: ca.category_id,
-          name: ca.category_alias
-        }))
-        setCategoryList([...category])
-      } else {
-        message.error('请求失败')
-      }
-  };
+  useEffect(() => {
+    if (categorys.length) {
+      const category: Item[] = categorys.map((ca: CategoryItem) => ({
+        id: ca.category_id,
+        name: ca.category_alias
+      }))
+      setCategoryList([...category]);
+      setSelectedCategory(category[0].id)
+    }
 
-  const fetchTagData = async () => {
-      const res = (await httpRequest.post(`/auth/tag/find`,{})) as Response<any>;
-      if (res?.code === 0) {
-        const tag: Item[]  = res.data.map((tag: TagItem) => ({
-          id: tag.tag_id,
-          name: tag.tag_name
-        }))
-        setTagList([...tag])
-      } else {
-        message.error('请求失败')
-      }
-  };
+    if (tags.length) {
+      const tag: Item[] = tags.map((tag: TagItem) => ({
+        id: tag.tag_id,
+        name: tag.tag_name
+      }))
+      setTagList([...tag]);
+      setSelectedTag(tag[0].id)
+    }
+  }, [tags, categorys])
 
   useEffect(() => {
-    fetchCategoryData();
-    fetchTagData()
-  }, [])
+    if (selectedNote?.noteId) {
+      setTitle(selectedNote?.title || '');
+      setSelectedCategory(selectedNote?.categoryId || 0);
+      setSelectedTag(selectedNote.tagId || 0)
+      setPublished(!!selectedNote.isPush)
+      httpRequest.post(`/auth/note/find`, {
+        id: selectedNote?.noteId
+      }).then((res) => {
+        const result = res as unknown as Response<NoteServerItem[]>;
+        if (result?.code === 0) {
+          const note = result.data[0];
+          if (markdownRef.current) {
+            setContent(note?.mark_content ? decodeURIComponent(note.mark_content as string) : '');
+
+            markdownRef.current.innerHTML = note?.content ? marked.parse(decodeURIComponent(note.content as string)) as string : '';
+          }
+        }
+      })
+    } else {
+      setTitle('');
+      setSelectedCategory(categoryList[0]?.id);
+      setSelectedTag(tagList[0]?.id)
+      setPublished(false)
+      setContent('')
+      markdownRef.current && (markdownRef.current.innerHTML = '');
+    }
+  }, [selectedNote])
 
   const onCategoryValue = (value: string) => {
     setSelectedCategory(parseInt(value, 10))
@@ -74,10 +103,46 @@ const EditNote = () => {
     setSelectedTag(parseInt(value, 10))
   }
 
-  const handleData = () => {
+  const handleData = async () => {
+    if (!title || !selectedCategory || !selectedTag || !content) {
+      messageApi.warning('请输入有效的数据');
+      return false;
+    }
+    const createDate = dayjs().format();
+    const isId = selectedNote?.noteId;
+    let res;
+    if (isId) {
+      res = (await httpRequest.post(`/auth/note/update`, {
+        id: isId,
+        title,
+        content: encodeURIComponent(marked.parse(content) as string),
+        markContent: encodeURIComponent(content),
+        isPush: published ? 1 : 0,
+        categoryId: selectedCategory,
+        tagId: selectedTag,
+        updateDate: createDate
+      })) as Response<{}>;
+    } else {
+      res = (await httpRequest.post(`/auth/note/create`, {
+        title,
+        content: encodeURIComponent(marked.parse(content) as string),
+        markContent: encodeURIComponent(content),
+        isPush: published ? 1 : 0,
+        categoryId: selectedCategory,
+        tagId: selectedTag,
+        createDate
+      })) as Response<{}>;
+    }
+
+    if (res?.code !== 0) {
+      messageApi.success(`${isId ? '更新' : '新增'}失败`);
+    } else {
+      messageApi.success(`${isId ? '更新' : '新增'}成功`)
+    }
 
   }
   return <>
+    {contextHolder}
     <div className="z-20 grid grid-cols-[1fr_1fr_1fr_auto_1fr] text-base bg-white gap-y-4">
       <div className="inline-grid items-end h-24 pr-3">
         <div className="block text-sm font-medium leading-6 text-gray-900">
@@ -98,10 +163,11 @@ const EditNote = () => {
           类型
         </div>
         <div className="grid mt-2">
-            <Select {...{ 
-            onSelectedValue: onCategoryValue, 
-            items: categoryList, 
-            value: selectedCategory }} />
+          <Select {...{
+            onSelectedValue: onCategoryValue,
+            items: categoryList,
+            value: selectedCategory
+          }} />
         </div>
       </div>
       <div className="inline-grid items-end h-24 pr-3">
@@ -109,10 +175,11 @@ const EditNote = () => {
           标签
         </div>
         <div className="grid mt-2">
-          <Select {...{ 
-            onSelectedValue: onTagValue, 
-            items: tagList, 
-            value: selectedTag }} />
+          <Select {...{
+            onSelectedValue: onTagValue,
+            items: tagList,
+            value: selectedTag
+          }} />
         </div>
       </div>
       <div className="inline-grid items-end h-24 pr-3">
@@ -146,7 +213,7 @@ const EditNote = () => {
             overflow-y-scroll
             overscroll-contain
             text-base"
-            >
+        >
           <CodeMirror
             value={content}
             height="auto"
@@ -164,15 +231,9 @@ const EditNote = () => {
             className={`
                   prose
                   prose-slate
-                  prose-h2:mt-0
-                  prose-h3:mt-0
-                  prose-h4:mt-0
                   max-w-full
                   prose-code:rounded-md
-                  prose-code:before:content-none 
-                  prose-code:after:content-none
-                  prose-p:before:content-none 
-                  prose-p:after:content-none
+                  prose-a:text-sky-600
                   prose-hr:my-4
                 `}
             ref={markdownRef}

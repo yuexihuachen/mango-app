@@ -1,20 +1,22 @@
 
-import { useEffect, useState } from "react"
+import React,{ useEffect, useState } from "react"
 import httpRequest from '@/lib/httpClient';
-import { Response } from '@/types';
+import { NoteServerItem, Response, AnyParams } from '@/types';
 import { CategoryItem } from '@/types/category';
 import { message, Modal } from 'antd';
-import { TagItem } from '@/types/tag';
+import { TagItem, SearchParams, NoteItem } from '@/types/index';
+import Select from "@/components/select/select";
+import { groupBy } from "@/utils/utils";
+import { useAppDispatch } from "@/hooks";
+import { updateNote } from "@/features/note/noteSlice";
 
-import Select from "../select/select";
+const firstItem = { id: 0, name: '全部' };
 
-const firstItem = {id: 0, name: '全部'};
-
-const pushItems = [firstItem, {
-  id: 1,
+const pushItems = [{ id: -1, name: '全部' }, {
+  id: 0,
   name: '未发布'
 }, {
-  id: 2,
+  id: 1,
   name: '已发布'
 }]
 
@@ -23,15 +25,31 @@ type Item = {
   name: string;
 }
 
-const NoteList = () => {
-  const [categoryList, setCategoryList] = useState<Item[]>([]);
-  const [tagList, setTagList] = useState<Item[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+type Props = {
+  tagList: TagItem[];
+  categoryList: CategoryItem[];
+}
 
+const NoteList = (props: Props) => {
+  const {
+    tagList: tags,
+    categoryList: categorys
+  } = props;
+  const dispatch = useAppDispatch();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deNote, setDeNote] = useState<Partial<NoteServerItem>>({})
+  // 搜索条件值
   const [title, setTitle] = useState('')
   const [selectedCategory, setSelectedCategory] = useState(1);
   const [selectedTag, setSelectedTag] = useState(1);
   const [isPush, setIsPush] = useState(-1);
+  // 搜索条件选择项
+  const [noteList, setNoteList] = useState<NoteServerItem[]>([]);
+  const [categoryList, setCategoryList] = useState<Item[]>([]);
+  const [tagList, setTagList] = useState<Item[]>([]);
+
+  const [categoryObj, setCategoryObj] = useState<AnyParams>({});
+  const [tagObj, setTagObj] = useState<AnyParams>({})
 
   const onCategoryValue = (value: string) => {
     setSelectedCategory(parseInt(value, 10))
@@ -43,43 +61,100 @@ const NoteList = () => {
   const onPushValue = (value: number) => {
     setIsPush(value)
   }
-  const fetchCategoryData = async () => {
-      const res = (await httpRequest.post(`/auth/category/find`,{})) as Response<any>;
-      if (res?.code === 0) {
-        const category: Item[]  = res.data.map((ca: CategoryItem) => ({
-          id: ca.category_id,
-          name: ca.category_alias
-        }))
-        setCategoryList([firstItem, ...category])
-      } else {
-        message.error('请求失败')
-      }
-  };
-
-  const fetchTagData = async () => {
-      const res = (await httpRequest.post(`/auth/tag/find`,{})) as Response<any>;
-      if (res?.code === 0) {
-        const tag: Item[]  = res.data.map((tag: TagItem) => ({
-          id: tag.tag_id,
-          name: tag.tag_name
-        }))
-        setTagList([firstItem, ...tag])
-      } else {
-        message.error('请求失败')
-      }
-  };
 
   useEffect(() => {
-    fetchCategoryData();
-    fetchTagData()
-  }, [])
+    if (categorys.length) {
+      const category: Item[] = categorys.map((ca: CategoryItem) => ({
+        id: ca.category_id,
+        name: ca.category_alias
+      }))
+      const categoryObj = groupBy(categorys, 'category_id','category_alias')
+      setCategoryList([firstItem,...category]);
+      setCategoryObj(categoryObj)
+      setSelectedCategory(0)
+    }
+
+    if (tags.length) {
+      const tag: Item[] = tags.map((tag: TagItem) => ({
+        id: tag.tag_id,
+        name: tag.tag_name
+      }))
+      const tagObj = groupBy(tags, 'tag_id', 'tag_name')
+      setTagList([firstItem, ...tag]);
+      setTagObj(tagObj)
+      setSelectedTag(0)
+    }
+  }, [tags, categorys])
 
   const handleOk = async () => {
-
+    if (deNote?.note_id) {
+      const res = (await httpRequest.post(`/auth/note/delete`, { id: deNote.note_id })) as Response<any>;
+      if (res?.code === 0) {
+        message.success('删除成功');
+        const newNoteList = noteList.filter(note => note.note_id !== deNote.note_id);
+        setNoteList(newNoteList)
+      } else {
+        message.error('删除失败');
+      }
+      setIsModalOpen(false);
+    }
   };
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  const searchBody = () => {
+    let body: Partial<SearchParams> = {};
+    if (title) {
+      body.title = title;
+    }
+    if (isPush != -1) {
+      body.isPush = isPush;
+    }
+    if (selectedCategory) {
+      body.categoryId = selectedCategory;
+    }
+    if (selectedTag) {
+      body.tagId = selectedTag;
+    }
+    return body;
+  }
+
+  const searchData = async () => {
+    const body = searchBody();
+    const res = (await httpRequest.post(`/auth/note/findAll`, body)) as Response<NoteItem[]>;
+    if (res?.code === 0) {
+      message.success({
+        key: 1,
+        content: '请求成功'
+      })
+      setNoteList(res.data as unknown as NoteServerItem[])
+    } else {
+      message.error({
+        key: 1,
+        content: '请求异常'
+      })
+    }
+  }
+
+  const editNote = (note: NoteServerItem) => {
+    const newNote: NoteItem = {
+      noteId: note.note_id,
+      title: note.title,
+      categoryId: note.category_id,
+      tagId: note.tag_id,
+      isPush: note.is_push
+    }
+    dispatch(updateNote({
+      selectedNote: newNote,
+      noteTabId: '2'
+    }))
+  }
+
+  const deleteNote = (note: NoteServerItem) => {
+    setDeNote(note)
+    setIsModalOpen(true);
+  }
 
   return <>
     <div className="z-20 grid grid-cols-5 text-base bg-white gap-y-4">
@@ -102,10 +177,11 @@ const NoteList = () => {
           类型
         </div>
         <div className="grid mt-2">
-          <Select {...{ 
-            onSelectedValue: onCategoryValue, 
-            items: categoryList, 
-            value: selectedCategory }} />
+          <Select {...{
+            onSelectedValue: onCategoryValue,
+            items: categoryList,
+            value: selectedCategory
+          }} />
         </div>
       </div>
       <div className="inline-grid items-end h-24 pr-3">
@@ -113,10 +189,11 @@ const NoteList = () => {
           标签
         </div>
         <div className="grid mt-2">
-          <Select {...{ 
-            onSelectedValue: onTagValue, 
-            items: tagList, 
-            value: selectedTag }} />
+          <Select {...{
+            onSelectedValue: onTagValue,
+            items: tagList,
+            value: selectedTag
+          }} />
         </div>
       </div>
       <div className="inline-grid items-end h-24 pr-3">
@@ -130,6 +207,7 @@ const NoteList = () => {
       <div className="inline-grid items-end h-24">
         <button
           type="button"
+          onClick={searchData}
           className="px-12 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           搜索
@@ -141,33 +219,31 @@ const NoteList = () => {
       <div className="p-3 border-b border-gray-200">是否发布</div>
       <div className="p-3 border-b border-gray-200">操作</div>
     </div>
-    <div className="grid grid-cols-4 text-base pb-11">
-      {/* {notes.map((note: Note) => {
-          const category = (objCategory[note.category] as unknown as Category)?.alias;
+    <div className="grid grid-cols-5 text-base pb-11">
+      {noteList.map((note: NoteServerItem) => {
+          const {
+            note_id,
+            title,
+            category_id,
+            tag_id,
+            is_push
+          } = note;
           return (
-            <React.Fragment key={note.id}>
+            <React.Fragment key={note_id}>
               <div className="px-3 py-6 border-b border-gray-200">
-                {note.title}
+                {title}
               </div>
               <div className="px-3 py-6 border-b border-gray-200">
-                {category}
+                {categoryObj[category_id]}
               </div>
               <div className="px-3 py-6 border-b border-gray-200">
-                {note.published == 1 ? '是' : '否'}
+                {tagObj[tag_id]}
+              </div>
+              <div className="px-3 py-6 border-b border-gray-200">
+                {is_push?'已发布':'未发布'}
               </div>
               <div className="px-3 py-6 border-b border-gray-200 cursor-pointer">
                 <span className="flex items-center ml-auto font-medium text-indigo-600">
-                  <span
-                    onClick={() => viewNote(note)}
-                    className="pointer-events-auto hover:text-indigo-500"
-                  >
-                    <img
-                      className="w-4 h-4"
-                      src={`/view.svg`}
-                      alt="Your Company"
-                    />
-                  </span>
-                  <span className="w-px h-6 mx-3 bg-slate-400/20"></span>
                   <span
                     onClick={() => editNote(note)}
                     className="pointer-events-auto hover:text-indigo-500"
@@ -193,17 +269,17 @@ const NoteList = () => {
               </div>
             </React.Fragment>
           );
-        })} */}
+        })}
     </div>
-          <Modal
-            title="确认删除当前类别信息"
-            okText={'确认'}
-            cancelText={'取消'}
-            open={isModalOpen}
-            onOk={handleOk}
-            onCancel={handleCancel}
-          >
-          </Modal>
+    <Modal
+      title="确认删除当前笔记信息"
+      okText={'确认'}
+      cancelText={'取消'}
+      open={isModalOpen}
+      onOk={handleOk}
+      onCancel={handleCancel}
+    >
+    </Modal>
   </>
 }
 

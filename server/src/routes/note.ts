@@ -8,6 +8,8 @@ note.post('/auth/note/create', noteController.create);
 note.post('/auth/note/update', noteController.update);
 note.post('/note/find', noteController.find);
 note.post('/note/findAll', noteController.findAll);
+note.post('/auth/note/find', noteController.find);
+note.post('/auth/note/findAll', noteController.findAll);
 note.post('/auth/note/delete', noteController.delete);
 
 export {

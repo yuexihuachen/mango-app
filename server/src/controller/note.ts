@@ -1,6 +1,5 @@
 import type { Context } from 'hono';
-
-import db from '@/connection/index';
+import sql from '@/connection'
 import BaseClass from '@/lib/baseClass';
  
 class Note extends BaseClass {
@@ -10,130 +9,156 @@ class Note extends BaseClass {
 
   async create(c: Context) {
     const body = await c.req.json();
-    const query = db.query(
-      `INSERT INTO notes (title, content, category, published, uid) VALUES ($title, $content, $category, $published, $uid)`
-    );
-    const result = query.run({
-      $title: body.title,
-      $content: body.content,
-      $category: body.category,
-      $published: body.published,
-      $uid: c.get('userid')
-    });
+    const {
+      title,
+      content,
+      markContent,
+      isPush,
+      categoryId,
+      tagId,
+      createDate
+    } = body;
+    const user = c.get('user');
+    const userData = {
+      title,
+      content,
+      mark_content: markContent,
+      is_push: isPush,
+      user_id: user.user_id,
+      category_id: categoryId,
+      tag_id: tagId,
+      push_date: createDate,
+      update_date: createDate
+    };
+    
+    const result = await sql`
+      INSERT INTO note ${sql(userData)}
+      RETURNING *
+    `;
     let response = super.failed('新增失败');
-    if (result?.changes) {
-      response = super.success('新增成功', result)
+    if (result.count) {
+      response = super.success({
+        msg: '新增成功',
+        data: {}
+      })
     }
     return c.json(response);
   }
 
   async find(c: Context) {
-    const body = await c.req.json();
-    let sql =  `select id,title,content,category,published from notes`;
-    let condition='',runParams: Partial<any> = {};
-    if (body?.title) {
-      condition += ` title LIKE '%${body.title}%' AND`;
-      delete body.title
-    }
-    if (Object.keys(body).length) {
-      for (const key in body) {
-        if (key === 'token' && body[key]) {
-          condition += ` uid=$uid AND`;
-          runParams[`$uid`] = c.get('userid');
-        } else {
-          condition += ` ${key}=$${key} AND`;
-          runParams[`$${key}`] = body[key];
-        }
-      } 
-    }
-    const newSql = condition.length? `${sql} WHERE ${condition.slice(0, condition.length - 4)} AND published=1`: `${sql} WHERE published=1`;
-    let response = {};
-    try {
-      const query = db.query(newSql);
-      const result = query.all(runParams);
-      response = super.success('查询成功', result)
-    } catch(err) {
-      response = super.failed('查询失败');
+   const body = await c.req.json();
+    const {
+      id
+    } = body;
+    const user = c.get('user');
+    const res = await sql`
+      SELECT
+        note_id,title,category_id,tag_id,is_push,content,mark_content
+      FROM
+        note
+        WHERE user_id=${user.user_id} 
+        AND note_id=${id}
+      ORDER BY note_id
+    `;
+   
+    let response = super.failed('查询失败');
+    if (res.count) {
+      const result = res;
+      response = super.success({
+        msg: '查询成功',
+        data: result
+      })
     }
     return c.json(response);
   }
 
+    // "note_id"	"title"	"content"	"is_push"	"category_id"	"tag_id"	"user_id"	"push_date"	"update_date"
   async findAll(c: Context) {
     const body = await c.req.json();
-    let sql =  `select id,title,content,category,published from notes`;
-    let condition='',runParams: Partial<any> = {};
-    if (body?.title) {
-      condition += ` title LIKE '%${body.title}%' AND`;
-      delete body.title
-    }
-    if (Object.keys(body).length) {
-      for (const key in body) {
-        if (key === 'token' && body[key]) {
-          condition += ` uid=$uid AND`;
-          runParams[`$uid`] = c.get('userid');
-        } else {
-          condition += ` ${key}=$${key} AND`;
-          runParams[`$${key}`] = body[key];
-        }
-      } 
-    }
-    let newSql = condition.length? `${sql} WHERE ${condition.slice(0, condition.length - 4)}`: `${sql}`;
-    let response = {};
-    try {
-      const query = db.query(newSql);
-      const result = query.all(runParams);
-      response = super.success('查询成功', result)
-    } catch(err) {
-      response = super.failed('查询失败');
+    const {
+      title,
+      isPush,
+      categoryId,
+      tagId
+    } = body;
+    const user = c.get('user');
+    const res = await sql`
+      SELECT
+        note_id,title,category_id,tag_id,is_push
+      FROM
+        note
+        WHERE user_id=${user.user_id} 
+        ${title?sql`AND title LIKE '%${title}%'`:sql``}
+        ${categoryId?sql`AND category_id=${categoryId}`:sql``}
+        ${tagId?sql`AND tag_id=${tagId}`:sql``}
+        ${isPush?sql`AND is_push=${isPush}`:sql``}
+      ORDER BY note_id
+    `;
+   
+    let response = super.failed('查询失败');
+    if (res.count) {
+      const result = res;
+      response = super.success({
+        msg: '查询成功',
+        data: result
+      })
     }
     return c.json(response);
   }
 
   async update(c: Context) {
-    const { condition: bodyCondition, fields } = await c.req.json();
-    const condition = {
-      ...bodyCondition,
-      uid: c.get('userid')
-    }
-    // let sql = `UPDATE notes SET name=$name, alias=$alias, orderid=$orderid WHERE id=$id`;
-    let sql = `UPDATE notes SET `,
-    runParams: any = {};
-    for (const key in fields) {
-      sql += ` ${key}=$${key},`;
-      runParams[`$${key}`] = fields[key];
-    }
-    sql = sql.trim().slice(0, sql.trim().length - 1);
-    sql += ` WHERE `
-    for (const key in condition) {
-      sql += ` ${key}=$${key} and`;
-      runParams[`$${key}`] = condition[key];
-    }
-    sql = sql.trim().slice(0, sql.trim().length - 3);
-    const query = db.query(sql);
-    const result = query.run(runParams);
+    const body = await c.req.json();
+    const {
+      id,
+      title,
+      content,
+      isPush,
+      categoryId,
+      tagId,
+      markContent,
+      updateDate
+    } = body;
+    const user = c.get('user');
+    const userData = {
+      title,
+      content,
+      is_push: isPush,
+      category_id: categoryId,
+      tag_id: tagId,
+      update_date: updateDate,
+      mark_content: markContent
+    };
+    
+    const result = await sql`UPDATE note SET ${sql(userData)} WHERE note_id=${id} AND user_id=${user.user_id}`;
     let response = super.failed('更新失败');
-    if (result?.changes) {
-      response = super.success('更新成功', result)
+    if (result.count) {
+      response = super.success({
+        msg: '更新成功',
+        data: {}
+      })
     }
     return c.json(response);
   }
 
   async delete(c: Context) {
     const body = await c.req.json();
-    let sql = `DELETE FROM notes WHERE id=$id and uid=$uid`
-    const query = db.query(sql);
+    const {
+      id
+    } = body;
+    const user = c.get('user');
     let result = {
-      changes: 0
+      count: 0
     };
-    if (body.id) {
-      result = query.run({
-        $id: body.id,
-        $uid: c.get('userid')
-      });
+    if (id) {
+      result = await sql`
+      DELETE FROM note WHERE user_id=${user.user_id} AND note_id=${id};`
     }
     let response = super.failed('删除失败');
-    if (result.changes) {
-      response = super.success('删除成功', result)
+    if (result.count) {
+      response = super.success({
+        msg: '删除成功', 
+        data: result
+      })
     }
     return c.json(response);
   }

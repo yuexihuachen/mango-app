@@ -1,10 +1,10 @@
 import { AnyParams } from "@/types/index";
 
-
-export const groupBy = (objArray: any, property: string) => {
+export const groupBy = (objArray: any, property: string, val?: string) => {
     return objArray.reduce((acc: object, obj: AnyParams) => {
         const key = obj[property];
-        return {...acc, [key]: obj}
+        const value = val?obj[val]: obj;
+        return {...acc, [key]: value}
     }, {})
 }
 
