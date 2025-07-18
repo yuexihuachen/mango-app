@@ -15,7 +15,11 @@ const refreshUserToken = () => {
       rt: docCookies.getItem('rt')
     })
     .then(res => {
-      return res
+      if (res?.msg === "INVALID_REFRESH_TOKEN") {
+        window.history.pushState({}, '/signin');
+        window.history.go();
+      }
+      return res;
     })
 }
 

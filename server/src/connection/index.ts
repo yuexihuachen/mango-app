@@ -39,6 +39,7 @@ function resolveSql() {
 
 (async function() {
     if (!sql) {
+        console.log('sql', sql)
         await resolveSql()
     }
 })()

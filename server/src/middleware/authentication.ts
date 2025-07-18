@@ -1,7 +1,7 @@
 import type { Context, Next } from 'hono';
 import { verifyToken } from '@/lib/utils';
 import {
-  deleteCookie,
+  deleteCookie
 } from 'hono/cookie'
 
 const authentication = () => {
@@ -20,7 +20,6 @@ const authentication = () => {
             } catch (error) {
                 c.set('user', {});
                 deleteCookie(c, 'at');
-                console.log('过期user')
             }
         }
         await next()

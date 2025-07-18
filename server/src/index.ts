@@ -65,7 +65,7 @@ app.get('/hello', async (c) => {
   try {
     rows = await sql`SELECT * FROM public.user`.values();
   } catch(error) {
-    console.log(error)
+
   }
   
   return c.json(rows)
