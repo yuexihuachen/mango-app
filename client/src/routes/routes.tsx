@@ -19,6 +19,14 @@ const Signin = React.lazy(() => import("@/pages/signin"));
 const ResetPwd = React.lazy(() => import("@/pages/resetPwd"));
 const Signup = React.lazy(() => import("@/pages/signup"));
 
+const Archive = React.lazy(() => import("@/pages/archive"));
+const Categorys = React.lazy(() => import("@/pages/categorys"));
+const Tags = React.lazy(() => import("@/pages/tags"));
+const Blog = React.lazy(() => import("@/pages/blog"));
+const CaseStudies = React.lazy(() => import("@/pages/caseStudies"));
+const Talks = React.lazy(() => import("@/pages/talks"));
+const Notes = React.lazy(() => import("@/pages/notes"));
+
 const userRouter = [{
   path: '/signin', // 登录
   loader() {
@@ -72,20 +80,40 @@ const router = createBrowserRouter([
     element: <Index />,
     children: [
       {
-        path: '/home',
-        element: <Home />
+        path: '/archive',
+        element: <Archive />
+      },
+      {
+        path: '/categorys',
+        element: <Categorys />
+      },
+            {
+        path: '/tags',
+        element: <Tags />
+      },
+            {
+        path: '/blog',
+        element: <Blog />
+      },
+            {
+        path: '/case-studies',
+        element: <CaseStudies />
       },
       {
         path: '/about',
         element: <About />
       },
       {
+        path: '/talks',
+        element: <Talks />
+      },
+      {
         path: ':categoryId',
-        element: <Home />
+        element: <Notes />
       },
       {
         path: '/',
-        element: <About />
+        element: <Home />
       }
     ]
   },

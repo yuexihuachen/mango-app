@@ -29,10 +29,10 @@ const Layout = () => {
   const {pathname} = useLocation();
   return <div className="w-full">
     <div className="fixed top-0 w-full z-50 bg-white shadow-md">
-      <div className="mx-auto flex gap-4 px-6 items-center h-16 max-w-10xl">
+      <div className="mx-auto flex gap-4 px-6 items-center h-16 max-w-8xl">
         <div className="inline-flex items-center gap-4 cursor-pointer">
           <Link to={'/'}><img src={Logo} className="h-6" /></Link>
-          <span className="font-black">ExplainThis</span>
+          <span className="font-black">剑去</span>
         </div>
         <div className="flex text-sm ml-8 gap-6 h-16 items-start cursor-pointer flex-auto">
           {
@@ -52,7 +52,7 @@ const Layout = () => {
         </div>
       </div>
     </div>
-    <div className="mt-16">
+    <div className="mt-16 min-w-7xl max-w-8xl mx-auto">
       <Outlet />
     </div>
   </div>

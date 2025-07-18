@@ -49,7 +49,7 @@ const Note = () => {
       noteTabId: key
     }))
   }
-  return <div className="block mt-5 w-7xl mx-auto">
+  return <div className="block mt-5 w-full">
     <Tabs {...{ items, selectedKey, onSelectTab }} />
   </div>
 }
