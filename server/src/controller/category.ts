@@ -39,6 +39,26 @@ class Category extends BaseClass {
     return c.json(response);
   }
 
+  async findAll(c: Context) {
+    const user = c.get('user');
+    const res = await sql`
+      SELECT
+        category_id, category_name, category_alias, "order", create_date, update_date
+      FROM
+        category
+        ORDER BY category_id
+    `;
+    let response = super.failed('查询失败');
+    if (res.count) {
+      const result = res;
+      response = super.success({
+        msg: '查询成功',
+        data: result
+      })
+    }
+    return c.json(response);
+  }
+
   async find(c: Context) {
     const user = c.get('user');
     const res = await sql`

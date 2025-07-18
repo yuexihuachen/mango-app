@@ -11,6 +11,7 @@ export type CategoryItem = {
     update_date: string;
     order: number;
     total: number;
+    count?: string;
 } & CategoryId;
 
 export type Props = {

@@ -58,7 +58,7 @@ const Index = () => {
           } 
         </div>
         <div className="flex">
-          <div className="relative cursor-pointer"><div className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"><img alt="search Logo" width="16" height="16" src="/search.svg" /></div><input className="block w-full rounded-3xl border-0 py-1.5 pl-10 pr-4 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-700" placeholder="Search" type="text" /></div>
+          <div className="relative cursor-pointer"><div className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"><img alt="search Logo" width="16" height="16" src="/search.svg" /></div><input className="block w-full rounded-3xl border-0 py-1.5 pl-10 pr-4 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-700" placeholder="搜索文章" type="text" /></div>
         </div>
         <div className="flex ml-6 text-sm">
           <Link to={'/note'} className="cursor-pointer">登录</Link>
