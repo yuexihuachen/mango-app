@@ -1,11 +1,21 @@
 import { AnyParams } from "@/types/index";
 
+// 单个属性分组
 export const groupBy = (objArray: any, property: string, val?: string) => {
     return objArray.reduce((acc: object, obj: AnyParams) => {
         const key = obj[property];
         const value = val?obj[val]: obj;
         return {...acc, [key]: value}
     }, {})
+}
+// 多个属性分组
+export const multipleGroupBy = (objectArray: any, property: string) => {
+  return objectArray.reduce((acc: object, obj: AnyParams) => {
+    const key: string = obj[property];
+    const curGroup = acc[key] ?? [];
+
+    return { ...acc, [key]: [...curGroup, obj] };
+  }, {});
 }
 
 export const docCookies = {

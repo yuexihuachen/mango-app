@@ -187,6 +187,37 @@ class Note extends BaseClass {
     }
     return c.json(response);
   }
+
+  async archiveNote(c: Context) {
+    const body = await c.req.json();
+    const {
+      pageSize, 
+      pageIndex
+    } = body;
+    const res = await sql`
+      SELECT
+        note_id,
+        title,
+        tag_id,
+        category_id,
+        push_date
+      FROM
+        note
+      ORDER BY
+        push_date
+      LIMIT ${pageSize} OFFSET ${pageIndex - 1}
+    `;
+   
+    let response = super.failed('查询失败');
+    if (res.count) {
+      const result = res;
+      response = super.success({
+        msg: '查询成功',
+        data: result
+      })
+    }
+    return c.json(response);
+  }
 }
 
 export default Note;

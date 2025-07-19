@@ -42,7 +42,7 @@ const Categorys = () => {
   const onCategory = (category: CategoryItem) => {
     setSelectedCategory(category)
   }
-  return <div className="container">
+  return <div className="root">
     <div className="flex my-12 gap-2">
       {
         categoryList.map((category) => {
@@ -57,8 +57,8 @@ const Categorys = () => {
         })
       }
     </div>
-    <div className='flex mt-10 flex-col gap-4'>
-      <Link to="/zh-hans/swe/js-data-types">
+    <div className='flex flex-col gap-4'>
+      <Link to="">
       <div className="group flex w-full cursor-pointer list-none flex-col items-center justify-start rounded border border-slate-200 bg-white px-3 py-3 hover:shadow sm:flex-row sm:justify-between">
         <p className="min-w-0 flex-1 text-sm text-slate-800 group-hover:text-indigo-500 md:text-base">
         JavaScript 有哪些资料型别？该怎么辨别一个变数的资料型别？</p>

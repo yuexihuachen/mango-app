@@ -12,6 +12,7 @@ note.post('/note/findAll', noteController.findAll);
 note.post('/auth/note/find', noteController.find);
 note.post('/auth/note/findAll', noteController.findAll);
 note.post('/auth/note/delete', noteController.delete);
+note.post('/note/archiveNote', noteController.archiveNote);
 
 export {
   note

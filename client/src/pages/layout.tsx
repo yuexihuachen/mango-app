@@ -32,7 +32,7 @@ const Layout = () => {
       <div className="mx-auto flex gap-4 px-6 items-center h-16 max-w-8xl">
         <div className="inline-flex items-center gap-4 cursor-pointer">
           <Link to={'/'}><img src={Logo} className="h-6" /></Link>
-          <span className="font-black">剑去</span>
+          <span className="font-black">技术博客</span>
         </div>
         <div className="flex text-sm ml-8 gap-6 h-16 items-start cursor-pointer flex-auto">
           {
