@@ -188,6 +188,18 @@ class Note extends BaseClass {
     return c.json(response);
   }
 
+  static async getNoteTotalNumber() {
+    const res = await sql`
+       SELECT COUNT(*) as totalpage FROM note
+    `;
+   
+    let response = { totalpage: 0 };
+    if (res.count) {
+      response = res
+    }
+    return response;
+  }
+
   async archiveNote(c: Context) {
     const body = await c.req.json();
     const {
@@ -207,13 +219,18 @@ class Note extends BaseClass {
         push_date
       LIMIT ${pageSize} OFFSET ${pageIndex - 1}
     `;
-   
+    const pageTotal: any = await Note.getNoteTotalNumber();
     let response = super.failed('查询失败');
     if (res.count) {
       const result = res;
       response = super.success({
         msg: '查询成功',
-        data: result
+        data: {
+          result,
+          total: parseInt(pageTotal[0].totalpage, 10),
+          pageSize, 
+          pageIndex
+        }
       })
     }
     return c.json(response);

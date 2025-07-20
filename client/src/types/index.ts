@@ -16,8 +16,14 @@ export type AccessToken = {
     access_token: string;
 }
 
-export type AnyParams = {
+export type OptionalParams = {
     [key: string]: string;
+}
+
+export type TPagination = {
+  pageIndex: number;
+  pageSize: number;
+  total: number;
 }
 
 export * from './note';

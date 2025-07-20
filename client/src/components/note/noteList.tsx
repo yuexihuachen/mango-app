@@ -1,7 +1,7 @@
 
 import React,{ useEffect, useState } from "react"
 import httpRequest from '@/lib/httpClient';
-import { NoteServerItem, Response, AnyParams } from '@/types';
+import { NoteServerItem, Response, OptionalParams } from '@/types';
 import { CategoryItem } from '@/types/category';
 import { message, Modal } from 'antd';
 import { TagItem, SearchParams, NoteItem } from '@/types/index';
@@ -48,8 +48,8 @@ const NoteList = (props: Props) => {
   const [categoryList, setCategoryList] = useState<Item[]>([]);
   const [tagList, setTagList] = useState<Item[]>([]);
 
-  const [categoryObj, setCategoryObj] = useState<AnyParams>({});
-  const [tagObj, setTagObj] = useState<AnyParams>({})
+  const [categoryObj, setCategoryObj] = useState<OptionalParams>({});
+  const [tagObj, setTagObj] = useState<OptionalParams>({})
 
   const onCategoryValue = (value: string) => {
     setSelectedCategory(parseInt(value, 10))

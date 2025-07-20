@@ -1,15 +1,3 @@
-// import postgres from 'postgres'
-
-// const sql = postgres({ 
-//   host                 : 'localhost',
-//   port                 : 5432,
-//   database             : 'note_db',   
-//   username             : 'postgres',
-//   password             : '123456',
-//    ssl                  : false
-//  })
-
-// export default sql
 
 import { SQL } from "bun";
 
@@ -24,6 +12,11 @@ function resolveSql() {
             username: "postgres",
             password: "123456",
             port: 5432,
+              // Connection pool settings
+            max: 20, // Maximum connections in pool
+            idleTimeout: 30, // Close idle connections after 30s
+            maxLifetime: 0, // Connection lifetime in seconds (0 = forever)
+            connectionTimeout: 30, // Timeout when establishing new connections
             ssl: false,
             onconnect: client => {
                 console.log("Connected to database");
@@ -42,6 +35,7 @@ function resolveSql() {
         console.log('sql', sql)
         await resolveSql()
     }
+     console.log('sql', sql)
 })()
 
 export default sql;
