@@ -4,16 +4,13 @@ import { useState, useEffect } from 'react';
 import { multipleGroupBy } from '@/utils/utils';
 import dayjs from 'dayjs';
 import React from 'react';
-import Arrow from '@/assets/images/arrow.svg';
 import { TPagination } from '@/types';
-import Item from 'antd/es/list/Item';
+import { Pagination } from 'antd';
+import type { PaginationProps } from 'antd';
 
 const Archive = () => {
   const [notes, setNotes] = useState<any>({});
   const [pagination, setPagination] = useState<Partial<TPagination>>({});
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [prevPage, setPrevPage] = useState<number[]>([1,2,3]);
-  const [nextPage, setNextPage] = useState<number[]>([])
   const fetchData = async () => {
     const res = (await httpRequest.post(`/note/archiveNote`, {
       pageSize: 30,
@@ -26,7 +23,6 @@ const Archive = () => {
         pageIndex: res.data.pageIndex,
         total
       })
-      setNextPage([total - 2, total - 1, total]);
       const list = res.data.result.map(item => {
         const ym = dayjs(item.push_date);
         return {
@@ -44,42 +40,16 @@ const Archive = () => {
     fetchData()
   }, [])
 
-  const onPrevPage = (page: number) => {
-    if (page > 1) {
-      let prevList = [page - 1, page, page + 1];
-      if (page + 1 === nextPage[0]) {
-        prevList =[page - 1, page]
-      }
-      setPrevPage(prevList)
-      setCurrentPage(page)
+  const itemRender: PaginationProps['itemRender'] = (_, type, originalElement) => {
+    if (type === 'prev') {
+      return <a>上一步</a>;
     }
-  }
+    if (type === 'next') {
+      return <a>下一步</a>;
+    }
+    return originalElement;
+  };
 
-  const onNextPage = (page: number) => {
-    const total = pagination.total as number;
-    if (page <= total) {
-       let prevList = [page - 1, page, page + 1];
-       if (page === nextPage[0]) {
-        prevList = [page -1]
-       }
-      setPrevPage(prevList)
-      setCurrentPage(page)
-    }
-  }
-  const onPrevArrowPage = () => {
-    if (currentPage - 1 < nextPage[0]) {
-      onPrevPage(currentPage - 1)
-    } else {
-      onNextPage(currentPage - 1)
-    }
-  }
-  const onNextArrowPage = () => {
-    if (currentPage + 1 < nextPage[0]) {
-      onPrevPage(currentPage + 1)
-    } else {
-      onNextPage(currentPage + 1)
-    }
-  }
   return <div className="root">
     <div className="mb-10 flex gap-x-10 mt-16">
       <h1 className="text-3xl font-medium tracking-tight text-neutral-950 lg:text-4xl">所有文章</h1>
@@ -145,50 +115,8 @@ const Archive = () => {
         </div>
       </div>
     </div>
-    <div className='my-16 text-center select-none'>
-      <nav className="isolate inline-flex -space-x-px rounded-md shadow-xs cursor-pointer">
-        <span
-          onClick={onPrevArrowPage}
-          className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-        >
-          <img src={Arrow} className='w-5 h-5' />
-        </span>
-        <span className={`relative items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-gray-300 ring-inset focus:outline-offset-0 ${currentPage >= 4?'inline-flex':'hidden'}`}>
-          1
-        </span>
-        <span className={`relative items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-gray-300 ring-inset focus:outline-offset-0 ${currentPage >= 3?'inline-flex':'hidden'}`}>
-          ...
-        </span>
-        {
-         currentPage - 1 < nextPage[0] && prevPage.map((item) => {
-            return <span
-              onClick={() => onPrevPage(item)}
-              className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ring-1 ring-gray-300 ring-inset focus:z-20 focus:outline-offset-0 ${currentPage === item?'bg-indigo-600 text-white':'text-gray-900'}`}
-            >
-              {item}
-            </span>
-          })
-        }
-        <span className={`relative items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-gray-300 ring-inset focus:outline-offset-0 ${currentPage + 2 < nextPage[0]?'inline-flex':'hidden'}`}>
-          ...
-        </span>
-        {
-          nextPage.map((item) => {
-            return <span
-              onClick={() => onNextPage(item)}
-              className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ring-1 ring-gray-300 ring-inset focus:z-20 focus:outline-offset-0 ${currentPage === item?'bg-indigo-600 text-white':'text-gray-900'}`}
-            >
-              {item}
-            </span>
-          })
-        }
-        <span
-          onClick={onNextArrowPage}
-          className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-        >
-          <img src={Arrow} className='w-5 h-5 rotate-180' />
-        </span>
-      </nav>
+    <div className='my-16 flex justify-center select-none '>
+      <Pagination defaultCurrent={pagination.pageIndex} total={300} showSizeChanger={false} itemRender={itemRender} />
     </div>
   </div>
 }
