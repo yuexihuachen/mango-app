@@ -10,7 +10,7 @@ note.post('/note/find', noteController.find);
 note.post('/note/groupByFields', noteController.groupByFields);
 note.post('/note/findAll', noteController.findAll);
 note.post('/auth/note/find', noteController.find);
-note.post('/auth/note/findAll', noteController.findAll);
+note.post('/auth/note/findAll', noteController.authFindAll);
 note.post('/auth/note/delete', noteController.delete);
 note.post('/note/archiveNote', noteController.archiveNote);
 

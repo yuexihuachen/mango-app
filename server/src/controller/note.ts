@@ -72,8 +72,7 @@ class Note extends BaseClass {
     return c.json(response);
   }
 
-    // "note_id"	"title"	"content"	"is_push"	"category_id"	"tag_id"	"user_id"	"push_date"	"update_date"
-  async findAll(c: Context) {
+  async authFindAll(c: Context) {
     const body = await c.req.json();
     const {
       title,
@@ -105,6 +104,39 @@ class Note extends BaseClass {
     }
     return c.json(response);
   }
+
+  async findAll(c: Context) {
+    const body = await c.req.json();
+    const {
+      title,
+      isPush,
+      categoryId,
+      tagId
+    } = body;
+    const res = await sql`
+      SELECT
+        note_id,title,category_id,tag_id,is_push
+      FROM
+        note
+        WHERE is_push = 1
+        ${title?sql`AND title LIKE '%${title}%'`:sql``}
+        ${categoryId?sql`AND category_id=${categoryId}`:sql``}
+        ${tagId?sql`AND tag_id=${tagId}`:sql``}
+        ${isPush?sql`AND is_push=${isPush}`:sql``}
+      ORDER BY note_id
+    `;
+   
+    let response = super.failed('查询失败');
+    if (res.count) {
+      const result = res;
+      response = super.success({
+        msg: '查询成功',
+        data: result
+      })
+    }
+    return c.json(response);
+  }
+
 
   async update(c: Context) {
     const body = await c.req.json();
