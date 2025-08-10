@@ -121,7 +121,9 @@ CREATE TABLE "public"."note" (
   "tag_id" int4 NOT NULL,
   "user_id" int4 NOT NULL,
   "push_date" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
-  "update_date" varchar(255) COLLATE "pg_catalog"."default" NOT NULL
+  "update_date" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
+  "mark_content" text COLLATE "pg_catalog"."default" NOT NULL,
+  "description" varchar(500) COLLATE "pg_catalog"."default" NOT NULL
 )
 ;
 COMMENT ON COLUMN "public"."note"."note_id" IS '笔记id';
@@ -133,6 +135,8 @@ COMMENT ON COLUMN "public"."note"."tag_id" IS '标签id';
 COMMENT ON COLUMN "public"."note"."user_id" IS '用户id';
 COMMENT ON COLUMN "public"."note"."push_date" IS '发布时间';
 COMMENT ON COLUMN "public"."note"."update_date" IS '更新时间';
+COMMENT ON COLUMN "public"."note"."mark_content" IS 'mark内容';
+COMMENT ON COLUMN "public"."note"."description" IS '描述';
 
 -- ----------------------------
 -- Primary Key structure for table note
