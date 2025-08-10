@@ -42,8 +42,29 @@ class Tag extends BaseClass {
         tag_id, tag_name, create_date
       FROM
         tag
-        WHERE user_id=${user.user_id}
+      ${user.user_id?sql` WHERE user_id=${user.user_id} `:sql``}
         ORDER BY tag_id
+    `;
+    
+    let response = super.failed('查询失败');
+    if (res.count) {
+      const result = res;
+      response = super.success({
+        msg: '查询成功',
+        data: result
+      })
+    }
+    return c.json(response);
+  }
+
+  async findAll(c: Context) {
+    const user = c.get('user');
+    const res = await sql`
+      SELECT
+        tag_id, tag_name, create_date
+      FROM
+        tag
+      ORDER BY tag_id
     `;
     
     let response = super.failed('查询失败');

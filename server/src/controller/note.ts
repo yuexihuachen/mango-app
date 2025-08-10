@@ -1,7 +1,7 @@
 import type { Context } from 'hono';
 import sql from '@/connection'
 import BaseClass from '@/lib/baseClass';
- 
+
 class Note extends BaseClass {
   constructor() {
     super();
@@ -30,7 +30,7 @@ class Note extends BaseClass {
       push_date: createDate,
       update_date: createDate
     };
-    
+
     const result = await sql`
       INSERT INTO note ${sql(userData)}
       RETURNING *
@@ -46,7 +46,7 @@ class Note extends BaseClass {
   }
 
   async find(c: Context) {
-   const body = await c.req.json();
+    const body = await c.req.json();
     const {
       id
     } = body;
@@ -60,7 +60,7 @@ class Note extends BaseClass {
         AND note_id=${id}
       ORDER BY note_id
     `;
-   
+
     let response = super.failed('查询失败');
     if (res.count) {
       const result = res;
@@ -87,13 +87,13 @@ class Note extends BaseClass {
       FROM
         note
         WHERE user_id=${user.user_id} 
-        ${title?sql`AND title LIKE '%${title}%'`:sql``}
-        ${categoryId?sql`AND category_id=${categoryId}`:sql``}
-        ${tagId?sql`AND tag_id=${tagId}`:sql``}
-        ${isPush?sql`AND is_push=${isPush}`:sql``}
+        ${title ? sql`AND title LIKE '%${title}%'` : sql``}
+        ${categoryId ? sql`AND category_id=${categoryId}` : sql``}
+        ${tagId ? sql`AND tag_id=${tagId}` : sql``}
+        ${isPush ? sql`AND is_push=${isPush}` : sql``}
       ORDER BY note_id
     `;
-   
+
     let response = super.failed('查询失败');
     if (res.count) {
       const result = res;
@@ -119,13 +119,13 @@ class Note extends BaseClass {
       FROM
         note
         WHERE is_push = 1
-        ${title?sql`AND title LIKE '%${title}%'`:sql``}
-        ${categoryId?sql`AND category_id=${categoryId}`:sql``}
-        ${tagId?sql`AND tag_id=${tagId}`:sql``}
-        ${isPush?sql`AND is_push=${isPush}`:sql``}
-      ORDER BY note_id
+        ${title ? sql`AND title LIKE '%${title}%'` : sql``}
+        ${categoryId ? sql`AND category_id=${categoryId}` : sql``}
+        ${tagId ? sql`AND tag_id=${tagId}` : sql``}
+        ${isPush ? sql`AND is_push=${isPush}` : sql``}
+      ORDER BY note_id;
     `;
-   
+
     let response = super.failed('查询失败');
     if (res.count) {
       const result = res;
@@ -160,7 +160,7 @@ class Note extends BaseClass {
       update_date: updateDate,
       mark_content: markContent
     };
-    
+
     const result = await sql`UPDATE note SET ${sql(userData)} WHERE note_id=${id} AND user_id=${user.user_id}`;
     let response = super.failed('更新失败');
     if (result.count) {
@@ -188,14 +188,14 @@ class Note extends BaseClass {
     let response = super.failed('删除失败');
     if (result.count) {
       response = super.success({
-        msg: '删除成功', 
+        msg: '删除成功',
         data: result
       })
     }
     return c.json(response);
   }
 
-  async groupByFields(c: Context){
+  async groupByFields(c: Context) {
     const body = await c.req.json();
     const {
       fieldName
@@ -208,7 +208,7 @@ class Note extends BaseClass {
         WHERE is_push = 1
         GROUP BY ${sql(fieldName)}
     `;
-   
+
     let response = super.failed('查询失败');
     if (res.count) {
       const result = res;
@@ -224,7 +224,7 @@ class Note extends BaseClass {
     const res = await sql`
        SELECT COUNT(*) as totalpage FROM note
     `;
-   
+
     let response = { totalpage: 0 };
     if (res.count) {
       response = res
@@ -235,7 +235,7 @@ class Note extends BaseClass {
   async archiveNote(c: Context) {
     const body = await c.req.json();
     const {
-      pageSize, 
+      pageSize,
       pageIndex
     } = body;
     const res = await sql`
@@ -260,7 +260,43 @@ class Note extends BaseClass {
         data: {
           result,
           total: parseInt(pageTotal[0].totalpage, 10),
-          pageSize, 
+          pageSize,
+          pageIndex
+        }
+      })
+    }
+    return c.json(response);
+  }
+
+  async blogNote(c: Context) {
+    const body = await c.req.json();
+    const {
+      pageSize,
+      pageIndex
+    } = body;
+    const res = await sql`
+      SELECT
+        note_id,
+        title,
+        tag_id,
+        category_id,
+        description,
+        push_date
+      FROM
+        note
+      ORDER BY note_id
+      LIMIT ${pageSize} OFFSET ${pageIndex - 1}
+    `;
+    const pageTotal: any = await Note.getNoteTotalNumber();
+    let response = super.failed('查询失败');
+    if (res.count) {
+      const result = res;
+      response = super.success({
+        msg: '查询成功',
+        data: {
+          result,
+          total: parseInt(pageTotal[0].totalpage, 10),
+          pageSize,
           pageIndex
         }
       })
