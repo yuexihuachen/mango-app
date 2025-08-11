@@ -32,6 +32,6 @@
   }
 
   .root {
-    @apply mx-auto flex flex-col w-8xl px-6;
+    @apply mx-auto flex flex-col w-7xl px-6;
   }
 }

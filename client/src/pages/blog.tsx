@@ -23,7 +23,16 @@ const Blog = () => {
         pageIndex: res.data.pageIndex,
         total
       })
-      setNotes(res?.data?.result || []);
+      let result = [];
+
+      for (let i = 0; i < res.data.result.length; i++) {
+        const index = Math.floor(i/3);
+        if (!result[index]) {
+          result[index] = [];
+        }
+        result[index].push(res?.data?.result[i]);
+      }
+      setNotes(result);
     }
   };
 
@@ -52,32 +61,34 @@ const Blog = () => {
     </div>
     <div className='flex flex-col gap-y-4'>
       {
-        notes.map((note) => {
-          const {
-            note_id,
-            title,
-            description,
-            tag_id,
-            category_id,
-            push_date
-          } = note;
-          return <React.Fragment key={note_id}>
-            <div className="block mb-4">
-              <div>
-                <div className="block">
-                  <a className="text-3xl font-medium text-gray-900 hover:text-gray-600" href={`#`}>{title}</a>
+        notes.map((note, index) => {
+          return <div className='grid grid-cols-3 gap-10' key={index}>
+            {
+              note.map((item) => {
+            const {
+                note_id,
+                title,
+                description,
+                tag_id,
+                category_id,
+                push_date
+              } = item;
+                return <div className='block'>
+                  <div className='flex flex-col border border-gray-200 rounded-2xl px-10 pt-10 items-center pb-10'>
+                    <div className='text-4xl text-gray-800'>{title}</div>
+                    <div className='text-xl my-4'>{description}</div>
+                    <div>
+                      <span className='bg-amber-100 text-amber-800 py-1 px-2 rounded-sm text-xs'>基准</span>
+                      <span className='bg-red-100 text-red-700 py-1 px-2 rounded-sm text-xs mx-2'>博客</span>
+                    </div>
+                    <div className='flex justify-end mt-20 pt-10 border-t border-gray-200 w-full'>
+                      <span className="w-24 text-sm text-gray-700">{push_date.slice(0, 10)}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="block my-2">
-                  <div className="text-xl text-gray-400">{description}</div>
-                </div>
-                <div className='block'>
-                  <span className='bg-amber-100 text-amber-800 py-1 px-2 rounded-sm text-xs'>基准</span>
-                  <span className='bg-red-100 text-red-700 py-1 px-2 rounded-sm text-xs mx-2'>博客</span>
-                  <span className="w-24 text-sm text-gray-700">{push_date.slice(0, 10)}</span>
-                </div>
-              </div>
-            </div>
-          </React.Fragment>
+              })
+            }
+          </div>
         })
       }
 
