@@ -59,7 +59,7 @@ const Categorys = () => {
     fetchCategoryNote(category.category_id);
   }
   return <div className="root">
-    <div className="flex my-12 gap-2">
+    <div className="flex my-12 gap-2 flex-wrap">
       {
         categoryList.map((category) => {
           const {

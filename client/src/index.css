@@ -34,4 +34,12 @@
   .root {
     @apply mx-auto flex flex-col w-7xl px-6;
   }
+
+  .full-root {
+     @apply mx-auto flex flex-col;
+  }
+
+  .fixed-width {
+    @apply w-7xl;
+  }
 }
